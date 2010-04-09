@@ -8,8 +8,7 @@ import staticmedia
 site_media_root = os.path.join(os.path.dirname(__file__),"media")
 
 urlpatterns = patterns('',
-                       # Example:
-                       # (r'^rolf/', include('rolf.foo.urls')),
+                       (r'^$','rolf_main.views.index'),
                        ('^accounts/',include('djangowind.urls')),
                        (r'^admin/(.*)', admin.site.root),
 		       (r'^survey/',include('survey.urls')),

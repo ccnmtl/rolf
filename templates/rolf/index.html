@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+{% if recent_pushes %}
+<h1>Your Recent Pushes</h1>
+
+<table width="100%">
+{% for push in recent_pushes %}
+<tr class="{{push.status}}">
+<th><a
+       href="{{push.deployment.application.category.get_absolute_url}}">{{push.deployment.application.category.name}}</a>
+       :
+<a
+   href="{{push.deployment.application.get_absolute_url}}">{{push.deployment.application.name}}</a>
+   :
+<a
+   href="{{push.deployment.get_absolute_url}}">{{push.deployment.name}}</a> :
+<a href="{{push.get_absolute_url}}">{{push.start_time}}</a></th>
+<td>{{push.comment}}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+{% if categories.count %}
+<div id="all-applications">
+<h1>All Applications</h1>
+
+{% for category in categories %}
+<div>
+<h2><a href="{{category.get_absolute_url}}">{{category.name}}</a></h2>
+
+{% if category.application_set.count %}
+{% for application in category.application_set.all %}
+<div class="nest">
+  <table width="100%">
+    <tr><th width="30%"><a href="{{application.get_absolute_url}}">{{application.name}}</a></th>
+      <td>
+	{% for deployment in application.deployment_set.all %}
+	<div class="deployment nest nested-{{deployment.status}}">
+	  <a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
+	</div>
+	{% endfor %}
+      </td>
+  </tr>
+  </table>
+</div>
+{% endfor %}
+{% endif %}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+<form action="/category/add/" method="post">
+<p>Add A New Category: <input type="text" name="name" /> <input
+type="submit" value="Add" /></p>
+</form>
+
+
+{% endblock %}
