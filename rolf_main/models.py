@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=256)
+
+    class Meta:
+        ordering = ('name',)
+
+    def get_absolute_url(self):
+        return "/category/%d/" % self.id 
     
 class Application(models.Model):
     name = models.CharField(max_length=256)

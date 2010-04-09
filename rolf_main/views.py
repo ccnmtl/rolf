@@ -23,3 +23,9 @@ class rendered_with(object):
 def index(request):
     return dict(recent_pushes=Push.objects.filter(user=request.user),
                 categories=Category.objects.all())
+
+@login_required
+def add_category(request):
+    if request.method == "POST":
+        c = Category.objects.create(name=request.POST.get('name','unknown'))
+    return HttpResponseRedirect("/")
