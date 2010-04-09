@@ -24,7 +24,7 @@ USE_I18N = False
 MEDIA_ROOT = "/var/www/rolf/uploads/"
 MEDIA_URL = '/uploads/'
 ADMIN_MEDIA_PREFIX = '/media/'
-SECRET_KEY = ')ng#)ef_u@_^zvvu@dxm7ql-yb^_!a6%v3v^j3b(mp+)l+5%@h'
+SECRET_KEY = ')ng#)ef_u@_^vvzu@dxm7ql-yb^_!a%6v3vj^3b(m+p)l5+%@h'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
@@ -63,14 +63,11 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.markup',
     'staticmedia',
-    'sorl.thumbnail',
     'django.contrib.admin',
     'tagging',
     'smartif',
     'template_utils',
     'typogrify',
-    'survey',
-    'tinymce',
 )
 
 THUMBNAIL_SUBDIR = "thumbs"
@@ -93,18 +90,3 @@ WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper','djangowind.auth.Staff
 WIND_STAFF_MAPPER_GROUPS = ['tlc.cunix.local:columbia.edu']
 WIND_SUPERUSER_MAPPER_GROUPS = ['anp8','jb2410','zm4','sbd12','egr2107','kmh2124','sld2131','amm8','mar227','ed2198']
 
-# TinyMCE settings
-
-TINYMCE_JS_URL = '/site_media/js/tiny_mce/tiny_mce.js'
-TINYMCE_JS_ROOT = 'media/js/tiny_mce'
-
-# if you set this to True, you may have to 
-# override TINYMCE_JS_ROOT with the full path on production
-TINYMCE_COMPRESSOR = False 
-TINYMCE_SPELLCHECKER = True
-
-TINYMCE_DEFAULT_CONFIG = {'cols': 80, 
-                          'rows': 30,
-                          'plugins':'table,spellchecker,paste,searchreplace',
-                          'theme' : 'simple',
-                          }
