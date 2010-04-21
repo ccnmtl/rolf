@@ -29,3 +29,11 @@ def add_category(request):
     if request.method == "POST":
         c = Category.objects.create(name=request.POST.get('name','unknown'))
     return HttpResponseRedirect("/")
+
+@login_required
+def add_application(request,object_id):
+    category = get_object_or_404(Category,id=object_id)
+    if request.method == "POST":
+        a = Application.objects.create(category=category,
+                                       name=request.POST.get('name','unknown'))
+    return HttpResponseRedirect(category.get_absolute_url())

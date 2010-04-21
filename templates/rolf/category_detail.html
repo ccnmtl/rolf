@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{object.name}}{% endblock %}
+
+{% block content %}
+<h1>{{object.name}}</h1>
+
+{% if object.application_set.count %}
+<div>
+<table width="100%">
+
+{% for application in object.application_set.all %}
+<tr class="application"
+    ><th><h3><a href="{{application.get_absolute_url}}">{{application.name}}</a></h3></th></tr>
+{% for deployment in application.deployment_set.all %}
+<tr class="deployment {{deployment.status}}"><th><a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a></th></tr>
+{% endfor %}
+{% endfor %}
+</table>
+
+</div>
+{% endif %}
+
+<form action="add_application/" method="post">
+<p>Add A New Application: <input type="text" name="name" /> <input
+type="submit" value="Add" /></p>
+</form>
+
+
+<hr />
+<form action="delete/" method="post">
+<p>Delete this category: <input type="submit" value="DELETE"/></p>
+</form>
+
+
+{% endblock %}
