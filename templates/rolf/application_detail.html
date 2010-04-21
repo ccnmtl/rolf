@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}{{object.name}}{% endblock %}
+
+{% block content %}
+
+<h1><a href="{{object.category.get_absolute_url}}">{{object.category.name}}</a> : {{object.name}}</h1>
+
+{% if object.deployment_set.count %}
+<div>
+<table width="100%">
+
+{% for deployment in object.deployment_set %}
+<tr class="{{deployment.status}}">
+<th><a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a></th></tr>
+{% endfor %}
+
+</table>
+
+</div>
+{% endif %}
+
+<form action="add_deployment/" method="post">
+<p>Add A New Deployment: <input type="text" name="name" /> <input
+type="submit" value="Add" /></p>
+</form>
+
+
+<hr />
+<form action="delete/" method="post">
+<p>Delete this application: <input type="submit" value="DELETE"/></p>
+</form>
+
+{% endblock %}
