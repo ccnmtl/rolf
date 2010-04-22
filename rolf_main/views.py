@@ -88,3 +88,24 @@ def add_stage(request,object_id):
                                      name=request.POST.get('name','unknown stage'))
         
     return HttpResponseRedirect(deployment.get_absolute_url())
+
+@login_required
+def clone_deployment(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        application = get_object_or_404(Application,id=request.POST['application_id'])
+        new_deployment = Deployment.objects.create(name=request.POST['name'],application=application)
+        # clone settings
+        for setting in deployment.setting_set.all():
+            s = Setting.objects.create(deployment=new_deployment,name=setting.name,
+                                       value=setting.value)
+        # clone stages
+        for stage in deployment.stage_set.all():
+            recipe = stage.recipe
+            r = recipe
+            if recipe.name == "":
+                # not a cookbook recipe, so we clone it
+                r = Recipe.objects.create(name="",language=recipe.language,code=recipe.code)
+            s = Stage.objects.create(deployment=new_deployment,name=stage.name,recipe=r)
+        return HttpResponseRedirect(new_deployment.get_absolute_url())
+    return HttpResponseRedirect(deployment.get_absolute_url())

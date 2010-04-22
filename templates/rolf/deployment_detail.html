@@ -152,10 +152,10 @@ value="{{setting.value}}" style="width: 100%" /></td>
 <p>In Application: 
 
 <select name="application_id">
-{% for category in all_categories %}
+{% for category in object.all_categories %}
 <optgroup label="{{category.name}}">
 {% for application in category.application_set.all %}
-<option id="{{application.id}}"
+<option id="{{application.id}}" value="{{application.id}}"
 {% ifequal application.id object.application.id %}
 selected="selected"
 {% endifequal %}>{{application.name}}</option>

@@ -30,6 +30,9 @@ class Deployment(models.Model):
     def get_absolute_url(self):
         return "/deployment/%d/" % self.id
 
+    def all_categories(self):
+        return Category.objects.all()
+
 class Setting(models.Model):
     deployment = models.ForeignKey(Deployment)
     name = models.CharField(max_length=256)
