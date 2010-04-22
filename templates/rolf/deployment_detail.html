@@ -91,17 +91,19 @@ value="{{setting.value}}" style="width: 100%" /></td>
 
 <table width="100%">
 <tbody id="stages-table">
-<tr class="draggable" py:for="stage in deployment.stages" id="stage-${stage.id}">
-<th>${stage.cardinality} - <a href="/stage/${stage.id}/">${stage.name}</a></th>
-<td><a py:if="stage.recipe.name"
-href="/cookbook/${stage.recipe.id}/">Cookbook Recipe:
-${stage.recipe.name}</a>
-<div py:if="not
-	    stage.recipe.name"><b>${stage.recipe.language}</b><br
-								 /><div
-	    class="code">${XML(stage.recipe.code_html())}</div></div>
+{% for stage in object.stage_set.all %}
+<tr class="draggable" id="stage-{{stage.id}}">
+<th><a href="{{stage.get_absolute_url}}">{{stage.name}}</a></th>
+<td>{% if stage.recipe.name %}
+<a href="{{stage.recipe.get_absolute_url}}">Cookbook Recipe:
+{{stage.recipe.name}}</a>
+{% else %}
+<div><b>{{stage.recipe.language}}</b><br />
+  <div class="code">{{stage.recipe.code_html|safe}}</div></div>
+{% endif %}
 </td>
 </tr>
+{% endfor %}
 </tbody>
 </table>
 
@@ -111,23 +113,32 @@ ${stage.recipe.name}</a>
 <form action="add_stage/" method="post">
 <fieldset><legend>Add Stage</legend>
 <table>
-<tr><th>name</th><td><input type="text" name="name"/></td></tr>
-<tr><th>recipe</th><td>Select a Cookbook recipe <select
-name="recipe_id">
-<option value="">None - Add code below</option>
-{% for recipe in all_recipes %}
-<option value="{{recipe.id}}">{{recipe.name}}</option>
-{% endfor %}
-</select><br />
-Or enter new code:<br />
-<select
-   name="language"><option
-		      value="python">python</option><option
-						       value="shell">shell</option></select><br />
-<textarea name="code" cols="60" rows="5" class="resizable"></textarea>
+  <tr>
+    <th>name</th>
+    <td><input type="text" name="name"/></td>
+  </tr>
+  <tr>
+    <th>recipe</th>
+    <td>Select a Cookbook recipe 
+      <select name="recipe_id">
+	<option value="">None - Add code below</option>
+	{% for recipe in all_recipes %}
+	<option value="{{recipe.id}}">{{recipe.name}}</option>
+	{% endfor %}
+      </select><br />
+      Or enter new code:<br />
+      <select name="language">
+	<option value="python">python</option>
+	<option value="shell">shell</option>
+      </select><br />
 
-</td></tr>
-</table><input type="submit" value="add stage" />
+      <textarea name="code" cols="60" rows="5"></textarea>
+
+    </td>
+  </tr>
+</table>
+
+<input type="submit" value="add stage" />
 
 </fieldset>
 </form>
