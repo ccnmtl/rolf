@@ -45,3 +45,12 @@ def add_deployment(request,object_id):
         a = Deployment.objects.create(application=application,
                                        name=request.POST.get('name','unknown'))
     return HttpResponseRedirect(application.get_absolute_url())
+
+@login_required
+def add_setting(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        s = Setting.objects.create(deployment=deployment,
+                                   name=request.POST.get('name','unknown'),
+                                   value=request.POST.get('value',''))
+    return HttpResponseRedirect(deployment.get_absolute_url())
