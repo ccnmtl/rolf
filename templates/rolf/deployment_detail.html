@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% block title %}{{object.name}}{% endblock %}
+
+{% block content %}
+
+<h1><a
+       href="{{object.application.category.get_absolute_url}}">{{object.application.category.name}}</a> 
+: 
+<a href="{{object.application.get_absolute_url}}">{{object.application.name}}</a> : {{object.name}}</h1>
+
+<div class="tabber">
+
+<div class="tabbertab">
+<h2>Push</h2>
+
+{% if object.push_set.count %}
+<div>
+{% with object.most_recent_push as recent_push %}
+<div id="push-status" class="{{recent_push.status}}">{{recent_push.status}}</div>
+{% endwith %}
+</div>
+{% endif %}
+
+<form action="push/" method="post">
+<fieldset><legend>Push</legend>
+
+Comment: <input type="text" name="comment" /> (<input type="checkbox" name="step" /> step )<input type="submit" value="push" />
+</fieldset>
+</form>
+
+{% if object.push_set.count %}
+<div>
+
+<table width="100%">
+{% for push in object.push_set.all %}
+<tr class="{{push.status}}">
+<th><a
+       href="{{push.get_absolute_url}}">{{push.start_time}}</a></th>
+<td>{{push.user.user_name}}</td>
+<td>{{push.comment}}</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+</div>
+{% endif %}
+
+
+<div class="tabbertab">
+<h2>Settings</h2>
+
+{% if object.setting_set.count %}
+<div>
+
+<form action="edit_settings/" method="post">
+<table width="100%">
+<tr><th>name</th><th>value</th></tr>
+{% for setting in object.setting_set.all %}
+<tr>
+<td><input type="text" name="setting_name_{{setting.id}}"
+value="{{setting.name}}"  style="width: 100%"/></td>
+<td><input type="text" name="setting_value_{{setting.id}}" 
+value="{{setting.value}}" style="width: 100%" /></td>
+</tr>
+{% endfor %}
+</table>
+<input type="submit" value="save settings" />
+</form>
+</div>
+{% endif %}
+
+<form action="add_setting/" method="post">
+<fieldset>
+<legend>Add Setting</legend>
+<table width="100%">
+<tr><th>name</th><th>value</th></tr>
+<tr><td><input type="text" name="name" style="width: 100%"/></td>
+<td><input type="text" name="value" style="width: 100%"/></td>
+</tr>
+</table>
+<input type="submit" value="Add" />
+</fieldset>
+</form>
+</div>
+
+<div class="tabbertab">
+<h2>Stages</h2>
+{% if object.stage_set.count %}
+<div>
+
+<table width="100%">
+<tbody id="stages-table">
+<tr class="draggable" py:for="stage in deployment.stages" id="stage-${stage.id}">
+<th>${stage.cardinality} - <a href="/stage/${stage.id}/">${stage.name}</a></th>
+<td><a py:if="stage.recipe.name"
+href="/cookbook/${stage.recipe.id}/">Cookbook Recipe:
+${stage.recipe.name}</a>
+<div py:if="not
+	    stage.recipe.name"><b>${stage.recipe.language}</b><br
+								 /><div
+	    class="code">${XML(stage.recipe.code_html())}</div></div>
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+{% endif %}
+
+<form action="add_stage/" method="post">
+<fieldset><legend>Add Stage</legend>
+<table>
+<tr><th>name</th><td><input type="text" name="name"/></td></tr>
+<tr><th>recipe</th><td>Select a Cookbook recipe <select
+name="recipe_id">
+<option value="">None - Add code below</option>
+{% for recipe in all_recipes %}
+<option value="{{recipe.id}}">{{recipe.name}}</option>
+{% endfor %}
+</select><br />
+Or enter new code:<br />
+<select
+   name="language"><option
+		      value="python">python</option><option
+						       value="shell">shell</option></select><br />
+<textarea name="code" cols="60" rows="5" class="resizable"></textarea>
+
+</td></tr>
+</table><input type="submit" value="add stage" />
+
+</fieldset>
+</form>
+</div>
+
+<div class="tabbertab">
+<h2>Clone</h2>
+<form action="clone/" method="post">
+<p>Clone this deployment.</p>
+<p>New deployment name: <input type="text" name="name" /></p>
+<p>In Application: 
+
+<select name="application_id">
+{% for category in all_categories %}
+<optgroup label="{{category.name}}">
+{% for application in category.application_set.all %}
+<option id="{{application.id}}"
+{% ifequal application.id object.application.id %}
+selected="selected"
+{% endifequal %}>{{application.name}}</option>
+{% endfor %}
+</optgroup>
+{% endfor %}
+</select></p>
+
+ <input type="submit" value="Clone"/>
+</form>
+</div>
+
+
+<div class="tabbertab">
+<h2>Delete</h2>
+<form action="delete/" method="post">
+<p>Delete this deployment: <input type="submit" value="DELETE"/></p>
+</form>
+</div>
+</div>
+
+
+{% endblock %}
