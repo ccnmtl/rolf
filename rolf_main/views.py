@@ -54,3 +54,19 @@ def add_setting(request,object_id):
                                    name=request.POST.get('name','unknown'),
                                    value=request.POST.get('value',''))
     return HttpResponseRedirect(deployment.get_absolute_url())
+
+@login_required
+def edit_settings(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        for k in request.POST.keys():
+            if k.startswith('setting_name_'):
+                setting_id = int(k[len('setting_name_'):])
+                setting = get_object_or_404(Setting,id=setting_id)
+                if request.POST[k] == "":
+                    setting.delete
+                else:
+                    setting.name = request.POST[k]
+                    setting.value = request.POST.get("setting_value_%d" % setting_id,"")
+                    setting.save()
+    return HttpResponseRedirect(deployment.get_absolute_url())
