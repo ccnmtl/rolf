@@ -27,6 +27,9 @@ class Deployment(models.Model):
     class Meta:
         order_with_respect_to = "application"
 
+    def get_absolute_url(self):
+        return "/deployment/%d/" % self.id
+
 class Setting(models.Model):
     deployment = models.ForeignKey(Deployment)
     name = models.CharField(max_length=256)

@@ -9,7 +9,7 @@
 <div>
 <table width="100%">
 
-{% for deployment in object.deployment_set %}
+{% for deployment in object.deployment_set.all %}
 <tr class="{{deployment.status}}">
 <th><a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a></th></tr>
 {% endfor %}

@@ -37,3 +37,11 @@ def add_application(request,object_id):
         a = Application.objects.create(category=category,
                                        name=request.POST.get('name','unknown'))
     return HttpResponseRedirect(category.get_absolute_url())
+
+@login_required
+def add_deployment(request,object_id):
+    application = get_object_or_404(Application,id=object_id)
+    if request.method == "POST":
+        a = Deployment.objects.create(application=application,
+                                       name=request.POST.get('name','unknown'))
+    return HttpResponseRedirect(application.get_absolute_url())
