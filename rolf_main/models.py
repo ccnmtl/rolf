@@ -52,6 +52,9 @@ class Stage(models.Model):
     class Meta:
         order_with_respect_to = "deployment"
 
+    def get_absolute_url(self):
+        return "/stage/%d/" % self.id
+
 class Push(models.Model):
     user = models.ForeignKey(User)
     deployment = models.ForeignKey(Deployment)

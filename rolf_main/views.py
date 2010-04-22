@@ -70,3 +70,21 @@ def edit_settings(request,object_id):
                     setting.value = request.POST.get("setting_value_%d" % setting_id,"")
                     setting.save()
     return HttpResponseRedirect(deployment.get_absolute_url())
+
+@login_required
+def add_stage(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        recipe = None
+        code = request.POST.get('code','').replace('\r\n','\n')
+        recipe_id = request.POST.get('recipe_id','')
+        if recipe_id:
+            recipe = get_object_or_404(Recipe,id=recipe_id)
+        else:
+            recipe = Recipe.objects.create(name="",description="",
+                                           language=request.POST.get('language','python'),
+                                           code=code)
+        stage = Stage.objects.create(deployment=deployment,recipe=recipe,
+                                     name=request.POST.get('name','unknown stage'))
+        
+    return HttpResponseRedirect(deployment.get_absolute_url())
