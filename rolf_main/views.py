@@ -109,3 +109,15 @@ def clone_deployment(request,object_id):
             s = Stage.objects.create(deployment=new_deployment,name=stage.name,recipe=r)
         return HttpResponseRedirect(new_deployment.get_absolute_url())
     return HttpResponseRedirect(deployment.get_absolute_url())
+
+@login_required
+def push(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        push = deployment.new_push(user=request.user,comment=request.POST.get('comment',''))
+        if request.POST.get('step',''):
+            return HttpResponseRedirect(push.get_absolute_url() + "?step=1")
+        else:
+            return HttpResponseRedirect(push.get_absolute_url())
+    else:
+        return HttpResponse("POST requests, only, please")
