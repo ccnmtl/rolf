@@ -147,3 +147,14 @@ def add_cookbook_recipe(request):
     description = request.POST.get('description','')
     r = Recipe.objects.create(name=name,description=description,language=language,code=code)
     return HttpResponseRedirect("/cookbook/")
+
+@login_required
+def edit_recipe(request,object_id):
+    recipe = get_object_or_404(Recipe,id=object_id)
+    recipe.name = request.POST.get('name','')
+    recipe.description = request.POST.get('description','')
+    recipe.language = request.POST.get('language','')
+    code = request.POST.get('code','').replace('\r\n','\n')
+    recipe.code = code
+    recipe.save()
+    return HttpResponseRedirect(recipe.get_absolute_url())
