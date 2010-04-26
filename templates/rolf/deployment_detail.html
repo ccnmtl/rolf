@@ -35,7 +35,7 @@ Comment: <input type="text" name="comment" /> (<input type="checkbox" name="step
 {% for push in object.push_set.all %}
 <tr class="{{push.status}}">
 <th><a
-       href="{{push.get_absolute_url}}">{{push.start_time}}</a></th>
+       href="{{push.get_absolute_url}}">{{push.start_time|date:"jS F Y H:i"}}</a></th>
 <td>{{push.user.first_name}} {{push.user.last_name}}</td>
 <td>{{push.comment}}</td>
 </tr>
