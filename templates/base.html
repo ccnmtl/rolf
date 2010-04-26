@@ -18,7 +18,7 @@
 	{% block js %}{% endblock %}
 	{% block feeds %}{% endblock %}
 </head>
-<body class="one_column {% block widthtype %}fixed{% endblock %}">
+<body class="one_column {% block widthtype %}fixed{% endblock %} {% block extra_body_classes %}{% endblock %}">
 {% comment %}
 ###### FOR WIDTH TYPE--
    fixed : fixed width, doesn't change with browser resize

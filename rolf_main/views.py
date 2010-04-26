@@ -133,3 +133,17 @@ def stage(request,object_id):
                                    end_time=str(pushstage.end_time),
                                    stage_id=pushstage.stage.id)),
                         mimetype='application/json')
+
+@login_required
+@rendered_with('rolf/cookbook.html')
+def cookbook(request):
+    return dict(all_recipes=Recipe.objects.all().exclude(name=""))
+
+@login_required
+def add_cookbook_recipe(request):
+    code = request.POST.get('code','').replace('\r\n','\n')        
+    name = request.POST.get('name','')
+    language = request.POST.get('language','')
+    description = request.POST.get('description','')
+    r = Recipe.objects.create(name=name,description=description,language=language,code=code)
+    return HttpResponseRedirect("/cookbook/")

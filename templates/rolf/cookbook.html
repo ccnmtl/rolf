@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block extra_body_classes %}cookbook{% endblock %}
+{% block content %}
+
+<h1>Cookbook</h1>
+
+<ul class="toc">
+{% for recipe in all_recipes %}
+<li><a href="#recipe-{{recipe.id}}">{{recipe.name}}</a></li>
+{% endfor %}
+</ul>
+{% for recipe in all_recipes %}
+<div id="recipe-{{recipe.id}}">
+<h2><a href="/cookbook/{{recipe.id}}/">{{recipe.name}}</a></h2>
+<p>{{recipe.description}}</p>
+<p><b>{{recipe.language}}</b></p>
+<div class="code">{{recipe.code_html|safe}}</div>
+</div>
+{% endfor %}
+
+<form action="add/" method="post">
+<fieldset><legend>add recipe</legend>
+<table>
+<tr><th>name</th>
+<td><input type="text" name="name" /></td></tr>
+<tr><th>description</th>
+<td><textarea name="description" rows="5" cols="60" class="resizable"></textarea></td>
+</tr>
+
+<tr><th>code</th>
+<td>
+language <select name="language">
+<option value="python">python</option>
+<option value="shell">shell</option>
+</select><br />
+<textarea name="code" rows="5" cols="60" class="resizable"></textarea></td>
+</tr>
+
+</table>
+<input type="submit" value="add recipe" />
+</fieldset>
+</form>
+
+
+{% endblock %}
