@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1><a href="/cookbook/">Cookbook</a>: {{object.name}}</h1>
+
+<form action="edit/" method="post">
+<table>
+<tr><th>name</th>
+<td><input type="text" name="name" value="{{object.name}}"/>
+{% ifequal object.name '' %}
+<span style="color: #f00">You must give this recipe a name to
+  enter it in the cookbook</span>{% endifequal %}
+</td></tr>
+<tr><th>description</th>
+<td><textarea name="description" rows="5" cols="60" class="resizable">{{object.description}}</textarea></td>
+</tr>
+
+<tr><th>code</th>
+<td>
+language <select name="language">
+{% ifequal object.language "python" %}
+<option value="python" selected="selected">python</option>
+<option value="shell">shell</option>
+{% else %}
+<option value="python">python</option>
+<option value="shell" selected="selected">shell</option>
+{% endifequal %}
+
+</select><br />
+<textarea name="code" rows="5" cols="60" class="resizable">{{object.code}}</textarea></td>
+</tr>
+
+
+</table>
+<input type="submit" value="save"/>
+</form>
+
+{% if object.stage_set.count %}
+<div>
+<h2>Deployments using this recipe</h2>
+<table width="100%">
+{% for stage in object.stage_set.all %}
+<tr class="{% cycle 'odd' or 'even' %}">
+<td>
+<a
+   href="{{stage.deployment.application.category.get_absolute_url}}">{{stage.deployment.application.category.name}}</a>
+   :
+<a
+   href="{{stage.deployment.application.get_absolute_url}}">{{stage.deployment.application.name}}</a> :
+<a href="{{stage.deployment.get_absolute_url}}">{{stage.deployment.name}}</a></td>
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+<hr />
+<form action="delete/" method="post">
+<fieldset><legend>delete recipe</legend>
+<input type="submit" value="DELETE" />
+</fieldset>
+</form>
+
+{% endblock %}

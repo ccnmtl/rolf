@@ -4,7 +4,7 @@ from django.conf import settings
 import os.path
 admin.autodiscover()
 import staticmedia
-from rolf_main.models import Category, Application, Deployment, Push
+from rolf_main.models import Category, Application, Deployment, Push, Recipe
 
 category_info_dict = {
     'queryset': Category.objects.all(),
@@ -26,6 +26,11 @@ push_info_dict = {
     'template_name' : 'rolf/push_detail.html',
 }
 
+recipe_info_dict = {
+    'queryset': Recipe.objects.all(),
+    'template_name' : 'rolf/recipe_detail.html',
+}
+
 
 site_media_root = os.path.join(os.path.dirname(__file__),"media")
 
@@ -45,6 +50,7 @@ urlpatterns = patterns('',
                        (r'push/(?P<object_id>\d+)/$','django.views.generic.list_detail.object_detail',push_info_dict),
                        (r'push/(?P<object_id>\d+)/stage/$','rolf_main.views.stage'),
                        (r'cookbook/$','rolf_main.views.cookbook'),
+                       (r'cookbook/(?P<object_id>\d+)/$','django.views.generic.list_detail.object_detail',recipe_info_dict),
                        (r'cookbook/add/$','rolf_main.views.add_cookbook_recipe'),
                        ('^accounts/',include('djangowind.urls')),
                        (r'^admin/(.*)', admin.site.root),
