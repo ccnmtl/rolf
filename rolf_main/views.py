@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 from models import *
-
+from simplejson import dumps
 
 class rendered_with(object):
     def __init__(self, template_name):
@@ -121,3 +121,15 @@ def push(request,object_id):
             return HttpResponseRedirect(push.get_absolute_url())
     else:
         return HttpResponse("POST requests, only, please")
+
+@login_required
+def stage(request,object_id):
+    push = get_object_or_404(Push,id=object_id)
+    pushstage = push.run_stage(request.GET.get('stage_id',None),
+                               request.GET.get('rollback_id',None))
+    logs = [dict(command=l.command,stdout=l.stdout,stderr=l.stderr) for l in pushstage.log_set.all()]
+    return HttpResponse(dumps(dict(status=pushstage.status,
+                                   logs=logs,
+                                   end_time=str(pushstage.end_time),
+                                   stage_id=pushstage.stage.id)),
+                        mimetype='application/json')

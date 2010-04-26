@@ -128,14 +128,18 @@ class Push(models.Model):
     class Meta:
         ordering = ('-start_time',)
 
+    def get_absolute_url(self):
+        return "/push/%d/" % self.id
+
     def run_stage(self,stage_id,rollback_id=""):
         rollback = None
-        if rollback_id != "":
+        if rollback_id:
             rollback = Push.objects.get(id=rollback_id)
         stage = Stage.objects.get(id=stage_id)
         pushstage = PushStage.objects.create(push=self,stage=stage)
         pushstage.run(rollback)
-        if pushstage.status == "failed" or pushstage.stage.id == self.deployment.stage_set.all()[-1].id:
+        all_stages = list(self.deployment.stage_set.all())
+        if pushstage.status == "failed" or pushstage.stage.id == all_stages[-1].id:
             # last stage, so set the push status
             self.status = pushstage.status
             self.end_time = datetime.now()
@@ -151,7 +155,7 @@ class Push(models.Model):
         d['CWD'] = self.checkout_dir()
         d['CHECKOUT_DIR'] = self.checkout_dir()
         d['PUSH_COMMENT'] = self.comment
-        d['PUSH_UNI'] = self.user.user_name
+        d['PUSH_UNI'] = self.user.username
         d['ROLLBACK_URL'] = self.rollback_url
         d['ROLF_PUSH_ID'] = "%d" % self.id
         return d
@@ -249,7 +253,7 @@ class PushStage(models.Model):
             return ""
 
     def stderr(self):
-        if self.logs_set.count() > 0:
+        if self.log_set.count() > 0:
             return self.log_set.all()[0].stderr
         else:
             return ""

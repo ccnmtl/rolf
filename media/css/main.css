@@ -832,3 +832,508 @@ body.fluid #content
 	border: 0;
 }
 
+td, th {padding:3px;border:none;}
+tr th {text-align:left;background-color:#f0f0f0;color:#333;}
+tr.odd td {background-color:#edf3fe;}
+tr.even td {background-color:#fff;}
+
+th h2 {
+  margin: 0px;
+}
+
+
+#search {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+        margin: 0px;
+        padding: 0px;
+}
+#search form {
+	margin: 0px;
+	padding: 0px;
+}
+#search input {
+	font-size: .9em;
+}
+
+a.link, a, a.active {
+  color: #369;
+}
+
+
+#main_content {
+  color: black;
+  font-size: 127%;
+  background-color: white;
+  width: 1000px;
+  margin: 0 auto 0 auto;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+#sidebar {
+  border: 1px solid #aaa;
+  background-color: #eee;
+  margin: 0.5em;
+  padding: 1em;
+  float: right;
+  width: 200px;
+  font-size: 88%;
+}
+
+#sidebar h2 {
+  margin-top: 0;
+}
+
+#sidebar ul {
+  margin-left: 1.5em;
+  padding-left: 0;
+}
+
+h1,h2,h3,h4,h5,h6,#getting_started_steps {
+  font-family: "Century Schoolbook L", Georgia, serif;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+h2 {
+  font-size: 150%;
+}
+
+
+#getting_started_steps a {
+  text-decoration: none;
+}
+
+#getting_started_steps a:hover {
+  text-decoration: underline;
+}
+
+#getting_started_steps li {
+  font-size: 80%;
+  margin-bottom: 0.5em;
+}
+
+#getting_started_steps h2 {
+  font-size: 120%;
+}
+
+#getting_started_steps p {
+  font: 100% "Lucida Grande", "Lucida Sans Unicode", geneva, verdana, sans-serif;
+}
+
+#footer {
+  border: 1px solid #aaa;
+  border-top: 0px none;
+  color: #999;
+  background-color: white;
+  padding: 10px;
+  font-size: 80%;
+  text-align: center;
+  width: 1000px;
+  margin: 0 auto 1em auto;
+}
+
+.code {
+  font-family: monospace;
+background-color: #fff; font-family: courier; font-size: 12px; margin: 0px;
+
+overflow: auto;
+}
+
+span.code {
+  font-weight: bold;
+  background: #eee;
+}
+
+#status_block {
+  margin: 0 auto 0.5em auto;
+  padding: 15px 10px 15px 55px;
+  background: #cec URL('../images/ok.png') left center no-repeat;
+  border: 1px solid #9c9;
+  width: 450px;
+  font-size: 120%;
+  font-weight: bolder;
+}
+
+.notice {
+  margin: 0.5em auto 0.5em auto;
+  padding: 15px 10px 15px 55px;
+  width: 450px;
+  background: #eef URL('../images/info.png') left center no-repeat;
+  border: 1px solid #cce;
+}
+
+.fielderror {
+    color: red;
+    font-weight: bold;
+}
+
+.rating-0 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-00.gif');
+}
+
+.rating-1 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-01.gif');
+}
+
+.rating-2 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-02.gif');
+}
+
+.rating-3 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-03.gif');
+}
+
+.rating-4 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-04.gif');
+}
+
+.rating-5 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-05.gif');
+}
+
+.rating-6 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-06.gif');
+}
+
+.rating-7 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-07.gif');
+}
+
+.rating-8 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-08.gif');
+}
+
+.rating-9 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-09.gif');
+}
+
+.rating-10 {
+  width: 92px;
+  height: 15px;
+  background: URL('../images/stars-10.gif');
+}
+
+#menu ul {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+#menu li {
+      display: inline;
+}
+#menu a {
+color: #fff;
+
+text-decoration: none;
+}
+
+#menu a:hover {
+color: #369;
+background: #fff;
+}
+
+a.intersection {font-weight: bold;}
+
+tr.application th {padding-left: 20px;}
+tr.deployment th {padding-left: 40px;}
+
+td,th {vertical-align: top;}
+
+
+/*--------------------------------------------------
+  REQUIRED to hide the non-active tab content.
+  But do not hide them in the print stylesheet!
+  --------------------------------------------------*/
+.tabberlive .tabbertabhide {
+ display:none;
+}
+
+/*--------------------------------------------------
+  .tabber = before the tabber interface is set up
+  .tabberlive = after the tabber interface is set up
+  --------------------------------------------------*/
+.tabber {
+}
+.tabberlive {
+ margin-top:1em;
+}
+
+/*--------------------------------------------------
+  ul.tabbernav = the tab navigation list
+  li.tabberactive = the active tab
+  --------------------------------------------------*/
+ul.tabbernav
+{
+ margin:0;
+ padding: 3px 0;
+ border-bottom: 1px solid #778;
+ font: bold 12px Verdana, sans-serif;
+}
+
+ul.tabbernav li
+{
+ list-style: none;
+ margin: 0;
+ display: inline;
+}
+
+ul.tabbernav li a
+{
+ padding: 3px 0.5em;
+ margin-left: 3px;
+ border: 1px solid #778;
+ border-bottom: none;
+ background: #DDE;
+ text-decoration: none;
+}
+
+ul.tabbernav li a:link { color: #448; }
+ul.tabbernav li a:visited { color: #667; }
+
+ul.tabbernav li a:hover
+{
+ color: #000;
+ background: #AAE;
+ border-color: #227;
+}
+
+ul.tabbernav li.tabberactive a
+{
+ background-color: #fff;
+ border-bottom: 1px solid #fff;
+}
+
+ul.tabbernav li.tabberactive a:hover
+{
+ color: #000;
+ background: white;
+ border-bottom: 1px solid white;
+}
+
+/*--------------------------------------------------
+  .tabbertab = the tab content
+  Add style only after the tabber interface is set up (.tabberlive)
+  --------------------------------------------------*/
+.tabberlive .tabbertab {
+ padding:5px;
+ border:1px solid #aaa;
+ border-top:0;
+
+ /* If you don't want the tab size changing whenever a tab is changed
+    you can set a fixed height */
+
+ /* height:200px; */
+
+ /* If you set a fix height set overflow to auto and you will get a
+    scrollbar when necessary */
+
+ /* overflow:auto; */
+}
+
+/* If desired, hide the heading since a heading is provided by the tab */
+.tabberlive .tabbertab h2 {
+ display:none;
+}
+.tabberlive .tabbertab h3 {
+ display:none;
+}
+
+/* Example of using an ID to set different styles for the tabs on the page */
+.tabberlive#tab1 {
+}
+.tabberlive#tab2 {
+}
+.tabberlive#tab2 .tabbertab {
+ height:200px;
+ overflow:auto;
+}
+
+tr.ok td { background-color: #cfc; }
+
+
+
+tr.ok th {
+background: #cfc url(/static/images/ok.gif) no-repeat 0px 0px;
+padding-left: 22px;
+height: 19px;
+}
+
+
+tr.nested-ok th {
+background: #cfc url(/static/images/ok.gif) no-repeat 0px 0px;
+height: 19px;
+}
+
+tr.nested-failed th {
+background: #fcc url(/static/images/failed.gif) no-repeat 0px 0px;
+height: 19px;
+}
+
+div.nested-ok {
+background: #cfc url(/static/images/ok.gif) no-repeat 0px 0px;
+height: 19px;
+padding-left: 30px;
+}
+
+div.nested-failed {
+background: #fcc url(/static/images/failed.gif) no-repeat 0px 0px;
+height: 19px;
+padding-left: 30px;
+}
+
+div.nested-inprogress {
+background: #ccf url(/static/images/spinner.gif) no-repeat 0px 0px;
+height: 19px;
+padding-left: 30px;
+}
+
+div#all-applications h2 {
+   background-color: #eee;
+   border-top: #000 solid 1px;
+}
+
+
+
+div.nest th {
+  background-color: #fff;
+  border-top: #ccc solid 1px;
+}
+
+tr.failed td { background-color: #fcc;}
+
+tr.failed th { background: #fcc url(/static/images/failed.gif) no-repeat 0px 0px;
+padding-left: 22px;
+height: 19px;
+}
+
+tr.inprogress th, tr.inprogress td {background-color: #ccf;}
+
+tr.inprogress th { background: #ccf url(/static/images/spinner.gif) no-repeat 0px 0px;
+padding-left: 22px;
+ }
+
+tr.unknown th {background-color: #ccc;}
+tr.unknown td {background-color: #fff;}
+
+
+td.stdout pre, td.stderr pre { background-color: #fff; font-family: courier; font-size: 10px; margin: 0px;
+max-width: 100%;
+overflow: auto;
+}
+
+h3 { font-size: 100%; margin: 0px; font-weight: normal; }
+
+h3.hidden { 
+            cursor: pointer;
+            padding-left: 15px;
+            background: url(/static/images/arrow_right.png) no-repeat 0px 4px;
+ }
+
+h3.showing { 
+             cursor: pointer;
+             padding-left: 15px;
+             background: url(/static/images/arrow_down.png) no-repeat 0px 4px;
+ }
+
+
+td.command pre {
+	   background-color: #eee;
+	   border: #ccc solid 1px;
+	   padding: 3px;
+}
+
+
+td.stdout pre {
+	  border: #cfc solid 1px;
+	  padding: 3px;
+}
+
+td.stderr pre {
+	  border: #fcc solid 1px;
+	  padding: 3px;	  
+}
+
+div#push-status {
+
+		font-size: 300%;
+
+}
+
+div.ok {
+       color: #060;
+       border: #060 solid 1px;
+       padding-left: 50px;
+       background: #cec url(/static/images/ok_check.png) no-repeat 0px 0px;
+       height: 48px;
+}
+
+div.failed {
+	   color: #f00;
+	   background-color: #fcc;
+	   border: #600 solid 1px;
+       background: #fcc url(/static/images/large_failed.png) no-repeat
+	   0px 0px;
+	   padding-left: 50px;
+}
+
+div.inprogress {
+	   color: #00f;
+	   border: #006 solid 1px;
+	   background: #e7e7e7 url(/static/images/large_spinner.gif) no-repeat 0px 0px;
+	   padding-left: 50px;
+	   height: 50px;
+}	   
+
+.p_string{color: #c66;}
+.p_word{color:purple;}
+.p_commentline{
+	color: #c33;
+	font-style:italic;
+}
+
+.pl_string{color:red;}
+.pl_word{color:blue;}
+.pl_commentline{
+	color:green;
+	font-style:italic;
+}
+
+.pl_identifier {
+	       color: #c66;
+}
+
+.pl_scalar {
+   color: #b93;
+}
+
+body.cookbook h2 {
+border-top: #000 solid 1px;
+}
+
+.dragging { cursor: move;}

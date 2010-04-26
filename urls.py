@@ -4,7 +4,7 @@ from django.conf import settings
 import os.path
 admin.autodiscover()
 import staticmedia
-from rolf_main.models import Category, Application, Deployment
+from rolf_main.models import Category, Application, Deployment, Push
 
 category_info_dict = {
     'queryset': Category.objects.all(),
@@ -19,6 +19,11 @@ application_info_dict = {
 deployment_info_dict = {
     'queryset': Deployment.objects.all(),
     'template_name' : 'rolf/deployment_detail.html',
+}
+
+push_info_dict = {
+    'queryset': Push.objects.all(),
+    'template_name' : 'rolf/push_detail.html',
 }
 
 
@@ -37,6 +42,8 @@ urlpatterns = patterns('',
                        (r'deployment/(?P<object_id>\d+)/add_stage/$','rolf_main.views.add_stage'),
                        (r'deployment/(?P<object_id>\d+)/clone/$','rolf_main.views.clone_deployment'),
                        (r'deployment/(?P<object_id>\d+)/push/$','rolf_main.views.push'),
+                       (r'push/(?P<object_id>\d+)/$','django.views.generic.list_detail.object_detail',push_info_dict),
+                       (r'push/(?P<object_id>\d+)/stage/$','rolf_main.views.stage'),
                        ('^accounts/',include('djangowind.urls')),
                        (r'^admin/(.*)', admin.site.root),
 		       (r'^survey/',include('survey.urls')),
