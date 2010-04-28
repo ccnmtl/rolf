@@ -123,6 +123,19 @@ def push(request,object_id):
         return HttpResponse("POST requests, only, please")
 
 @login_required
+def rollback(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        push_id = request.POST.get('push_id','')
+        push = deployment.new_push(user=request.user,comment=request.POST.get('comment',''))
+        if request.POST.get('step',''):
+            return HttpResponseRedirect("/push/%d/?step=1;rollback=%s" % (push.id,push_id))
+        else:
+            return HttpResponseRedirect("/push/%d/?rollback=%s" % (push.id,push_id))
+    else:
+        return HttpResponse("requires POST")
+
+@login_required
 def stage(request,object_id):
     push = get_object_or_404(Push,id=object_id)
     pushstage = push.run_stage(request.GET.get('stage_id',None),
