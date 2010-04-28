@@ -17,7 +17,7 @@ src="/site_media/js/MochiKit/MochiKit.js"></script>
    : 
 <a href="{{object.deployment.get_absolute_url}}">{{object.deployment.name}}</a></h1>
 
-{% if push.comment %}
+{% if object.comment %}
 <p>{{object.comment}}</p>
 {% endif %}
 
@@ -26,7 +26,7 @@ src="/site_media/js/MochiKit/MochiKit.js"></script>
 
 <div id="push-status" class="{{object.status}}">{{object.status}}</div>
 
-{% if not push.pushstage_set.count %}
+{% if not object.pushstage_set.count %}
 <div>
 <!-- the push hasn't actually happened yet. we add the interface doing that here -->
 
@@ -61,9 +61,10 @@ id="execute-{{stage.id}}" />
 </div>
 
 <div>
+{% else %}
 
-{% if push.rollback_url %}
-{% ifequal push.status 'ok' %}
+{% if object.rollback_url %}
+{% ifequal object.status 'ok' %}
 <form action="{{object.deployment.get_absolute_url}}rollback/" method="post">
 <fieldset><legend>Rollback to this Push</legend>
 <input type="hidden" name="push_id" value="{{object.id}}" />
@@ -75,26 +76,33 @@ comment <input type="text" name="comment" /> (<input type="checkbox"
 {% endifequal %}
 {% endif %}
 
-{% if push.pushstage_set.count %}
+{% if object.pushstage_set.count %}
 <h2>stages</h2>
-<table style="width: 100%">
-{% for pushstage in push.pushstage_set.all %}
+<table style="width: 100%" >
+{% for pushstage in object.reverse_pushstages %}
 <tr class="{{pushstage.status}} pushstage-row" id="pushstage-{{pushstage.id}}">
-<th>{{pushstage.stage.name}}</th>
-<td>{{pushstage.end_time}}</td>
+  <th>{{pushstage.stage.name}}</th>
+  <td>{{pushstage.end_time|date:"jS F Y H:i"}}</td>
 </tr>
 
 {% for log in pushstage.log_set.all %}
-<tr>
+
   {% if log.command %}
+<tr>
   <td colspan="2" class="command"><h3>Code</h3><pre>{{log.command}}</pre></td>
+</tr>
   {% endif %}
   {% if log.stdout %}
+<tr>
   <td colspan="2" class="stdout"><h3>STDOUT</h3><pre>{{log.stdout}}</pre></td>
+</tr>
   {% endif %}
   {% if log.stderr %}
+<tr>
   <td colspan="2" class="stderr"><h3>STDERR</h3><pre>{{log.stderr}}</pre></td>
+</tr>
   {% endif %}
+
 {% endfor %}
 
 {% endfor %}

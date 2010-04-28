@@ -167,6 +167,9 @@ class Push(models.Model):
         d['ROLF_PUSH_ID'] = "%d" % self.id
         return d
 
+    def reverse_pushstages(self):
+        return self.pushstage_set.all().order_by("id")
+
 
 class PushStage(models.Model):
     push = models.ForeignKey(Push)
