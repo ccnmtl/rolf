@@ -119,6 +119,10 @@ class Stage(models.Model):
     def get_absolute_url(self):
         return "/stage/%d/" % self.id
 
+    def all_recipes(self):
+        """ helper to make this available in generic templates """
+        return Recipe.objects.all().exclude(name="").exclude(id=self.recipe.id)
+
 class Push(models.Model):
     user = models.ForeignKey(User)
     deployment = models.ForeignKey(Deployment)
