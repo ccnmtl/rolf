@@ -158,3 +158,31 @@ def edit_recipe(request,object_id):
     recipe.code = code
     recipe.save()
     return HttpResponseRedirect(recipe.get_absolute_url())
+
+@login_required
+def edit_stage(request,object_id):
+    stage = get_object_or_404(Stage,id=object_id)
+    stage.name = request.POST.get('name','')
+    code = request.POST.get('code','').replace('\r\n','\n')
+    recipe_id = request.POST.get('recipe_id','')
+    if recipe_id != "":
+        r = Recipe.objects.get(recipe_id)
+        stage.recipe = r
+    else:
+        if stage.recipe.name != "":
+            stage.recipe = Recipe.objects.create(language=request.POST.get('language','shell'),code="")
+        else:
+            stage.recipe.language = request.POST.get('language','shell')
+            stage.recipe.code = code
+            stage.recipe.save()
+    stage.save()
+    return HttpResponseRedirect(stage.get_absolute_url())
+
+@login_required
+def reorder_stages(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    ids = [(int(k[len('stage_'):]),int(v)) for k,v in request.GET.items() if k.startswith('stage_')]
+    ids.sort(key=lambda x: x[1])
+    deployment.set_stage_order([x[0] for x in ids])
+    return HttpResponse("ok")
+    

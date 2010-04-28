@@ -4,7 +4,7 @@ from django.conf import settings
 import os.path
 admin.autodiscover()
 import staticmedia
-from rolf_main.models import Category, Application, Deployment, Push, Recipe
+from rolf_main.models import Category, Application, Deployment, Push, Recipe, Stage
 
 category_info_dict = {
     'queryset': Category.objects.all(),
@@ -31,6 +31,11 @@ recipe_info_dict = {
     'template_name' : 'rolf/recipe_detail.html',
 }
 
+stage_info_dict = {
+    'queryset': Stage.objects.all(),
+    'template_name' : 'rolf/stage_detail.html',
+}
+
 
 site_media_root = os.path.join(os.path.dirname(__file__),"media")
 
@@ -49,6 +54,7 @@ urlpatterns = patterns('',
                        (r'deployment/(?P<object_id>\d+)/add_stage/$','rolf_main.views.add_stage'),
                        (r'deployment/(?P<object_id>\d+)/clone/$','rolf_main.views.clone_deployment'),
                        (r'deployment/(?P<object_id>\d+)/push/$','rolf_main.views.push'),
+                       (r'deployment/(?P<object_id>\d+)/reorder_stages/$','rolf_main.views.reorder_stages'),
                        (r'deployment/(?P<object_id>\d+)/delete/$','django.views.generic.create_update.delete_object',dict(model=Deployment,
                                                                                                                           post_delete_redirect="/")),
 
@@ -62,6 +68,11 @@ urlpatterns = patterns('',
                        (r'cookbook/(?P<object_id>\d+)/delete/$','django.views.generic.create_update.delete_object',dict(model=Recipe,
                                                                                                                         post_delete_redirect="/cookbook/")),
                        (r'cookbook/add/$','rolf_main.views.add_cookbook_recipe'),
+
+                       (r'stage/(?P<object_id>\d+)/$','django.views.generic.list_detail.object_detail',stage_info_dict),
+                       (r'stage/(?P<object_id>\d+)/edit/$','rolf_main.views.edit_stage'),
+                       (r'stage/(?P<object_id>\d+)/delete/$','django.views.generic.list_detail.object_detail',dict(model=Stage,post_delete_redirect="/")),
+
                        ('^accounts/',include('djangowind.urls')),
                        (r'^admin/(.*)', admin.site.root),
 		       (r'^survey/',include('survey.urls')),
