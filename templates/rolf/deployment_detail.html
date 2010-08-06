@@ -130,7 +130,7 @@ value="{{setting.value}}" style="width: 100%" /></td>
     <td>Select a Cookbook recipe 
       <select name="recipe_id">
 	<option value="">None - Add code below</option>
-	{% for recipe in all_recipes %}
+	{% for recipe in object.all_recipes %}
 	<option value="{{recipe.id}}">{{recipe.name}}</option>
 	{% endfor %}
       </select><br />

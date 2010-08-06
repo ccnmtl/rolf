@@ -65,6 +65,9 @@ class Deployment(models.Model):
     def most_recent_push(self):
         return self.push_set.all()[0]
         
+    def all_recipes(self):
+        """ helper to make this available in generic templates """
+        return Recipe.objects.all().exclude(name="")
 
 class Setting(models.Model):
     deployment = models.ForeignKey(Deployment)
