@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.conf import settings
 import os.path
 admin.autodiscover()
-import staticmedia
 from rolf_main.models import Category, Application, Deployment, Push, Recipe, Stage
 
 category_info_dict = {
@@ -78,5 +77,5 @@ urlpatterns = patterns('',
                        (r'^admin/(.*)', admin.site.root),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': site_media_root}),
                        (r'^uploads/(?P<path>.*)$','django.views.static.serve',{'document_root' : settings.MEDIA_ROOT}),
-) + staticmedia.serve()
+) 
 

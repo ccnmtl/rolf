@@ -62,7 +62,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.markup',
-    'staticmedia',
     'django.contrib.admin',
     'tagging',
     'smartif',
@@ -75,11 +74,6 @@ THUMBNAIL_SUBDIR = "thumbs"
 EMAIL_SUBJECT_PREFIX = "[rolf] "
 EMAIL_HOST = 'localhost'
 SERVER_EMAIL = "rolf@ccnmtl.columbia.edu"
-
-# put any static media here to override app served static media
-STATICMEDIA_MOUNTS = (
-    ('/sitemedia', 'sitemedia'),
-)
 
 # WIND settings
 
