@@ -283,7 +283,7 @@ img, img a
 	padding: 0;
 	border: 0;
 	border-top: 1px solid #fc6;
-	background-color: #c30;
+	background-color: #03c;
 }
 
 #primarynav div.encase
@@ -319,24 +319,24 @@ img, img a
 	margin: 3px;
 	padding: 0 0.5em;
 	border: 0;
-	background-color: #fc6;
+	background-color: #6cf;
 	line-height: 24px;
 }
 
 #primarynav li:hover
 {
-	background-color: #fc9;
+	background-color: #9cf;
 }
 
 #primarynav a
 {
-	color: #900;
+	color: #009;
 	text-decoration: none;
 }
 
 #primarynav a:hover
 {
-	color: #c00;
+	color: #00c;
 	text-decoration: none;
 }
 
@@ -344,7 +344,7 @@ img, img a
 {
 	background: transparent;
 	font-weight: bold;
-	color: #fc6;
+	color: #6cf;
 	
 }
 
@@ -364,7 +364,7 @@ img, img a
 {
 	background: transparent;
 	font-weight: bold;
-	color: #fc6;
+	color: #6cf;
 	
 }
 
