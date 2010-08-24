@@ -2,12 +2,34 @@
 
 {% block title %}{{object.name}}{% endblock %}
 {% block js %}
-    <script type="text/javascript"
-    src="/site_media/js/MochiKit/MochiKit.js"></script>
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
+        type="text/javascript" ></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/site_media/js/tabber.js"></script>
 
-    <script type="text/javascript"
-    src="/site_media/js/dragdropreorder.js"></script>
+<script type="text/javascript">
+var saveOrder = function() {
+    var url = "reorder_stages/?";
+    var worktodo = 0;
+    jQuery("#stages-table tr").each(function(index,element) {
+       worktodo = 1;
+       var id = jQuery(element).attr('id').split("-")[1];
+       url += "stage_" + index + "=" + id + ";";
+    });
+    if (worktodo == 1) {
+        var req = new XMLHttpRequest();
+        req.open("POST",url,true);
+        req.send(null);
+    }
+};
+</script>
 
+<style type="text/css">
+	#stages-table .draggable { background-color: #ddd; }
+	.draghandle {float: left;}
+	.dragging {border: #f60 solid 1px;}
+	</style>
 {% endblock %}
 {% block content %}
 
@@ -101,7 +123,7 @@ value="{{setting.value}}" style="width: 100%" /></td>
 <tbody id="stages-table">
 {% for stage in object.stage_set.all %}
 <tr class="draggable" id="stage-{{stage.id}}">
-<th><a href="{{stage.get_absolute_url}}">{{stage.name}}</a></th>
+<th><span title="drag to reorder stages" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span><a href="{{stage.get_absolute_url}}">{{stage.name}}</a></th>
 <td>{% if stage.recipe.name %}
 <a href="{{stage.recipe.get_absolute_url}}">Cookbook Recipe:
 {{stage.recipe.name}}</a>
@@ -185,5 +207,19 @@ selected="selected"
 </div>
 </div>
 
+<script type="text/javascript">
+jQuery(function() {
+  jQuery("#stages-table").sortable({
+    containment : 'parent'
+    ,items : 'tr'
+    ,axis : 'y'
+    ,tolerance: 'pointer'
+    ,activeClass: 'dragging'
+    ,handle: '.draghandle'
+    ,stop: function (event,ui) { saveOrder();}
+  });
+  jQuery("#stages-table").disableSelection();
+});
+</script>
 
 {% endblock %}
