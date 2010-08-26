@@ -71,7 +71,7 @@ urlpatterns = patterns('',
 
                        (r'stage/(?P<object_id>\d+)/$','django.views.generic.list_detail.object_detail',stage_info_dict),
                        (r'stage/(?P<object_id>\d+)/edit/$','rolf_main.views.edit_stage'),
-                       (r'stage/(?P<object_id>\d+)/delete/$','django.views.generic.list_detail.object_detail',dict(model=Stage,post_delete_redirect="/")),
+                       (r'stage/(?P<object_id>\d+)/delete/$','django.views.generic.create_update.delete_object',dict(model=Stage,post_delete_redirect="/")),
 
                        ('^accounts/',include('djangowind.urls')),
                        (r'^admin/(.*)', admin.site.root),
