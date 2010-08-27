@@ -28,7 +28,9 @@ selected="selected"{% endifequal %}>{{recipe.name}}</option>
 Select a Cookbook recipe <select
 name="recipe_id">
 <option value="">None - Add code below</option>
-<option py:for="recipe in all_recipes" value="${recipe.id}">${recipe.name}</option>
+{% for recipe in object.all_recipes %}
+<option value="{{recipe.id}}">{{recipe.name}}</option>
+{% endfor %}
 </select><br />
 Or edit code:<br />
 
