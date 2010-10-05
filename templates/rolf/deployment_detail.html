@@ -66,7 +66,12 @@ Comment: <input type="text" name="comment" /> (<input type="checkbox" name="step
 <tr class="{{push.status}}">
 <th><a
        href="{{push.get_absolute_url}}">{{push.start_time|date:"jS F Y H:i"}}</a></th>
-<td>{{push.user.first_name}} {{push.user.last_name}}</td>
+<td>{% if push.user.last_name %}
+{{push.user.first_name}} {{push.user.last_name}}
+{% else %}
+{{push.user.username}}
+{% endif %}
+</td>
 <td>{{push.comment}}</td>
 </tr>
 {% endfor %}
