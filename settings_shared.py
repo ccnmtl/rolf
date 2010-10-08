@@ -4,9 +4,7 @@ import os.path
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    ('CCNMTL', 'ccnmtl-sysadmin@columbia.edu'),
-)
+ADMINS = ( )
 
 MANAGERS = ADMINS
 
@@ -67,6 +65,7 @@ INSTALLED_APPS = (
     'smartif',
     'template_utils',
     'typogrify',
+    'sentry.client',
     'rolf_main',
 )
 
