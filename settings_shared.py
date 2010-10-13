@@ -61,15 +61,10 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.markup',
     'django.contrib.admin',
-    'tagging',
-    'smartif',
-    'template_utils',
-    'typogrify',
     'sentry.client',
     'rolf_main',
 )
 
-THUMBNAIL_SUBDIR = "thumbs"
 EMAIL_SUBJECT_PREFIX = "[rolf] "
 EMAIL_HOST = 'localhost'
 SERVER_EMAIL = "rolf@ccnmtl.columbia.edu"

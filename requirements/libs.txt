@@ -8,9 +8,6 @@ requirements/src/cdap-1.0.tar.gz
 requirements/src/httplib2-0.4.0.tar.gz
 requirements/src/restclient-0.9.9.tar.gz
 requirements/src/Markdown-2.0.tar.gz
-requirements/src/pyenchant-1.5.1.tar.gz 
 requirements/src/simplejson-2.0.9.tar.gz
-requirements/src/smartypants-1.6.0.2.tar.gz
-requirements/src/uuid-1.30.tar.gz
 requirements/src/psycopg2-2.2.1.tar.gz
 
