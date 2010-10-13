@@ -1097,7 +1097,7 @@ ul.tabbernav li.tabberactive a:hover
 }
 
 tr.ok td { background-color: #cfc; }
-
+tr.odd td { background-color: #efe;}
 
 
 tr.ok th {
@@ -1105,7 +1105,7 @@ background: #cfc url(/site_media/img/ok.gif) no-repeat 0px 0px;
 padding-left: 22px;
 height: 19px;
 }
-
+tr.odd th { background-color: #efe;}
 
 tr.nested-ok th {
 background: #cfc url(/site_media/img/ok.gif) no-repeat 0px 0px;

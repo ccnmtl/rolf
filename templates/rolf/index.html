@@ -23,7 +23,7 @@
 
 <table width="100%">
 {% for push in recent_pushes %}
-<tr class="{{push.status}}">
+<tr class="{{push.status}} {% cycle "even" "odd" %}">
 <th><a
        href="{{push.deployment.application.category.get_absolute_url}}">{{push.deployment.application.category.name}}</a>
        :
