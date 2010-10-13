@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
 
-
+{% block js %}
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
+        type="text/javascript" ></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js" type="text/javascript"></script>
+{% endblock %}
 
 {% block content %}
 
+<div id="tabber">
+<ul>
+  {% if recent_pushes %}
+  <li><a href="#recent-pushes">Your Recent Pushes</a></li>
+  {% endif %}
+  <li><a href="#all-applications">All Applications</a></li>
+  <li><a href="#add-category">Add a New Category</a></li>
+</ul>
+
 {% if recent_pushes %}
-<h1>Your Recent Pushes</h1>
+<div id="recent-pushes">
 
 <table width="100%">
 {% for push in recent_pushes %}
@@ -23,13 +37,11 @@
 </tr>
 {% endfor %}
 </table>
-
+</div>
 {% endif %}
 
 {% if categories.count %}
 <div id="all-applications">
-<h1>All Applications</h1>
-
 {% for category in categories %}
 <div>
 <h2><a href="{{category.get_absolute_url}}">{{category.name}}</a></h2>
@@ -56,10 +68,17 @@
 </div>
 {% endif %}
 
+<div id="add-category">
 <form action="/category/add/" method="post">
 <p>Add A New Category: <input type="text" name="name" /> <input
 type="submit" value="Add" /></p>
 </form>
+</div>
 
+<script type="text/javascript">
+jQuery(function() {
+  jQuery("#tabber").tabs();
+});
+</script>
 
 {% endblock %}
