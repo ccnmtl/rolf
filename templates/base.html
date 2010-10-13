@@ -63,7 +63,13 @@
 			
 			{% block usernav %}
 			<ul>
-			  <li><a href="/accounts/logout/">logout</a></li>
+			  <li>logged in as {% if request.user.first_name %} 
+			    {{ request.user.first_name }}
+			    {{ request.user.last_name }}
+			    {% else %}
+			    {{ request.user.username }}
+			    {% endif %}
+			    [<a href="/accounts/logout/">logout</a>]</li>
 			</ul>
 			{% endblock %}
 
