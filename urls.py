@@ -73,6 +73,8 @@ urlpatterns = patterns('',
                        (r'stage/(?P<object_id>\d+)/edit/$','rolf_main.views.edit_stage'),
                        (r'stage/(?P<object_id>\d+)/delete/$','django.views.generic.create_update.delete_object',dict(model=Stage,post_delete_redirect="/")),
 
+
+                       (r'^logout/$', 'django.contrib.auth.views.logout', {'next_page':'/'}), 
                        ('^accounts/',include('djangowind.urls')),
                        (r'^admin/(.*)', admin.site.root),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': site_media_root}),
