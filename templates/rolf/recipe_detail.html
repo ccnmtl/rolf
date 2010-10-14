@@ -55,7 +55,7 @@ language <select name="language">
 <h2>Deployments using this recipe</h2>
 <table width="100%">
 {% for stage in object.stage_set.all %}
-<tr class="{% cycle 'odd' or 'even' %}">
+<tr class="{% cycle 'odd' 'even' %}">
 <td>
 <a
    href="{{stage.deployment.application.category.get_absolute_url}}">{{stage.deployment.application.category.name}}</a>
