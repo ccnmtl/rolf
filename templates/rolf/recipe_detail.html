@@ -1,8 +1,22 @@
 {% extends 'base.html' %}
+{% block js %}
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
+        type="text/javascript" ></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js" type="text/javascript"></script>
+{% endblock %}
 
 {% block content %}
 <h1><a href="/cookbook/">Cookbook</a>: {{object.name}}</h1>
 
+<div id="tabber">
+<ul>
+  <li><a href="#edit-tab">Edit</a></li>
+{% if object.stage_set.count %}  <li><a href="#deployments-tab">Deployments using this
+  recipe</a></li>{% endif %}
+  <li><a href="#delete-tab">Delete</a></li>
+</ul>
+<div id="edit-tab">
 <form action="edit/" method="post">
 <table>
 <tr><th>name</th>
@@ -34,9 +48,10 @@ language <select name="language">
 </table>
 <input type="submit" value="save"/>
 </form>
+</div>
 
 {% if object.stage_set.count %}
-<div>
+<div id="deployments-tab">
 <h2>Deployments using this recipe</h2>
 <table width="100%">
 {% for stage in object.stage_set.all %}
@@ -53,11 +68,19 @@ language <select name="language">
 </table>
 </div>
 {% endif %}
-<hr />
+
+<div id="delete-tab">
 <form action="delete/" method="post">
 <fieldset><legend>delete recipe</legend>
 <input type="submit" value="DELETE" />
 </fieldset>
 </form>
+</div>
+
+<script type="text/javascript">
+jQuery(function() {
+  jQuery("#tabber").tabs();
+});
+</script>
 
 {% endblock %}
