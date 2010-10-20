@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load perms %}
 {% block title %}{{object.name}}{% endblock %}
 {% block js %}
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
@@ -38,13 +38,15 @@ var saveOrder = function() {
 : 
 <a href="{{object.application.get_absolute_url}}">{{object.application.name}}</a> : {{object.name}}</h1>
 
+{% if_can_view object %}
 <div class="tabber">
 <ul>
 	<li><a href="#tab-push">Push</a></li>
-	<li><a href="#tab-settings">Settings</a></li>
-	<li><a href="#tab-stages">Stages</a></li>
-	<li><a href="#tab-clone">Clone</a></li>
-	<li><a href="#tab-delete">Delete</a></li>
+	{% if_can_edit object %}<li><a href="#tab-settings">Settings</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a href="#tab-stages">Stages</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a href="#tab-clone">Clone</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a href="#tab-delete">Delete</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a href="#tab-permissions">Permissions</a></li>{% end_can_edit %}
 	</ul>
 <div id="tab-push">
 
@@ -56,12 +58,14 @@ var saveOrder = function() {
 </div>
 {% endif %}
 
+{% if_can_push object %}
 <form action="push/" method="post">
 <fieldset><legend>Push</legend>
 
 Comment: <input type="text" name="comment" /> (<input type="checkbox" name="step" /> step )<input type="submit" value="push" />
 </fieldset>
 </form>
+{% end_can_push %}
 
 {% if object.push_set.count %}
 <div>
@@ -87,8 +91,8 @@ Comment: <input type="text" name="comment" /> (<input type="checkbox" name="step
 {% endif %}
 </div>
 
+{% if_can_edit object %}
 <div id="tab-settings">
-
 {% if object.setting_set.count %}
 <div>
 
@@ -122,7 +126,9 @@ value="{{setting.value}}" style="width: 100%" /></td>
 </fieldset>
 </form>
 </div>
+{% end_can_edit %}
 
+{% if_can_edit object %}
 <div id="tab-stages">
 {% if object.stage_set.count %}
 <div>
@@ -181,7 +187,9 @@ value="{{setting.value}}" style="width: 100%" /></td>
 </fieldset>
 </form>
 </div>
+{% end_can_edit %}
 
+{% if_can_edit object %}
 <div id="tab-clone">
 <form action="clone/" method="post">
 <p>Clone this deployment.</p>
@@ -204,13 +212,49 @@ selected="selected"
  <input type="submit" value="Clone"/>
 </form>
 </div>
+{% end_can_edit %}
 
-
+{% if_can_edit object %}
 <div id="tab-delete">
 <form action="delete/" method="post">
 <p>Delete this deployment: <input type="submit" value="DELETE"/></p>
 </form>
 </div>
+{% end_can_edit %}
+
+
+{% if_can_edit object %}
+<div id="tab-permissions">
+
+<h2>Permissions</h2>
+
+<table>
+{% for permission in object.permission_set.all %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{permission.group.name}}</td>
+<td>{{permission.capability}}</td>
+<td><form action="remove_permission/"
+	  method="post">
+<input type="hidden" name="permission_id" value="{{permission.id}}" />
+{% csrf_token %}
+<input type="submit" value="remove" /></form>
+</td>
+</tr>
+{% endfor %}
+</table>
+
+<form action="add_permission/" method="post">
+<table>
+{{ object.add_permission_form.as_table }}
+</table>
+<input type="submit" value="add" />
+</form>
+
+
+</div>
+{% end_can_edit %}
+
+
 </div>
 
 <script type="text/javascript">
@@ -228,5 +272,7 @@ jQuery(function() {
   jQuery(".tabber").tabs();
 });
 </script>
-
+{% else %}
+<p>Sorry, you don't have permission to view this deployment.</p>
+{% end_can_view %}
 {% endblock %}

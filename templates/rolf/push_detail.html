@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load perms %}
 {% block title %}{{object.name}}{% endblock %}
 {% block js %}
 <script type="text/javascript"
@@ -8,7 +9,7 @@ src="/site_media/js/MochiKit/MochiKit.js"></script>
 	src="/site_media/js/push.js"></script>
 {% endblock %}
 {% block content %}
-
+{% if_can_view object.deployment %}
 <h1>Push: <a
 	     href="{{object.deployment.application.category.get_absolute_url}}">{{object.deployment.application.category.name}}</a> 
 : 
@@ -65,6 +66,7 @@ id="execute-{{stage.id}}" />
 
 {% if object.rollback_url %}
 {% ifequal object.status 'ok' %}
+{% if_can_push object.deployment %}
 <form action="{{object.deployment.get_absolute_url}}rollback/" method="post">
 <fieldset><legend>Rollback to this Push</legend>
 <input type="hidden" name="push_id" value="{{object.id}}" />
@@ -73,6 +75,7 @@ comment <input type="text" name="comment" /> (<input type="checkbox"
   step) <input type="submit" value="ROLLBACK" />
 </fieldset>
 </form>
+{% end_can_push %}
 {% endifequal %}
 {% endif %}
 
@@ -108,13 +111,18 @@ comment <input type="text" name="comment" /> (<input type="checkbox"
 {% endfor %}
 </table>
 
+{% if_can_push object.deployment %}
 <form action="delete/" method="POST">
 <fieldset><legend>delete</legend>
 Delete this push <input type="submit" value="DELETE" />
 </fieldset>
 </form>
+{% end_can_push %}
 
 </div>
 {% endif %}
 {% endif %}
+{% else %}
+<p>Sorry, you don't have permission to view this.</p>
+{% end_can_view %}
 {% endblock %}

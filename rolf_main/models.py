@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 import os
 import stat
 import time
@@ -11,6 +11,7 @@ from subprocess import Popen,PIPE
 import os.path
 import cStringIO
 from tempfile import TemporaryFile
+from django.forms import ModelForm
 
 from SilverCity import Python,Perl
 from django.conf import settings
@@ -68,6 +69,44 @@ class Deployment(models.Model):
     def all_recipes(self):
         """ helper to make this available in generic templates """
         return Recipe.objects.all().exclude(name="")
+
+    def can_edit(self,user):
+        edit_groups = set([p.group.id for p in self.permission_set.filter(capability="edit")])
+        user_groups = set([g.id for g in user.groups.all()])
+        return not edit_groups.isdisjoint(user_groups)
+
+    def can_push(self,user):
+        edit_groups = set([p.group.id for p in self.permission_set.filter(capability="edit")])
+        push_groups = set([p.group.id for p in self.permission_set.filter(capability="push")])
+        user_groups = set([g.id for g in user.groups.all()])
+        return not user_groups.isdisjoint(edit_groups | push_groups)
+
+    def can_view(self,user):
+        user_groups = set([g.id for g in user.groups.all()])
+        edit_groups = set([p.group.id for p in self.permission_set.filter(capability="edit")])
+        push_groups = set([p.group.id for p in self.permission_set.filter(capability="push")])
+        view_groups = set([p.group.id for p in self.permission_set.filter(capability="view")])
+        return not user_groups.isdisjoint(edit_groups | push_groups | view_groups)
+
+    def add_permission_form(self,request_vars=None):
+        class AddPermissionForm(ModelForm):
+            class Meta:
+                model = Permission
+                exclude = ('deployment',)
+
+        if request_vars:
+            return AddPermissionForm(request_vars)
+        else:
+            return AddPermissionForm()
+
+class Permission(models.Model):
+    deployment = models.ForeignKey(Deployment)
+    group = models.ForeignKey(Group)
+    capability = models.CharField(max_length=16,
+                                  default="view",
+                                  choices=(("view","View"),
+                                           ("push","Push"),
+                                           ("edit","Edit")))
 
 class Setting(models.Model):
     deployment = models.ForeignKey(Deployment)

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load perms %}
 {% block title %}{{object.name}}{% endblock %}
 
 {% block content %}
@@ -11,7 +12,13 @@
 
 {% for deployment in object.deployment_set.all %}
 <tr class="{{deployment.status}}">
-<th><a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a></th></tr>
+<th>
+{% if_can_view deployment %}
+<a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
+{% else %}
+{{deployment.name}}
+{% end_can_view %}
+</th></tr>
 {% endfor %}
 
 </table>

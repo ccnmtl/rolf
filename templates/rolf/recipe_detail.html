@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load perms %}
 {% block js %}
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
@@ -55,6 +56,7 @@ language <select name="language">
 <h2>Deployments using this recipe</h2>
 <table width="100%">
 {% for stage in object.stage_set.all %}
+{% if_can_edit stage.deployment %}
 <tr class="{% cycle 'odd' 'even' %}">
 <td>
 <a
@@ -64,6 +66,7 @@ language <select name="language">
    href="{{stage.deployment.application.get_absolute_url}}">{{stage.deployment.application.name}}</a> :
 <a href="{{stage.deployment.get_absolute_url}}">{{stage.deployment.name}}</a></td>
 </tr>
+{% end_can_edit %}
 {% endfor %}
 </table>
 </div>

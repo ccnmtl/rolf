@@ -44,6 +44,11 @@ def add_deployment(request,object_id):
     if request.method == "POST":
         a = Deployment.objects.create(application=application,
                                        name=request.POST.get('name','unknown'))
+        # make sure the user has edit access
+        for group in request.user.groups.all():
+            p = Permission.objects.create(deployment=a,
+                                          group=group,
+                                          capability="edit")
     return HttpResponseRedirect(application.get_absolute_url())
 
 @login_required
@@ -53,6 +58,26 @@ def add_setting(request,object_id):
         s = Setting.objects.create(deployment=deployment,
                                    name=request.POST.get('name','unknown'),
                                    value=request.POST.get('value',''))
+    return HttpResponseRedirect(deployment.get_absolute_url())
+
+@login_required
+def remove_permission(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        if deployment.can_edit(request.user):
+            permission = get_object_or_404(Permission,id=request.POST.get('permission_id',-1))
+            permission.delete()
+    return HttpResponseRedirect(deployment.get_absolute_url())
+
+@login_required
+def add_permission(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        if deployment.can_edit(request.user):
+            form = deployment.add_permission_form(request_vars=request.POST)
+            permission = form.save(commit=False)
+            permission.deployment = deployment
+            permission.save()
     return HttpResponseRedirect(deployment.get_absolute_url())
 
 @login_required
@@ -107,6 +132,11 @@ def clone_deployment(request,object_id):
                 # not a cookbook recipe, so we clone it
                 r = Recipe.objects.create(name="",language=recipe.language,code=recipe.code)
             s = Stage.objects.create(deployment=new_deployment,name=stage.name,recipe=r)
+        # clone permissions
+        for perm in deployment.permission_set.all():
+            p = Permission.objects.create(deployment=new_deployment,
+                                          group=p.group,
+                                          capability=p.capability)
         return HttpResponseRedirect(new_deployment.get_absolute_url())
     return HttpResponseRedirect(deployment.get_absolute_url())
 

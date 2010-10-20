@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load perms %}
 {% block content %}
-
+{% if_can_edit object.deployment %}
 <h1><a href="{{object.deployment.application.category.get_absolute_url}}">{{object.deployment.application.category.name}}</a> :
 <a
    href="{{object.deployment.application.get_absolute_url}}">{{object.deployment.application.name}}</a> : 
@@ -61,5 +62,7 @@ Delete this stage: <input type="submit" value="DELETE" />
 
 </fieldset>
 </form>
-
+{% else %}
+<p>Sorry, you don't have permission to edit this.</p>
+{% end_can_edit %}
 {% endblock %}
