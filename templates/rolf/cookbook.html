@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block extra_body_classes %}cookbook{% endblock %}
 {% block content %}
-
+{% if request.user.is_superuser %}
 <h1>Cookbook</h1>
 
 <ul class="toc">
@@ -41,5 +41,7 @@ language <select name="language">
 </fieldset>
 </form>
 
-
+{% else %}
+<p>Sorry, only superusers can view the cookbook.</p>
+{% endif %}
 {% endblock %}

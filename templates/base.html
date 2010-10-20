@@ -57,7 +57,8 @@
 			{% block primarynavtabs %}
 			<ul>
 				<li><a href="/">Home</a></li>
-				<li><a href="/cookbook/">Cookbook</a></li>
+				{% if request.user.is_superuser %}<li><a href="/cookbook/">Cookbook</a></li>{% endif %}
+				{% if request.user.is_superuser %}<li><a href="/admin/">Django Admin</a></li>{% endif %}
 			</ul><!-- id="primarynavtabs" -->
 			{% endblock %}
 			
@@ -89,8 +90,12 @@
 			<div id="squish"><!-- Don't touch this div -->
 				<div class="block">
 					{% block pagetitle %}{% endblock %}
-				
+				{% if request.user.is_staff %}
 					{% block content %}{% endblock %}
+					{% else %}
+					<p>Sorry, this is available to
+				staff only.</p>
+				{% endif %}
 
 				<!-- ###### Don't touch this ###### -->
 				<div class="visualclear"></div><!-- id="visualclear" -->				

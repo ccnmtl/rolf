@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+{% if request.user.is_superuser %}
 <h1><a href="/cookbook/">Cookbook</a>: {{object.name}}</h1>
 
 <div id="tabber">
@@ -85,5 +86,7 @@ jQuery(function() {
   jQuery("#tabber").tabs();
 });
 </script>
-
+{% else %}
+<p>Sorry, only superusers have access to the cookbook.</p>
+{% endif %}
 {% endblock %}

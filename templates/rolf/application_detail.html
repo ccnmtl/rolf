@@ -26,11 +26,12 @@
 </div>
 {% endif %}
 
+{% if request.user.is_superuser %}
 <form action="add_deployment/" method="post">
 <p>Add A New Deployment: <input type="text" name="name" /> <input
 type="submit" value="Add" /></p>
 </form>
-
+{% endif %}
 
 <hr />
 <form action="delete/" method="post">

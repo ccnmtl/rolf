@@ -15,7 +15,7 @@
   <li><a href="#recent-pushes">Your Recent Pushes</a></li>
   {% endif %}
   <li><a href="#all-applications">All Applications</a></li>
-  <li><a href="#add-category">Add a New Category</a></li>
+{% if request.user.is_superuser %}<li><a href="#add-category">Add a New Category</a></li>{% endif %}
 </ul>
 
 {% if recent_pushes %}
@@ -68,17 +68,18 @@
 </div>
 {% endif %}
 
+{% if request.user.is_superuser %}
 <div id="add-category">
 <form action="/category/add/" method="post">
 <p>Add A New Category: <input type="text" name="name" /> <input
 type="submit" value="Add" /></p>
 </form>
 </div>
+{% endif %}
 
 <script type="text/javascript">
 jQuery(function() {
   jQuery("#tabber").tabs();
 });
 </script>
-
 {% endblock %}
