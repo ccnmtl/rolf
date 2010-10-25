@@ -139,8 +139,8 @@ def clone_deployment(request,object_id):
             # clone permissions
             for perm in deployment.permission_set.all():
                 p = Permission.objects.create(deployment=new_deployment,
-                                              group=p.group,
-                                              capability=p.capability)
+                                              group=perm.group,
+                                              capability=perm.capability)
             return HttpResponseRedirect(new_deployment.get_absolute_url())
     return HttpResponseRedirect(deployment.get_absolute_url())
 
