@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-
+{% if request.user.is_staff %}
 <div id="tabber">
 <ul>
   {% if recent_pushes %}
@@ -82,4 +82,7 @@ jQuery(function() {
   jQuery("#tabber").tabs();
 });
 </script>
+{% else %}
+<p>Sorry, this is available to staff only.</p>
+{% endif %}
 {% endblock %}

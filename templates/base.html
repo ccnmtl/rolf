@@ -90,11 +90,7 @@
 			<div id="squish"><!-- Don't touch this div -->
 				<div class="block">
 					{% block pagetitle %}{% endblock %}
-				{% if request.user.is_staff %}
 					{% block content %}{% endblock %}
-					{% else %}
-					<p>Sorry, this is available to
-				staff only.</p>
 				{% endif %}
 
 				<!-- ###### Don't touch this ###### -->
