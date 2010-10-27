@@ -22,7 +22,7 @@ USE_I18N = False
 MEDIA_ROOT = "/var/www/rolf/uploads/"
 MEDIA_URL = '/uploads/'
 ADMIN_MEDIA_PREFIX = '/media/'
-SECRET_KEY = ')ng#)ef_u@_^vvzu@dxm7ql-yb^_!a%6v3vj^3b(m+p)l5+%@h'
+SECRET_KEY = 'OVERRIDE THIS IN YOUR local_settings.py'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
@@ -61,23 +61,13 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.markup',
     'django.contrib.admin',
-    'sentry.client',
     'rolf_main',
 )
 
 EMAIL_SUBJECT_PREFIX = "[rolf] "
 EMAIL_HOST = 'localhost'
-SERVER_EMAIL = "rolf@ccnmtl.columbia.edu"
+SERVER_EMAIL = "rolf@yoursite.com"
 
-# WIND settings
-
-AUTHENTICATION_BACKENDS = ('djangowind.auth.WindAuthBackend','django.contrib.auth.backends.ModelBackend',)
-WIND_BASE = "https://wind.columbia.edu/"
-WIND_SERVICE = "cnmtl_full_np"
-WIND_PROFILE_HANDLERS = ['djangowind.auth.CDAPProfileHandler']
-WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper','djangowind.auth.StaffMapper','djangowind.auth.SuperuserMapper']
-WIND_STAFF_MAPPER_GROUPS = ['tlc.cunix.local:columbia.edu']
-WIND_SUPERUSER_MAPPER_GROUPS = ['anp8','jb2410','zm4','sbd12','egr2107','kmh2124','sld2131','amm8','mar227','ed2198']
 
 CHECKOUT_DIR = "/tmp/rolf/checkouts/"
 SCRIPT_DIR = "/tmp/rolf/scripts/"

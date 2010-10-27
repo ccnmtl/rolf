@@ -38,6 +38,14 @@ stage_info_dict = {
 
 site_media_root = os.path.join(os.path.dirname(__file__),"media")
 
+accounts_tuple = (r'^accounts/',include('django.contrib.auth.urls'))
+
+if hasattr(settings,'WIND_BASE'):
+    # we have a centralized auth system at Columbia,
+    # so if that is configured (in local_settings), use it
+    # instead of regular django auth
+    accounts_tuple = ('^accounts/',include('djangowind.urls'))
+
 urlpatterns = patterns('',
                        (r'^$','rolf_main.views.index'),
                        (r'category/add/','rolf_main.views.add_category'),
@@ -75,9 +83,9 @@ urlpatterns = patterns('',
                        (r'stage/(?P<object_id>\d+)/edit/$','rolf_main.views.edit_stage'),
                        (r'stage/(?P<object_id>\d+)/delete/$','django.views.generic.create_update.delete_object',dict(model=Stage,post_delete_redirect="/")),
 
-
+                       accounts_tuple,
                        (r'^logout/$', 'django.contrib.auth.views.logout', {'next_page':'/'}), 
-                       ('^accounts/',include('djangowind.urls')),
+                     
                        (r'^admin/(.*)', admin.site.root),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': site_media_root}),
                        (r'^uploads/(?P<path>.*)$','django.views.static.serve',{'document_root' : settings.MEDIA_ROOT}),
