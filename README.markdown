@@ -46,3 +46,8 @@ possible.
 ![Stages of a Deployment](http://github.com/ccnmtl/rolf/raw/master/doc/screenshots/rolf_stages2.png)
 
 ![Cookbook](http://github.com/ccnmtl/rolf/raw/master/doc/screenshots/rolf_cookbook.png)
+
+## Documentation
+
+Please see the [wiki](http://github.com/ccnmtl/rolf/wiki) for
+instructions on installing, configuring, and using Rolf. 
