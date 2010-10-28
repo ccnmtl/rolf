@@ -15,15 +15,17 @@
 <p class="errornote">{{ error_message }}</p>
 {% endif %}
 <div id="content-main">
-<form method="get" action="https://wind.columbia.edu/login">
-<input type="hidden" name="service" value="cnmtl_full_np" />
-<input type="hidden" name="destination" value="http://{{ request.get_host }}/accounts/windlogin/?next=/admin/&this_is_the_login_form=1" />
+{% if wind_base %}
+
+<form method="get" action="{{ wind_base }}login">
+<input type="hidden" name="service" value="{{ wind_service }}" />
+<input type="hidden" name="destination" value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/accounts/windlogin/?next=/admin/&this_is_the_login_form=1" />
 <p>If you have a Columbia UNI, you already have an account and can
 login through WIND with it</p>
 <input type="submit" value="Here" />
 </form>
 <p>otherwise: </p>
-
+{% endif %}
 <form action="{{ app_path }}" method="post" id="login-form">
   <div class="form-row">
     <label for="id_username">{% trans 'Username:' %}</label> <input type="text" name="username" id="id_username" />

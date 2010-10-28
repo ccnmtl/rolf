@@ -32,6 +32,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
+    'rolf_main.context_processors.wind_settings',
     )
 
 MIDDLEWARE_CLASSES = (
