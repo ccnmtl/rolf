@@ -1,46 +1,27 @@
-3,clear checkout directory,"if [ ""$CHECKOUT_DIR"" = """" ]; then
+clear checkout directory,shell,"if [ ""$CHECKOUT_DIR"" = """" ]; then
    echo ""checkout dir not set!""
 else
    rm -rf $CHECKOUT_DIR
-fi",shell,clear the checkout directory so we can do a fresh checkout
-6,tag svn,"t = time.localtime()
-tag = ""-"".join([str(i) for i in t[0:6]])
-trunk_url = self.setting('SVN_TRUNK')
-tag_url = trunk_url.replace('/trunk/','/tags/') + tag
-(ret,out,err) = self.execute([""svn"",""copy"",""-m"",""tagged for push by %s: %s"" % (self.setting('PUSH_UNI'),self.setting('PUSH_COMMENT')),self.push.checkout_dir(),tag_url])
-self.push.rollback_url = tag_url
-if ret == 0:
-    self.status = ""ok""
-else:
-    self.status = ""failed""",python,tags this push in svn. sets rollback_url on push object. expects SVN_TRUNK variable to be set and end in '/trunk/'
-7,supervisord restart app,ssh $REMOTE_HOST sudo supervisorctl restart $SUPERVISORD_NAME,shell,tell supervisord to restart the app for us. REMOTE_HOST and SUPERVISORD_NAME settings must exist.
-8,working-env init,ssh $REMOTE_HOST $REMOTE_DIRECTORY/init.sh $REMOTE_DIRECTORY,shell,initialize the working-env on the remote host
-30,test output,"#!/usr/bin/python
-
-print ""x"" * (2 ** 16)",shell,print a bunch of characters to find the exact point of brokenness.
-4,rsync,/usr/bin/rsync -a -z -C --verbose $CHECKOUT_DIR/ $REMOTE_HOST:$REMOTE_DIRECTORY,shell,rsync's the code to REMOTE_DIRECTORY on REMOTE_HOST. make sure that ssh keys have been set up in advance.
-5,svn trunk checkout,"if [ ""$ROLLBACK_URL"" = """" ]; then
-  svn co $SVN_TRUNK $CHECKOUT_DIR
-else
-  svn co $ROLLBACK_URL $CHECKOUT_DIR
-fi",shell,"basic standard svn checkout. SVN_TRUNK setting must be defined. If ROLLBACK_URL is set, it uses that instead (Rollo sets that on a rollback)."
-112,virtualenv bootstrap,"ssh $REMOTE_HOST ""cd ${REMOTE_DIRECTORY}; ./bootstrap.py""",shell,requires REMOTE_HOST and REMOTE_DIRECTORY variables
-113,rsync --delete,/usr/bin/rsync -a -z -C --delete --verbose $CHECKOUT_DIR/ $REMOTE_HOST:$REMOTE_DIRECTORY,shell,"rsync with a --delete flag. Be careful with this - if your app writes any user data or temp files or anything to the app directory, this will delete them and things will go all splodey. requires CHECKOUT_DIR, REMOTE_HOST, and REMOTE_DIRECTORY variables."
-213,git archive,"if [ ""$ROLLBACK_URL"" = """" ]; then
+fi",clear the checkout directory so we can do a fresh checkout
+git archive,shell,"if [ ""$ROLLBACK_URL"" = """" ]; then
   cd $CHECKOUT_DIR
   cd ..
   rmdir $CHECKOUT_DIR
   git clone --depth=1 $GIT_REMOTE $CHECKOUT_DIR
 else
   cd $CHECKOUT_DIR; git archive --remote=$GIT_REMOTE $ROLLBACK_URL |tar -x
-fi",shell,"""checkout"" a version of the code from git. pulls down just the code and not the entire history. equivalent of ""svn checkout"" recipe"
-214,git tag,"if [ ""$ROLLBACK_URL"" = """" ]; then
+fi","""checkout"" a version of the code from git. pulls down just the code and not the entire history. equivalent of ""svn checkout"" recipe"
+rsync --delete,shell,/usr/bin/rsync -a -z -C --delete --verbose $CHECKOUT_DIR/ $REMOTE_HOST:$REMOTE_DIRECTORY,"rsync with a --delete flag. Be careful with this - if your app writes any user data or temp files or anything to the app directory, this will delete them and things will go all splodey. requires CHECKOUT_DIR, REMOTE_HOST, and REMOTE_DIRECTORY variables."
+virtualenv bootstrap,shell,"ssh $REMOTE_HOST ""cd ${REMOTE_DIRECTORY}; ./bootstrap.py""",requires REMOTE_HOST and REMOTE_DIRECTORY variables
+touch wsgi,shell,ssh $REMOTE_HOST touch ${REMOTE_DIRECTORY}/apache/django.wsgi ,touch the wsgi file to make apache restart the daemon
+git tag,shell,"if [ ""$ROLLBACK_URL"" = """" ]; then
   cd $CHECKOUT_DIR; git config user.email ""ccnmtl-pusher@columbia.edu""
   cd $CHECKOUT_DIR; git config user.name ""CCNMTL Pusher""
-  cd $CHECKOUT_DIR; git tag ROLLO_PUSH_${ROLLO_PUSH_ID} -m ""tagged for push by ${PUSH_UNI}: ${PUSH_COMMENT}""
+  cd $CHECKOUT_DIR; git tag ROLF_PUSH_${ROLF_PUSH_ID} -m ""tagged for push by ${PUSH_UNI}: ${PUSH_COMMENT}""
   cd $CHECKOUT_DIR; git push --tags
-fi",shell,""
-215,save git rollback_url,"# it was easiest to do this as a separate step
+fi",
+save git rollback_url,python,"# it was easiest to do this as a separate step
 self.push.rollback_url = ""ROLLO_PUSH_%d"" % self.push.id
-self.status = ""ok""",python,to allow rollbacks
-216,touch wsgi,ssh $REMOTE_HOST touch ${REMOTE_DIRECTORY}/apache/django.wsgi #touch the wsgi file to make apache restart the daemon,shell,""
+self.push.save()
+self.status = ""ok""",to allow rollbacks
+
