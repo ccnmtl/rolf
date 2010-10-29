@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.markup',
     'django.contrib.admin',
+    'django_extensions',
     'rolf_main',
 )
 
