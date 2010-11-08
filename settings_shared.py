@@ -71,5 +71,5 @@ EMAIL_HOST = 'localhost'
 SERVER_EMAIL = "rolf@yoursite.com"
 
 
-CHECKOUT_DIR = "/tmp/rolf/checkouts/"
-SCRIPT_DIR = "/tmp/rolf/scripts/"
+CHECKOUT_DIR = "/var/tmp/rolf/checkouts/"
+SCRIPT_DIR = "/var/tmp/rolf/scripts/"
