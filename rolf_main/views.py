@@ -235,7 +235,8 @@ def reorder_stages(request,object_id):
     deployment = get_object_or_404(Deployment,id=object_id)
     if deployment.can_edit(request.user):
         ids = [(int(k[len('stage_'):]),int(v)) for k,v in request.GET.items() if k.startswith('stage_')]
-        ids.sort(key=lambda x: x[1])
-        deployment.set_stage_order([x[0] for x in ids])
+        ids.sort(key=lambda x: x[0])
+        deployment.set_stage_order([x[1] for x in ids])
+        deployment.save()
     return HttpResponse("ok")
     
