@@ -239,34 +239,11 @@ def reorder_stages(request,object_id):
         deployment.set_stage_order([x[1] for x in ids])
         deployment.save()
     return HttpResponse("ok")
+
+@login_required
+def generic_detail(request,object_id,model,template_name):
+    return render_to_response(template_name, dict(object=get_object_or_404(model,id=object_id)), context_instance=RequestContext(request))
     
-@login_required
-@rendered_with('rolf/category_detail.html')
-def category_detail(request,object_id):
-    return dict(object=get_object_or_404(Category,id=object_id))
 
-@login_required
-@rendered_with('rolf/application_detail.html')
-def application_detail(request,object_id):
-    return dict(object=get_object_or_404(Application,id=object_id))
 
-@login_required
-@rendered_with('rolf/deployment_detail.html')
-def deployment_detail(request,object_id):
-    return dict(object=get_object_or_404(Deployment,id=object_id))
-
-@login_required
-@rendered_with('rolf/push_detail.html')
-def push_detail(request,object_id):
-    return dict(object=get_object_or_404(Push,id=object_id))
-
-@login_required
-@rendered_with('rolf/recipe_detail.html')
-def recipe_detail(request,object_id):
-    return dict(object=get_object_or_404(Recipe,id=object_id))
-
-@login_required
-@rendered_with('rolf/stage_detail.html')
-def stage_detail(request,object_id):
-    return dict(object=get_object_or_404(Stage,id=object_id))
 
