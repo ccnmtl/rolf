@@ -33,8 +33,12 @@
 <a
    href="{{push.deployment.get_absolute_url}}">{{push.deployment.name}}</a> :
 <a href="{{push.get_absolute_url}}">{{push.start_time|date:"jS F Y H:i"}}</a></th>
+</tr>
+{% if push.comment %}
+<tr>
 <td>{{push.comment}}</td>
 </tr>
+{% endif %}
 {% endfor %}
 </table>
 </div>
