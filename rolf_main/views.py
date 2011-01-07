@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 from models import *
 from simplejson import dumps
+from munin.helpers import muninview
 
 class rendered_with(object):
     def __init__(self, template_name):
@@ -245,5 +246,10 @@ def generic_detail(request,object_id,model,template_name):
     return render_to_response(template_name, dict(object=get_object_or_404(model,id=object_id)), context_instance=RequestContext(request))
     
 
+@muninview(config="""graph_title Total Pushes
+graph_vlabel pushes
+graph_category rolf""")
+def total_pushes(request):
+    return [("pushes",Push.objects.count())]
 
 
