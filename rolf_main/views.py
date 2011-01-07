@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from models import *
 from simplejson import dumps
 from munin.helpers import muninview
+from datetime import datetime,timedelta
 
 class rendered_with(object):
     def __init__(self, template_name):
@@ -250,6 +251,12 @@ def generic_detail(request,object_id,model,template_name):
 graph_vlabel pushes
 graph_category rolf""")
 def total_pushes(request):
-    return [("pushes",Push.objects.count())]
+    return [("pushes",Push.objects.all().count())]
+
+@muninview(config="""graph_title Pushes
+graph_vlabel pushes
+graph_category rolf""")
+def current_pushes(request):
+    return [("pushes",Push.objects.filter(start_time__gt=datetime.now() - timedelta(minutes=6)).count())]
 
 

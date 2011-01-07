@@ -88,6 +88,7 @@ urlpatterns = patterns('',
                      
                        (r'^admin/(.*)', admin.site.root),
                        (r'^stats/total_pushes/$','rolf_main.views.total_pushes'),
+                       (r'^stats/current_pushes/$','rolf_main.views.current_pushes'),
                        ('^munin/',include('munin.urls')),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': site_media_root}),
                        (r'^uploads/(?P<path>.*)$','django.views.static.serve',{'document_root' : settings.MEDIA_ROOT}),
