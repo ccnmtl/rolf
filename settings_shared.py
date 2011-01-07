@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.admin',
     'django_extensions',
+    'munin',
     'rolf_main',
 )
 
