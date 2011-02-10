@@ -61,7 +61,7 @@ def add_setting(request,object_id):
             s = Setting.objects.create(deployment=deployment,
                                        name=request.POST.get('name','unknown'),
                                        value=request.POST.get('value',''))
-    return HttpResponseRedirect(deployment.get_absolute_url())
+    return HttpResponseRedirect("%s#tab-settings" % deployment.get_absolute_url())
 
 @login_required
 def remove_permission(request,object_id):
@@ -98,7 +98,7 @@ def edit_settings(request,object_id):
                         setting.name = request.POST[k]
                         setting.value = request.POST.get("setting_value_%d" % setting_id,"")
                         setting.save()
-    return HttpResponseRedirect(deployment.get_absolute_url())
+    return HttpResponseRedirect("%s#tab-settings" % deployment.get_absolute_url())
 
 @login_required
 def add_stage(request,object_id):
@@ -117,7 +117,7 @@ def add_stage(request,object_id):
             stage = Stage.objects.create(deployment=deployment,recipe=recipe,
                                          name=request.POST.get('name','unknown stage'))
         
-    return HttpResponseRedirect(deployment.get_absolute_url())
+    return HttpResponseRedirect("%s#tab-stages" % deployment.get_absolute_url())
 
 @login_required
 def clone_deployment(request,object_id):

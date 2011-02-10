@@ -137,7 +137,7 @@ value="{{setting.value}}" style="width: 100%" /></td>
 <tbody id="stages-table">
 {% for stage in object.stage_set.all %}
 <tr class="draggable" id="stage-{{stage.id}}">
-<th><span title="drag to reorder stages" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span><a href="{{stage.get_absolute_url}}">{{stage.name}}</a></th>
+<th><span title="drag to reorder stages" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span><a href="{{stage.get_absolute_url}}">{{stage.name|default:stage.id}}</a></th>
 <td>{% if stage.recipe.name %}
 <a href="{{stage.recipe.get_absolute_url}}">Cookbook Recipe:
 {{stage.recipe.name}}</a>
