@@ -220,7 +220,7 @@ def edit_stage(request,object_id):
     code = request.POST.get('code','').replace('\r\n','\n')
     recipe_id = request.POST.get('recipe_id','')
     if recipe_id != "":
-        r = Recipe.objects.get(recipe_id)
+        r = Recipe.objects.get(id=recipe_id)
         stage.recipe = r
     else:
         if stage.recipe.name != "":

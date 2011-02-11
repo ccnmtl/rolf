@@ -122,6 +122,9 @@ class Recipe(models.Model):
     language = models.CharField(max_length=256,default="python")
     description = models.TextField(blank=True,default="")
 
+    class Meta:
+        ordering = ['name']
+
     def get_absolute_url(self):
         return "/cookbook/%d/" % self.id
 

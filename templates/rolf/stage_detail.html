@@ -6,6 +6,7 @@
 <a
    href="{{object.deployment.application.get_absolute_url}}">{{object.deployment.application.name}}</a> : 
 <a href="{{object.deployment.get_absolute_url}}">{{object.deployment.name}}</a> : 
+<a href="{{object.deployment.get_absolute_url}}#tab-stages">stages</a> : 
 {{object.name}}</h1>
 
 <form action="edit/" method="post">
@@ -18,7 +19,7 @@
 <a href="{{object.recipe.get_absolute_url}}">{{object.recipe.name}}</a>. Edit
 in the cookbook, or select a different one: <select name="recipe_id">
 <option value="">- Custom Recipe -</option>
-{% for recipe in object.all_recipes %}
+{% for recipe in object.deployment.all_recipes %}
 <option value="{{recipe.id}}" {% ifequal recipe.id object.recipe.id %}
 selected="selected"{% endifequal %}>{{recipe.name}}</option>
 {% endfor %}
