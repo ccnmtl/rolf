@@ -18,7 +18,11 @@
 {% else %}
 {{deployment.name}}
 {% end_can_view %}
-</th></tr>
+</th>
+<td>
+  {{deployment.last_message}}
+</td>
+</tr>
 {% endfor %}
 
 </table>

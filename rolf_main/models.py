@@ -63,6 +63,12 @@ class Deployment(models.Model):
         else:
             return "unknown"
 
+    def last_message(self):
+        if self.push_set.count() > 0:
+            return self.most_recent_push().comment
+        else:
+            return None
+
     def most_recent_push(self):
         return self.push_set.all()[0]
         
