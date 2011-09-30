@@ -105,6 +105,18 @@ class Deployment(models.Model):
         else:
             return AddPermissionForm()
 
+    def add_flag_form(self,request_vars=None):
+        class AddFlagForm(ModelForm):
+            class Meta:
+                model = Flag
+                exclude = ('deployment',)
+
+        if request_vars:
+            return AddFlagForm(request_vars)
+        else:
+            return AddFlagForm()
+
+
 
 class Permission(models.Model):
     deployment = models.ForeignKey(Deployment)
@@ -217,6 +229,8 @@ class Push(models.Model):
         d['PUSH_UNI'] = self.user.username
         d['ROLLBACK_URL'] = self.rollback_url
         d['ROLF_PUSH_ID'] = "%d" % self.id
+        for fv in self.flagvalue_set.all():
+            d[fv.flag.varname] = fv.bash_value()
         return d
 
     def reverse_pushstages(self):
@@ -331,9 +345,12 @@ class Log(models.Model):
 class Flag(models.Model):
     deployment = models.ForeignKey(Deployment)
     name = models.CharField(max_length=256)
-    varname = models.CharField(max_length=256)
-    default = models.CharField(max_length=256,default="",blank=True)
-    boolean = models.BooleanField(default=False)
+    varname = models.CharField(max_length=256,
+                               help_text="Bash/Python variable name. UPPERCASE_AND_UNDERSCORES recommended")
+    default = models.CharField(max_length=256,default="",blank=True,
+                               help_text="leave empty for False on boolean fields")
+    boolean = models.BooleanField(default=False,
+                                  help_text="make it a checkbox")
     description = models.TextField(blank=True,default="")
 
 class FlagValue(models.Model):
@@ -341,4 +358,12 @@ class FlagValue(models.Model):
     push = models.ForeignKey(Push)
     value = models.CharField(max_length=256,default="")
     
-
+    def bash_value(self):
+        """ boolean flags should return "1" or "" depending on the checkbox value """
+        if self.flag.boolean:
+            if self.value == "on":
+                return "1"
+            else:
+                return ""
+        else:
+            return self.value

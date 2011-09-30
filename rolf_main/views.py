@@ -84,6 +84,27 @@ def add_permission(request,object_id):
     return HttpResponseRedirect(deployment.get_absolute_url())
 
 @login_required
+def remove_flag(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        if deployment.can_edit(request.user):
+            flag = get_object_or_404(Flag,id=request.POST.get('flag_id',-1))
+            flag.delete()
+    return HttpResponseRedirect(deployment.get_absolute_url())
+
+@login_required
+def add_flag(request,object_id):
+    deployment = get_object_or_404(Deployment,id=object_id)
+    if request.method == "POST":
+        if deployment.can_edit(request.user):
+            form = deployment.add_flag_form(request_vars=request.POST)
+            flag = form.save(commit=False)
+            flag.deployment = deployment
+            flag.save()
+    return HttpResponseRedirect(deployment.get_absolute_url())
+
+
+@login_required
 def edit_settings(request,object_id):
     deployment = get_object_or_404(Deployment,id=object_id)
     if request.method == "POST":
@@ -143,6 +164,16 @@ def clone_deployment(request,object_id):
                 p = Permission.objects.create(deployment=new_deployment,
                                               group=perm.group,
                                               capability=perm.capability)
+
+            # clone flags
+            for flag in deployment.flag_set.all():
+                f = Flag.objects.create(deployment=new_deployment,
+                                        name=flag.name,
+                                        varname=flag.varname,
+                                        boolean=flag.boolean,
+                                        default=flag.default,
+                                        description=flag.description)
+
             return HttpResponseRedirect(new_deployment.get_absolute_url())
     return HttpResponseRedirect(deployment.get_absolute_url())
 
@@ -152,6 +183,12 @@ def push(request,object_id):
     if request.method == "POST":
         if deployment.can_push(request.user):
             push = deployment.new_push(user=request.user,comment=request.POST.get('comment',''))
+            for k in request.POST.keys():
+                if k.startswith("flag_"):
+                    flag_id = k[len("flag_"):]
+                    flag = Flag.objects.get(id=flag_id)
+                    value = request.POST[k]
+                    fv = FlagValue.objects.create(flag=flag,push=push,value=value)
             if request.POST.get('step',''):
                 return HttpResponseRedirect(push.get_absolute_url() + "?step=1")
             else:
@@ -166,6 +203,12 @@ def rollback(request,object_id):
         if deployment.can_push(request.user):
             push_id = request.POST.get('push_id','')
             push = deployment.new_push(user=request.user,comment=request.POST.get('comment',''))
+            for k in request.POST.keys():
+                if k.startswith("flag_"):
+                    flag_id = k[len("flag_"):]
+                    flag = Flag.objects.get(id=flag_id)
+                    value = request.POST[k]
+                    fv = FlagValue.objects.create(flag=flag,push=push,value=value)
             if request.POST.get('step',''):
                 return HttpResponseRedirect("/push/%d/?step=1;rollback=%s" % (push.id,push_id))
             else:

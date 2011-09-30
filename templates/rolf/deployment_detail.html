@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load perms %}
+{% load markup %}
 {% block title %}{{object.name}}{% endblock %}
 {% block js %}
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
@@ -44,6 +45,7 @@ var saveOrder = function() {
 	<li><a href="#tab-push">Push</a></li>
 	{% if_can_edit object %}<li><a href="#tab-settings">Settings</a></li>{% end_can_edit %}
 	{% if_can_edit object %}<li><a href="#tab-stages">Stages</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a href="#tab-flags">Flags</a></li>{% end_can_edit %}
 	{% if_can_edit object %}<li><a href="#tab-clone">Clone</a></li>{% end_can_edit %}
 	{% if_can_edit object %}<li><a href="#tab-delete">Delete</a></li>{% end_can_edit %}
 	{% if_can_edit object %}<li><a href="#tab-permissions">Permissions</a></li>{% end_can_edit %}
@@ -61,6 +63,25 @@ var saveOrder = function() {
 {% if_can_push object %}
 <form action="push/" method="post">
 <fieldset><legend>Push</legend>
+
+{% if object.flag_set.count %}
+<table>
+{% for flag in object.flag_set.all %}
+<tr>
+<th>{{flag.name}}</th>
+<td>{% if flag.boolean %}
+<input type="checkbox" name="flag_{{flag.id}}"
+{% if flag.default %}checked="checked"{% endif %}
+/>
+{% else %}
+<input type="text" name="flag_{{flag.id}}" value="{{flag.default}}" />
+{% endif %}
+</td>
+<td>{{flag.description|markdown}}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
 
 Comment: <input type="text" name="comment" /> (<input type="checkbox" name="step" /> step )<input type="submit" value="push" />
 </fieldset>
@@ -188,6 +209,48 @@ value="{{setting.value}}" style="width: 100%" /></td>
 </form>
 </div>
 {% end_can_edit %}
+
+{% if_can_edit object %}
+<div id="tab-flags">
+
+<h2>Flags</h2>
+
+<table>
+<tr>
+  <th>Flag</th>
+  <th>Variable Name</th>
+  <th>Boolean?</th>
+  <th>Default</th>
+  <th>Description</th>
+  <th></th>
+</tr>
+{% for flag in object.flag_set.all %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{flag.name}}</td>
+<td>{{flag.varname}}</td>
+<td>{{flag.boolean}}</td>
+<td>{{flag.default}}</td>
+<td>{{flag.description|markdown}}</td>
+<td><form action="remove_flag/" method="post">
+<input type="hidden" name="flag_id" value="{{flag.id}}" />
+{% csrf_token %}
+<input type="submit" value="remove" /></form>
+</td>
+</tr>
+{% endfor %}
+</table>
+
+<form action="add_flag/" method="post">
+<table>
+{{ object.add_flag_form.as_table }}
+</table>
+<input type="submit" value="add" />
+</form>
+
+
+</div>
+{% end_can_edit %}
+
 
 {% if_can_edit object %}
 <div id="tab-clone">

@@ -65,6 +65,10 @@ urlpatterns = patterns('',
                        (r'deployment/(?P<object_id>\d+)/push/$','rolf_main.views.push'),
                        (r'deployment/(?P<object_id>\d+)/remove_permission/$','rolf_main.views.remove_permission'),
                        (r'deployment/(?P<object_id>\d+)/add_permission/$','rolf_main.views.add_permission'),
+
+                       (r'deployment/(?P<object_id>\d+)/remove_flag/$','rolf_main.views.remove_flag'),
+                       (r'deployment/(?P<object_id>\d+)/add_flag/$','rolf_main.views.add_flag'),
+
                        (r'deployment/(?P<object_id>\d+)/rollback/$','rolf_main.views.rollback'),
                        (r'deployment/(?P<object_id>\d+)/reorder_stages/$','rolf_main.views.reorder_stages'),
                        (r'deployment/(?P<object_id>\d+)/delete/$','django.views.generic.create_update.delete_object',dict(model=Deployment,post_delete_redirect="/")),
