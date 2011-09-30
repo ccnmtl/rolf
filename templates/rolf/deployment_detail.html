@@ -243,10 +243,12 @@ value="{{setting.value}}" style="width: 100%" /></td>
 {% endif %}
 
 <form action="add_flag/" method="post">
+<fieldset><label>Add Flag</label>
 <table>
 {{ object.add_flag_form.as_table }}
 </table>
 <input type="submit" value="add" />
+</fieldset>
 </form>
 
 
