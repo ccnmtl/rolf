@@ -105,6 +105,7 @@ class Deployment(models.Model):
         else:
             return AddPermissionForm()
 
+
 class Permission(models.Model):
     deployment = models.ForeignKey(Deployment)
     group = models.ForeignKey(Group)
@@ -327,5 +328,17 @@ class Log(models.Model):
     stderr = models.TextField(blank=True,default="")
     timestamp = models.DateTimeField(auto_now_add=True)
     
+class Flag(models.Model):
+    deployment = models.ForeignKey(Deployment)
+    name = models.CharField(max_length=256)
+    varname = models.CharField(max_length=256)
+    default = models.CharField(max_length=256,default="",blank=True)
+    boolean = models.BooleanField(default=False)
+    description = models.TextField(blank=True,default="")
+
+class FlagValue(models.Model):
+    flag = models.ForeignKey(Flag)
+    push = models.ForeignKey(Push)
+    value = models.CharField(max_length=256,default="")
     
 
