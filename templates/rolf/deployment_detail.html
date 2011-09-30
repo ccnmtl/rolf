@@ -215,6 +215,7 @@ value="{{setting.value}}" style="width: 100%" /></td>
 
 <h2>Flags</h2>
 
+{% if object.flag_set.count %}
 <table>
 <tr>
   <th>Flag</th>
@@ -239,6 +240,7 @@ value="{{setting.value}}" style="width: 100%" /></td>
 </tr>
 {% endfor %}
 </table>
+{% endif %}
 
 <form action="add_flag/" method="post">
 <table>
