@@ -1,0 +1,5 @@
+local_settings.py
+pip-log.txt
+*.pyc
+*~
+ve
