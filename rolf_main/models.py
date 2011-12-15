@@ -22,6 +22,9 @@ class Category(models.Model):
     class Meta:
         ordering = ('name',)
 
+    def __unicode__(self):
+        return self.name
+
     def get_absolute_url(self):
         return "/category/%d/" % self.id 
     
@@ -31,6 +34,10 @@ class Application(models.Model):
     
     class Meta:
         order_with_respect_to = "category"
+
+    def __unicode__(self):
+        return self.name
+
 
     def get_absolute_url(self):
         return "/application/%d/" % self.id
@@ -44,6 +51,9 @@ class Deployment(models.Model):
 
     def get_absolute_url(self):
         return "/deployment/%d/" % self.id
+
+    def __unicode__(self):
+        return self.name
 
     def all_categories(self):
         return Category.objects.all()
