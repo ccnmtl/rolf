@@ -36,6 +36,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     )
 
 MIDDLEWARE_CLASSES = (
+#    'django_statsd.middleware.GraphiteRequestTimingMiddleware',
+#    'django_statsd.middleware.GraphiteMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -65,7 +67,10 @@ INSTALLED_APPS = (
     'django_extensions',
     'munin',
     'rolf_main',
+#    'django_statsd',
 )
+
+STATSD_CLIENT = 'django_statsd.clients.statsd'
 
 EMAIL_SUBJECT_PREFIX = "[rolf] "
 EMAIL_HOST = 'localhost'
