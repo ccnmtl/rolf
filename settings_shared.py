@@ -70,6 +70,13 @@ INSTALLED_APPS = (
     'django_statsd',
 )
 
+STATSD_CLIENT = 'statsd.client'
+STATSD_PREFIX = 'rolf'
+STATSD_HOST = 'localhost'
+STATSD_PORT = 8125
+
+STATSD_PATCHES = ['django_statsd.patches.db', ]
+
 EMAIL_SUBJECT_PREFIX = "[rolf] "
 EMAIL_HOST = 'localhost'
 SERVER_EMAIL = "rolf@yoursite.com"
