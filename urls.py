@@ -90,7 +90,7 @@ urlpatterns = patterns('',
                        accounts_tuple,
                        (r'^logout/$', 'django.contrib.auth.views.logout', {'next_page':'/'}), 
                      
-                       (r'^admin/(.*)', admin.site.root),
+                       (r'^admin/', include(admin.site.urls)),
                        (r'^stats/total_pushes/$','rolf_main.views.total_pushes'),
                        (r'^stats/current_pushes/$','rolf_main.views.current_pushes'),
                        ('^munin/',include('munin.urls')),
