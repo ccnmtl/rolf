@@ -9,5 +9,5 @@ requirements/src/httplib2-0.4.0.tar.gz
 requirements/src/restclient-0.9.9.tar.gz
 requirements/src/Markdown-2.0.tar.gz
 requirements/src/simplejson-2.0.9.tar.gz
-requirements/src/psycopg2-2.2.1.tar.gz
-
+requirements/src/psycopg2-2.4-no-mx.tar.gz
+requirements/src/SilverCity-0.9.7.tar.gz
