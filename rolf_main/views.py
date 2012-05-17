@@ -6,6 +6,7 @@ from models import *
 from simplejson import dumps
 from munin.helpers import muninview
 from datetime import datetime,timedelta
+from django_statsd.clients import statsd
 
 class rendered_with(object):
     def __init__(self, template_name):
@@ -182,6 +183,7 @@ def push(request,object_id):
     deployment = get_object_or_404(Deployment,id=object_id)
     if request.method == "POST":
         if deployment.can_push(request.user):
+            statsd.incr('event.push')
             push = deployment.new_push(user=request.user,comment=request.POST.get('comment',''))
             for k in request.POST.keys():
                 if k.startswith("flag_"):
@@ -201,6 +203,7 @@ def rollback(request,object_id):
     deployment = get_object_or_404(Deployment,id=object_id)
     if request.method == "POST":
         if deployment.can_push(request.user):
+            statsd.incr('event.rollback')
             push_id = request.POST.get('push_id','')
             push = deployment.new_push(user=request.user,comment=request.POST.get('comment',''))
             for k in request.POST.keys():
@@ -220,6 +223,7 @@ def rollback(request,object_id):
 def stage(request,object_id):
     push = get_object_or_404(Push,id=object_id)
     if push.deployment.can_push(request.user):
+        statsd.incr('event.run_stage')
         pushstage = push.run_stage(request.GET.get('stage_id',None),
                                    request.GET.get('rollback_id',None))
         logs = [dict(command=l.command,stdout=l.stdout,stderr=l.stderr) for l in pushstage.log_set.all()]
