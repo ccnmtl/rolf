@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Rolf : Web Based Deployment Tool" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Rolf</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ccnmtl/rolf">View on GitHub</a>
+
+          <h1 id="project_title">Rolf</h1>
+          <h2 id="project_tagline">Web Based Deployment Tool</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ccnmtl/rolf/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ccnmtl/rolf/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Rolf is a web based deployment tool</h1>
+
+<p>Rolf is aimed at letting you deploy an application to production (or
+staging, or wherever) in one step. If your deployment takes more than
+one step, you're doing it wrong. </p>
+
+<p>A typical deployment process will checkout a clean copy of your
+application code, tag it (for easy rollbacks later), copy the code to
+the production server, update/build any dependencies needed, and
+restart or HUP a server process on the production server. </p>
+
+<p>A deployment in Rolf consists of a collection of settings (eg,
+repository URL, production host, target directory) and a list of
+stages that will be run in order, halting if any of the stages fail. </p>
+
+<p>Users can log in to Rolf and hit the big "push" button for a
+deployment. The stages each run, logging all the commands executed and
+the STDOUT and STDERR returned. If a push ever fails, or broken code
+gets pushed to production, it's easy to go back through the Rolf
+pushes to select a previous one that was successful and hit a
+"rollback" button and Rolf will run a deployment with that version of
+code to get your application back to a running state as soon as
+possible.  </p>
+
+<h2>Features</h2>
+
+<ul>
+<li>very simple interface, makes it hard to mess up a deployment</li>
+<li>Category/Application/Deployment hierarchy</li>
+<li>Deployment Stages can be written in Bash or Python</li>
+<li>Stages can be shared across applications/deployments and browsed in
+a "cookbook"</li>
+<li>basic permissions model so you can let users push/rollback an
+application without necessarily having the ability to modify the
+deployment steps or settings (handy to let designers push)</li>
+<li>drag and drop reordering of stages</li>
+<li>easy rollback to a known good state</li>
+<li>interactive step by step push mode for debugging your deployment</li>
+<li>easy to "clone" a deployment</li>
+</ul><h2>Screenshots</h2>
+
+<p><img src="https://github.com/ccnmtl/rolf/raw/master/doc/screenshots/rolf_all_apps.png" alt="All Apps Listing"></p>
+
+<p><img src="https://github.com/ccnmtl/rolf/raw/master/doc/screenshots/rolf_pushing.png" alt="A Push in Progress"></p>
+
+<p><img src="https://github.com/ccnmtl/rolf/raw/master/doc/screenshots/rolf_stages2.png" alt="Stages of a Deployment"></p>
+
+<p><img src="https://github.com/ccnmtl/rolf/raw/master/doc/screenshots/rolf_cookbook.png" alt="Cookbook"></p>
+
+<h2>Documentation</h2>
+
+<p>Please see the <a href="https://github.com/ccnmtl/rolf/wiki">wiki</a> for
+instructions on installing, configuring, and using Rolf. </p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Rolf maintained by <a href="https://github.com/ccnmtl">ccnmtl</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
