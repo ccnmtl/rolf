@@ -1,8 +1,8 @@
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
-from models import *
+from models import Category, Push, Application, Deployment, Permission, Setting, Flag, Recipe, Stage, FlagValue
 from simplejson import dumps
 from munin.helpers import muninview
 from datetime import datetime,timedelta
