@@ -1,5 +1,5 @@
 """
-imports a csv file of recipes. 
+imports a csv file of recipes.
 
 expects the format from dump_cookbook
 
@@ -13,8 +13,9 @@ import csv
 import cStringIO
 from rolf_main.models import *
 
+
 class Command(BaseCommand):
-    def handle(self,fname,**options):
+    def handle(self, fname, **options):
         print fname
         reader = csv.reader(open(fname))
         for row in reader:
@@ -23,4 +24,3 @@ class Command(BaseCommand):
                                           language=row[1],
                                           code=row[2],
                                           description=row[3])
-
