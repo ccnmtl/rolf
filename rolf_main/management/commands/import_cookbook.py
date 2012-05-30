@@ -8,10 +8,9 @@ Use like
 ./manage.py import_cookbook /path/to/cookbook.csv
 
 """
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import csv
-import cStringIO
-from rolf_main.models import *
+from rolf_main.models import Recipe
 
 
 class Command(BaseCommand):
