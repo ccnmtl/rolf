@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.conf import settings
+from django.views.generic.simple import direct_to_template
 import os.path
 admin.autodiscover()
 from rolf_main.models import Category, Application, Deployment, Push, Recipe, Stage
@@ -94,6 +95,7 @@ urlpatterns = patterns('',
                        (r'^stats/total_pushes/$','rolf_main.views.total_pushes'),
                        (r'^stats/current_pushes/$','rolf_main.views.current_pushes'),
                        ('^munin/',include('munin.urls')),
+                       (r'^stats/',direct_to_template, {'template': 'stats.html'}),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': site_media_root}),
                        (r'^uploads/(?P<path>.*)$','django.views.static.serve',{'document_root' : settings.MEDIA_ROOT}),
 ) 
