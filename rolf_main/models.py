@@ -2,19 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 import os
 import stat
-import time
-from datetime import datetime,timedelta
-import sys
+from datetime import datetime
 import StringIO
-import types
-from subprocess import Popen,PIPE
+from subprocess import Popen
 import os.path
-import cStringIO
 from tempfile import TemporaryFile
 from django.forms import ModelForm
 
-from SilverCity import Python,Perl
+from SilverCity import Python, Perl
 from django.conf import settings
+
 
 class Category(models.Model):
     name = models.CharField(max_length=256)
@@ -26,7 +23,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return "/category/%d/" % self.id 
+        return "/category/%d/" % self.id
     
 class Application(models.Model):
     name = models.CharField(max_length=256)
