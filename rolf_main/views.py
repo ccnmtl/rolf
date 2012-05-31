@@ -2,7 +2,8 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
-from models import Category, Push, Application, Deployment, Permission, Setting, Flag, Recipe, Stage, FlagValue
+from models import Category, Push, Application, Deployment, Permission
+from models import Setting, Flag, Recipe, Stage, FlagValue
 from simplejson import dumps
 from munin.helpers import muninview
 from datetime import datetime, timedelta
@@ -18,7 +19,7 @@ class rendered_with(object):
             items = func(request, *args, **kwargs)
             if type(items) == type({}):
                 return render_to_response(self.template_name, items,
-                                          context_instance=RequestContext(request))
+                             context_instance=RequestContext(request))
             else:
                 return items
         return rendered_func
@@ -34,7 +35,7 @@ def index(request):
 @login_required
 def add_category(request):
     if request.method == "POST":
-        c = Category.objects.create(name=request.POST.get('name', 'unknown'))
+        Category.objects.create(name=request.POST.get('name', 'unknown'))
     return HttpResponseRedirect("/")
 
 
@@ -42,9 +43,8 @@ def add_category(request):
 def add_application(request, object_id):
     category = get_object_or_404(Category, id=object_id)
     if request.method == "POST":
-        a = Application.objects.create(category=category,
-                                       name=request.POST.get('name',
-                                                             'unknown'))
+        Application.objects.create(category=category,
+                                   name=request.POST.get('name', 'unknown'))
     return HttpResponseRedirect(category.get_absolute_url())
 
 
@@ -56,9 +56,9 @@ def add_deployment(request, object_id):
                                       name=request.POST.get('name', 'unknown'))
         # make sure the user has edit access
         for group in request.user.groups.all():
-            p = Permission.objects.create(deployment=a,
-                                          group=group,
-                                          capability="edit")
+            Permission.objects.create(deployment=a,
+                                      group=group,
+                                      capability="edit")
     return HttpResponseRedirect(application.get_absolute_url())
 
 
@@ -67,11 +67,12 @@ def add_setting(request, object_id):
     deployment = get_object_or_404(Deployment, id=object_id)
     if request.method == "POST":
         if deployment.can_edit(request.user):
-            s = Setting.objects.create(deployment=deployment,
-                                       name=request.POST.get('name',
-                                                             'unknown'),
-                                       value=request.POST.get('value', ''))
-    return HttpResponseRedirect("%s#tab-settings" % deployment.get_absolute_url())
+            Setting.objects.create(deployment=deployment,
+                                   name=request.POST.get('name',
+                                                         'unknown'),
+                                   value=request.POST.get('value', ''))
+    return HttpResponseRedirect("%s#tab-settings" %
+                                deployment.get_absolute_url())
 
 
 @login_required
@@ -79,7 +80,8 @@ def remove_permission(request, object_id):
     deployment = get_object_or_404(Deployment, id=object_id)
     if request.method == "POST":
         if deployment.can_edit(request.user):
-            permission = get_object_or_404(Permission, id=request.POST.get('permission_id', -1))
+            permission = get_object_or_404(Permission,
+                             id=request.POST.get('permission_id', -1))
             permission.delete()
     return HttpResponseRedirect(deployment.get_absolute_url())
 
@@ -131,9 +133,11 @@ def edit_settings(request, object_id):
                         setting.delete
                     else:
                         setting.name = request.POST[k]
-                        setting.value = request.POST.get("setting_value_%d" % setting_id, "")
+                        setting.value = request.POST.get("setting_value_%d" %
+                                                         setting_id, "")
                         setting.save()
-    return HttpResponseRedirect("%s#tab-settings" % deployment.get_absolute_url())
+    return HttpResponseRedirect("%s#tab-settings" %
+                                deployment.get_absolute_url())
 
 
 @login_required
@@ -148,12 +152,15 @@ def add_stage(request, object_id):
                 recipe = get_object_or_404(Recipe, id=recipe_id)
             else:
                 recipe = Recipe.objects.create(name="", description="",
-                                               language=request.POST.get('language', 'python'),
+                                 language=request.POST.get('language',
+                                                           'python'),
                                                code=code)
-            stage = Stage.objects.create(deployment=deployment, recipe=recipe,
-                                         name=request.POST.get('name', 'unknown stage'))
+            Stage.objects.create(deployment=deployment, recipe=recipe,
+                                 name=request.POST.get('name',
+                                                       'unknown stage'))
 
-    return HttpResponseRedirect("%s#tab-stages" % deployment.get_absolute_url())
+    return HttpResponseRedirect("%s#tab-stages" %
+                                deployment.get_absolute_url())
 
 
 @login_required
@@ -163,12 +170,14 @@ def clone_deployment(request, object_id):
         if deployment.can_edit(request.user):
             application = get_object_or_404(Application,
                                             id=request.POST['application_id'])
-            new_deployment = Deployment.objects.create(name=request.POST['name'], application=application)
+            new_deployment = Deployment.objects.create(
+                name=request.POST['name'],
+                application=application)
             # clone settings
             for setting in deployment.setting_set.all():
-                s = Setting.objects.create(deployment=new_deployment,
-                                           name=setting.name,
-                                           value=setting.value)
+                Setting.objects.create(deployment=new_deployment,
+                                       name=setting.name,
+                                       value=setting.value)
             # clone stages
             for stage in deployment.stage_set.all():
                 recipe = stage.recipe
@@ -178,22 +187,22 @@ def clone_deployment(request, object_id):
                     r = Recipe.objects.create(name="",
                                               language=recipe.language,
                                               code=recipe.code)
-                s = Stage.objects.create(deployment=new_deployment,
-                                         name=stage.name, recipe=r)
+                Stage.objects.create(deployment=new_deployment,
+                                     name=stage.name, recipe=r)
             # clone permissions
             for perm in deployment.permission_set.all():
-                p = Permission.objects.create(deployment=new_deployment,
-                                              group=perm.group,
-                                              capability=perm.capability)
+                Permission.objects.create(deployment=new_deployment,
+                                          group=perm.group,
+                                          capability=perm.capability)
 
             # clone flags
             for flag in deployment.flag_set.all():
-                f = Flag.objects.create(deployment=new_deployment,
-                                        name=flag.name,
-                                        varname=flag.varname,
-                                        boolean=flag.boolean,
-                                        default=flag.default,
-                                        description=flag.description)
+                Flag.objects.create(deployment=new_deployment,
+                                    name=flag.name,
+                                    varname=flag.varname,
+                                    boolean=flag.boolean,
+                                    default=flag.default,
+                                    description=flag.description)
 
             return HttpResponseRedirect(new_deployment.get_absolute_url())
     return HttpResponseRedirect(deployment.get_absolute_url())
@@ -212,10 +221,11 @@ def push(request, object_id):
                     flag_id = k[len("flag_"):]
                     flag = Flag.objects.get(id=flag_id)
                     value = request.POST[k]
-                    fv = FlagValue.objects.create(flag=flag, push=push,
-                                                  value=value)
+                    FlagValue.objects.create(flag=flag, push=push,
+                                             value=value)
             if request.POST.get('step', ''):
-                return HttpResponseRedirect(push.get_absolute_url() + "?step=1")
+                return HttpResponseRedirect(push.get_absolute_url() +
+                                            "?step=1")
             else:
                 return HttpResponseRedirect(push.get_absolute_url())
     else:
@@ -236,12 +246,14 @@ def rollback(request, object_id):
                     flag_id = k[len("flag_"):]
                     flag = Flag.objects.get(id=flag_id)
                     value = request.POST[k]
-                    fv = FlagValue.objects.create(flag=flag, push=push,
-                                                  value=value)
+                    FlagValue.objects.create(flag=flag, push=push,
+                                             value=value)
             if request.POST.get('step', ''):
-                return HttpResponseRedirect("/push/%d/?step=1;rollback=%s" % (push.id, push_id))
+                return HttpResponseRedirect("/push/%d/?step=1;rollback=%s" %
+                                            (push.id, push_id))
             else:
-                return HttpResponseRedirect("/push/%d/?rollback=%s" % (push.id, push_id))
+                return HttpResponseRedirect("/push/%d/?rollback=%s" %
+                                            (push.id, push_id))
     else:
         return HttpResponse("requires POST")
 
@@ -276,8 +288,8 @@ def add_cookbook_recipe(request):
     name = request.POST.get('name', '')
     language = request.POST.get('language', '')
     description = request.POST.get('description', '')
-    r = Recipe.objects.create(name=name, description=description,
-                              language=language, code=code)
+    Recipe.objects.create(name=name, description=description,
+                          language=language, code=code)
     return HttpResponseRedirect("/cookbook/")
 
 
@@ -304,7 +316,8 @@ def edit_stage(request, object_id):
         stage.recipe = r
     else:
         if stage.recipe.name != "":
-            stage.recipe = Recipe.objects.create(language=request.POST.get('language', 'shell'), code="")
+            stage.recipe = Recipe.objects.create(
+                language=request.POST.get('language', 'shell'), code="")
         else:
             stage.recipe.language = request.POST.get('language', 'shell')
             stage.recipe.code = code
@@ -317,7 +330,8 @@ def edit_stage(request, object_id):
 def reorder_stages(request, object_id):
     deployment = get_object_or_404(Deployment, id=object_id)
     if deployment.can_edit(request.user):
-        ids = [(int(k[len('stage_'):]), int(v)) for k, v in request.GET.items() if k.startswith('stage_')]
+        ids = [(int(k[len('stage_'):]), int(v)) for k, v in
+               request.GET.items() if k.startswith('stage_')]
         ids.sort(key=lambda x: x[0])
         deployment.set_stage_order([x[1] for x in ids])
         deployment.save()
@@ -326,7 +340,10 @@ def reorder_stages(request, object_id):
 
 @login_required
 def generic_detail(request, object_id, model, template_name):
-    return render_to_response(template_name, dict(object=get_object_or_404(model, id=object_id)), context_instance=RequestContext(request))
+    return render_to_response(template_name,
+                              dict(object=get_object_or_404(model,
+                                                            id=object_id)),
+                              context_instance=RequestContext(request))
 
 
 @muninview(config="""graph_title Total Pushes
@@ -340,4 +357,6 @@ def total_pushes(request):
 graph_vlabel pushes
 graph_category rolf""")
 def current_pushes(request):
-    return [("pushes", Push.objects.filter(start_time__gt=datetime.now() - timedelta(minutes=6)).count())]
+    return [("pushes",
+             Push.objects.filter(start_time__gt=datetime.now() -
+                                 timedelta(minutes=6)).count())]

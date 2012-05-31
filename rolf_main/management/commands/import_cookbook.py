@@ -19,7 +19,7 @@ class Command(BaseCommand):
         reader = csv.reader(open(fname))
         for row in reader:
             if len(row) == 4:
-                r = Recipe.objects.create(name=row[0],
-                                          language=row[1],
-                                          code=row[2],
-                                          description=row[3])
+                Recipe.objects.create(name=row[0],
+                                      language=row[1],
+                                      code=row[2],
+                                      description=row[3])
