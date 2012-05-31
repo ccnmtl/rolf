@@ -85,22 +85,29 @@ class Deployment(models.Model):
         return Recipe.objects.all().exclude(name="")
 
     def can_edit(self, user):
-        edit_groups = set([p.group.id for p in self.permission_set.filter(capability="edit")])
+        edit_groups = set([p.group.id for p
+                           in self.permission_set.filter(capability="edit")])
         user_groups = set([g.id for g in user.groups.all()])
         return not edit_groups.isdisjoint(user_groups)
 
     def can_push(self, user):
-        edit_groups = set([p.group.id for p in self.permission_set.filter(capability="edit")])
-        push_groups = set([p.group.id for p in self.permission_set.filter(capability="push")])
+        edit_groups = set([p.group.id for p
+                           in self.permission_set.filter(capability="edit")])
+        push_groups = set([p.group.id for p
+                           in self.permission_set.filter(capability="push")])
         user_groups = set([g.id for g in user.groups.all()])
         return not user_groups.isdisjoint(edit_groups | push_groups)
 
     def can_view(self, user):
         user_groups = set([g.id for g in user.groups.all()])
-        edit_groups = set([p.group.id for p in self.permission_set.filter(capability="edit")])
-        push_groups = set([p.group.id for p in self.permission_set.filter(capability="push")])
-        view_groups = set([p.group.id for p in self.permission_set.filter(capability="view")])
-        return not user_groups.isdisjoint(edit_groups | push_groups | view_groups)
+        edit_groups = set([p.group.id for p
+                           in self.permission_set.filter(capability="edit")])
+        push_groups = set([p.group.id for p
+                           in self.permission_set.filter(capability="push")])
+        view_groups = set([p.group.id for p
+                           in self.permission_set.filter(capability="view")])
+        return not user_groups.isdisjoint(edit_groups | push_groups |
+                                          view_groups)
 
     def add_permission_form(self, request_vars=None):
         class AddPermissionForm(ModelForm):
@@ -220,7 +227,8 @@ class Push(models.Model):
         pushstage = PushStage.objects.create(push=self, stage=stage)
         pushstage.run(rollback)
         all_stages = list(self.deployment.stage_set.all())
-        if pushstage.status == "failed" or pushstage.stage.id == all_stages[-1].id:
+        if (pushstage.status == "failed" or
+            pushstage.stage.id == all_stages[-1].id):
             # last stage, so set the push status
             self.status = pushstage.status
             self.end_time = datetime.now()
@@ -269,8 +277,8 @@ class PushStage(models.Model):
             try:
                 exec recipe.code in locals(), globals()
             except Exception, e:
-                l = Log.objects.create(pushstage=self, command=recipe.code,
-                        stdout="", stderr=str(e))
+                Log.objects.create(pushstage=self, command=recipe.code,
+                                   stdout="", stderr=str(e))
                 self.status = "failed"
         else:
             # write to temp file, exec, then clean up
@@ -307,8 +315,8 @@ class PushStage(models.Model):
             stderr = stderr_buffer.read()
             stdout_buffer.close()
             stderr_buffer.close()
-            l = Log.objects.create(pushstage=self, command=recipe.code,
-                                   stdout=stdout, stderr=stderr)
+            Log.objects.create(pushstage=self, command=recipe.code,
+                               stdout=stdout, stderr=stderr)
             if ret == 0:
                 self.status = "ok"
             else:
@@ -331,8 +339,8 @@ class PushStage(models.Model):
         stderr = stderr_buffer.read()
         stdout_buffer.close()
         stderr_buffer.close()
-        l = Log.objects.create(pushstage=self, command=" ".join(args),
-                               stdout=stdout, stderr=stderr)
+        Log.objects.create(pushstage=self, command=" ".join(args),
+                           stdout=stdout, stderr=stderr)
         return (ret, stdout, stderr)
 
     def stdout(self):
@@ -359,10 +367,14 @@ class Log(models.Model):
 class Flag(models.Model):
     deployment = models.ForeignKey(Deployment)
     name = models.CharField(max_length=256)
+
     varname = models.CharField(max_length=256,
-                               help_text="Bash/Python variable name. UPPERCASE_AND_UNDERSCORES recommended")
+                               help_text=("Bash/Python variable name. "
+                                          "UPPERCASE_AND_UNDERSCORES "
+                                          "recommended"))
     default = models.CharField(max_length=256, default="", blank=True,
-                               help_text="leave empty for False on boolean fields")
+                               help_text=("leave empty for "
+                                          "False on boolean fields"))
     boolean = models.BooleanField(default=False,
                                   help_text="make it a checkbox")
     description = models.TextField(blank=True, default="")
