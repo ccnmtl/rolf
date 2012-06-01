@@ -68,6 +68,7 @@ INSTALLED_APPS = (
     'munin',
     'rolf_main',
     'django_statsd',
+    'south',
 )
 
 STATSD_CLIENT = 'statsd.client'

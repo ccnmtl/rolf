@@ -65,7 +65,8 @@
   <table width="100%">
     <tr><th width="30%"><a href="{{application.get_absolute_url}}">{{application.name}}</a></th>
       <td>
-	{% for deployment in application.deployment_set.all %}
+       {% comment %}Don't show deployments that are flagged as "deprecated".{%endcomment %}
+       {% for deployment in application.active_deployments %}
 	<div class="deployment nest nested-{{deployment.status}}">
 	  <a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
 	</div>
