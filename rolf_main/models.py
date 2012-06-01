@@ -39,10 +39,14 @@ class Application(models.Model):
     def get_absolute_url(self):
         return "/application/%d/" % self.id
 
+    def active_deployments(self):
+        return self.deployment_set.filter(deprecated = False)
+
 
 class Deployment(models.Model):
     name = models.CharField(max_length="256", default="prod")
     application = models.ForeignKey(Application)
+    deprecated = models.BooleanField(default=False, help_text="Check this box if you don't want this deployment to show up by default.")
 
     class Meta:
         order_with_respect_to = "application"
