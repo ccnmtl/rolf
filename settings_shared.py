@@ -85,3 +85,5 @@ SERVER_EMAIL = "rolf@yoursite.com"
 
 CHECKOUT_DIR = "/var/tmp/rolf/checkouts/"
 SCRIPT_DIR = "/var/tmp/rolf/scripts/"
+
+API_SECRET = "YOU MUST SET THIS IN A local_settings.py FILE"
