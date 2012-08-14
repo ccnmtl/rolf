@@ -3,13 +3,10 @@ from django.contrib.auth.models import User, Group
 import os
 import stat
 from datetime import datetime
-import StringIO
 from subprocess import Popen
 import os.path
 from tempfile import TemporaryFile
 from django.forms import ModelForm
-
-from SilverCity import Python, Perl
 from django.conf import settings
 
 
@@ -169,30 +166,6 @@ class Recipe(models.Model):
 
     def get_absolute_url(self):
         return "/cookbook/%d/" % self.id
-
-    def code_html(self):
-        if self.language == "python":
-            g = Python.PythonHTMLGenerator()
-            file = StringIO.StringIO()
-            g.generate_html(file, self.code)
-            return file.getvalue()
-        if self.language == "shell":
-            first_line = self.code.split('\n')[0]
-            if 'python' in first_line:
-                g = Python.PythonHTMLGenerator()
-                file = StringIO.StringIO()
-                g.generate_html(file, self.code)
-                return file.getvalue()
-            elif 'perl' in first_line:
-                g = Perl.PerlHTMLGenerator()
-                file = StringIO.StringIO()
-                g.generate_html(file, self.code)
-                return file.getvalue()
-            else:
-                g = Perl.PerlHTMLGenerator()
-                file = StringIO.StringIO()
-                g.generate_html(file, self.code)
-                return file.getvalue()
 
 
 class Stage(models.Model):
