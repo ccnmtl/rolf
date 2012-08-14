@@ -8,6 +8,8 @@ from simplejson import dumps
 from munin.helpers import muninview
 from datetime import datetime, timedelta
 from django_statsd.clients import statsd
+from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer, BadSignature, BadData
+from django.conf import settings
 
 
 class rendered_with(object):
@@ -345,6 +347,15 @@ def generic_detail(request, object_id, model, template_name):
                                                             id=object_id)),
                               context_instance=RequestContext(request))
 
+@login_required
+@rendered_with('rolf/get_api_key.html')
+def get_api_key(request):
+    s1 = URLSafeSerializer(settings.API_SECRET, salt="rolf-ipaddress-key")
+    k1 = s1.dumps(dict(username=request.user.username,
+                       remote_addr=request.META['REMOTE_ADDR']))
+    s2 = URLSafeTimedSerializer(settings.API_SECRET, salt="rolf-timed-key")
+    k2 = s2.dumps(dict(username=request.user.username))
+    return dict(k1=k1, k2=k2, remote_addr=request.META['REMOTE_ADDR'])
 
 @muninview(config="""graph_title Total Pushes
 graph_vlabel pushes
