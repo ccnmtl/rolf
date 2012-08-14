@@ -14,7 +14,7 @@
 <h2><a href="/cookbook/{{recipe.id}}/">{{recipe.name}}</a></h2>
 <p>{{recipe.description}}</p>
 <p><b>{{recipe.language}}</b></p>
-<div class="code">{{recipe.code_html|safe}}</div>
+<div class="code"><pre class="prettyprint">{{recipe.code}}</pre></div>
 </div>
 {% endfor %}
 
@@ -41,6 +41,10 @@ language <select name="language">
 </fieldset>
 </form>
 
+<script src="/site_media/js/prettify.js"></script>
+<script type="text/javascript">
+  prettyPrint();
+</script>
 {% else %}
 <p>Sorry, only superusers can view the cookbook.</p>
 {% endif %}

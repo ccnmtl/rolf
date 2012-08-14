@@ -164,7 +164,7 @@ value="{{setting.value}}" style="width: 100%" /></td>
 {{stage.recipe.name}}</a>
 {% else %}
 <div><b>{{stage.recipe.language}}</b><br />
-  <div class="code">{{stage.recipe.code_html|safe}}</div></div>
+  <div class="code"><pre class="prettyprint">{{stage.recipe.code}}</pre></div></div>
 {% endif %}
 </td>
 </tr>
@@ -323,7 +323,7 @@ selected="selected"
 
 
 </div>
-
+<script src="/site_media/js/prettify.js"></script>
 <script type="text/javascript">
 jQuery(function() {
   jQuery("#stages-table").sortable({
@@ -337,8 +337,11 @@ jQuery(function() {
   });
   jQuery("#stages-table").disableSelection();
   jQuery(".tabber").tabs();
+  prettyPrint();
 });
 </script>
+
+
 {% else %}
 <p>Sorry, you don't have permission to view this deployment.</p>
 {% end_can_view %}
