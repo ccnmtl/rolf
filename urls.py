@@ -88,7 +88,12 @@ urlpatterns = patterns('',
                        (r'^stage/(?P<object_id>\d+)/edit/$','rolf_main.views.edit_stage'),
                        (r'^stage/(?P<object_id>\d+)/delete/$','django.views.generic.create_update.delete_object',dict(model=Stage,post_delete_redirect="/")),
 
-                       (r'^api/1.0/get_key/', 'rolf_main.views.get_api_key'),
+                       (r'^api/1.0/get_key/$',
+                        'rolf_main.views.get_api_key'),
+                       (r'^api/1.0/deployment/(?P<deployment_id>\d+)/push/$',
+                        'rolf_main.views.api_push'),
+                       (r'^api/1.0/push/(?P<push_id>\d+)/stage/(?P<stage_id>\d+)/$',
+                        'rolf_main.views.api_run_stage'),
 
                        accounts_tuple,
                        (r'^logout/$', 'django.contrib.auth.views.logout', {'next_page':'/'}), 

@@ -1,5 +1,6 @@
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 from models import Category, Push, Application, Deployment, Permission
@@ -8,8 +9,10 @@ from simplejson import dumps
 from munin.helpers import muninview
 from datetime import datetime, timedelta
 from django_statsd.clients import statsd
-from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer, BadSignature, BadData
+from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer
+from itsdangerous import BadSignature, SignatureExpired
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class rendered_with(object):
@@ -347,6 +350,7 @@ def generic_detail(request, object_id, model, template_name):
                                                             id=object_id)),
                               context_instance=RequestContext(request))
 
+
 @login_required
 @rendered_with('rolf/get_api_key.html')
 def get_api_key(request):
@@ -356,6 +360,78 @@ def get_api_key(request):
     s2 = URLSafeTimedSerializer(settings.API_SECRET, salt="rolf-timed-key")
     k2 = s2.dumps(dict(username=request.user.username))
     return dict(k1=k1, k2=k2, remote_addr=request.META['REMOTE_ADDR'])
+
+
+def verify_key(request):
+    # TODO: convert to a decorator
+    key = request.META.get('HTTP_ROLF_API_KEY', '')
+    s1 = URLSafeSerializer(settings.API_SECRET,
+                           salt="rolf-ipaddress-key")
+    try:
+        d = s1.loads(key)
+        # check their IP
+        if d['remote_addr'] != request.META['REMOTE_ADDR']:
+            return None
+        return get_object_or_404(User, username=d['username'])
+    except BadSignature:
+        # try timed key
+        s2 = URLSafeTimedSerializer(settings.API_SECRET,
+                                    salt="rolf-timed-key")
+        try:
+            d = s2.loads(key, max_age=60 * 60 * 24 * 7)
+            return get_object_or_404(User, username=d['username'])
+        except BadSignature:
+            # invalid
+            return None
+        except SignatureExpired:
+            return None
+    return None
+
+
+def api_push(request, deployment_id):
+    user = verify_key(request)
+    if not user:
+        return HttpResponseForbidden()
+    if request.method != "POST":
+        return HttpResponseNotAllowed()
+    deployment = get_object_or_404(Deployment,
+                                   id=deployment_id)
+    if not deployment.can_push(user):
+        return HttpResponseForbidden()
+    statsd.incr('event.push')
+    push = deployment.new_push(
+        user=user, comment="")
+    stages = [dict(
+            name=stage.name,
+            url="/api/1.0/push/%d/stage/%d/" % (push.id, stage.id))
+              for stage in deployment.stage_set.all()]
+    return HttpResponse(dumps(dict(stages=stages)),
+                        mimetype="application/json")
+
+
+def api_run_stage(request, push_id, stage_id):
+    user = verify_key(request)
+    if not user:
+        return HttpResponseForbidden()
+    if request.method != "POST":
+        return HttpResponseNotAllowed()
+    push = get_object_or_404(Push, id=push_id)
+    if not push.deployment.can_push(user):
+        return HttpResponseForbidden()
+    stage = get_object_or_404(Stage, id=stage_id)
+
+    statsd.incr('event.run_stage')
+    pushstage = push.run_stage(stage.id,
+                               # no support for rollback yet
+                               None)
+    logs = [dict(command=l.command, stdout=l.stdout,
+                 stderr=l.stderr) for l in pushstage.log_set.all()]
+    return HttpResponse(
+        dumps(dict(status=pushstage.status,
+                   logs=logs,
+                   end_time=str(pushstage.end_time),
+                   stage_id=pushstage.stage.id)),
+        mimetype='application/json')
 
 
 @muninview(config="""graph_title Total Pushes
