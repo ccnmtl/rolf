@@ -357,6 +357,7 @@ def get_api_key(request):
     k2 = s2.dumps(dict(username=request.user.username))
     return dict(k1=k1, k2=k2, remote_addr=request.META['REMOTE_ADDR'])
 
+
 @muninview(config="""graph_title Total Pushes
 graph_vlabel pushes
 graph_category rolf""")
