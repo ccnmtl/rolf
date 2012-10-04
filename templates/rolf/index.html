@@ -11,12 +11,38 @@
 {% if request.user.is_staff %}
 <div id="tabber">
 <ul>
+	{% if recent_deployments %}
+  <li><a href="#recent-deployments">Your Recent Deployments</a></li>
+  {% endif %}
   {% if recent_pushes %}
   <li><a href="#recent-pushes">Your Recent Pushes</a></li>
   {% endif %}
   <li><a href="#all-applications">All Applications</a></li>
 {% if request.user.is_superuser %}<li><a href="#add-category">Add a New Category</a></li>{% endif %}
 </ul>
+
+{% if recent_deployments %}
+<div id="recent-deployments">
+
+<table width="100%">
+{% for deployment in recent_deployments %}
+<tr class="{% cycle "even" "odd" %}">
+<th><a
+       href="{{deployment.application.category.get_absolute_url}}">{{deployment.application.category.name}}</a>
+       :
+<a
+   href="{{deployment.application.get_absolute_url}}">{{deployment.application.name}}</a>
+   :
+<a
+   href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
+</th>
+</tr>
+{% endfor %}
+</table>
+
+
+</div>
+{% endif %}
 
 {% if recent_pushes %}
 <div id="recent-pushes">
