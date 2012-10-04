@@ -135,6 +135,12 @@ class Deployment(models.Model):
         else:
             return AddFlagForm()
 
+    def last_push_date(self):
+        if self.push_set.count() == 0:
+            return None
+        else:
+            return self.push_set.all()[0].start_time
+
 
 class Permission(models.Model):
     deployment = models.ForeignKey(Deployment)

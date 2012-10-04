@@ -33,7 +33,12 @@ class rendered_with(object):
 @login_required
 @rendered_with('rolf/index.html')
 def index(request):
-    return dict(recent_pushes=Push.objects.filter(user=request.user),
+    recent_pushes = Push.objects.filter(user=request.user)
+    recent_deployments = list(set([p.deployment for p in recent_pushes]))
+    recent_deployments.sort(key=lambda x: x.last_push_date())
+    recent_deployments.reverse()
+    return dict(recent_pushes=recent_pushes,
+                recent_deployments=recent_deployments,
                 categories=Category.objects.all())
 
 
