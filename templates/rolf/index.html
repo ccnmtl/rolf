@@ -36,6 +36,9 @@
 <a
    href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
 </th>
+<td>
+{{deployment.last_push_date}}
+</td>
 </tr>
 {% endfor %}
 </table>
