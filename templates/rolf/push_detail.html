@@ -68,12 +68,13 @@ id="execute-{{stage.id}}" />
 {% ifequal object.status 'ok' %}
 {% if_can_push object.deployment %}
 <form action="{{object.deployment.get_absolute_url}}rollback/" method="post">
-<fieldset><legend>Rollback to this Push</legend>
+<div class="well">
+<h3>Rollback to this push</h3>
 <input type="hidden" name="push_id" value="{{object.id}}" />
-comment <input type="text" name="comment" /> (<input type="checkbox"
+comment <input type="text" name="comment" /> <label class="checkbox"><input type="checkbox"
 						     name="step" />
-  step) <input type="submit" value="ROLLBACK" />
-</fieldset>
+  step</label> <input type="submit" value="ROLLBACK" class="btn btn-danger"/>
+</div>
 </form>
 {% end_can_push %}
 {% endifequal %}
@@ -112,9 +113,10 @@ comment <input type="text" name="comment" /> (<input type="checkbox"
 </table>
 
 {% if_can_push object.deployment %}
-<form action="delete/" method="POST">
+<form action="delete/" method="POST" class="form-inline">
 <fieldset><legend>delete</legend>
-Delete this push <input type="submit" value="DELETE" />
+Delete this push <input type="submit" value="DELETE" class="btn
+												btn-danger" />
 </fieldset>
 </form>
 {% end_can_push %}

@@ -37,7 +37,7 @@ def index(request):
     recent_deployments = list(set([p.deployment for p in recent_pushes]))
     recent_deployments.sort(key=lambda x: x.last_push_date())
     recent_deployments.reverse()
-    return dict(recent_pushes=recent_pushes,
+    return dict(recent_pushes=recent_pushes[:50],
                 recent_deployments=recent_deployments,
                 categories=Category.objects.all())
 
