@@ -3,6 +3,7 @@
 {% load markup %}
 {% block title %}{{object.name}}{% endblock %}
 {% block js %}
+
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
         type="text/javascript" ></script>
@@ -40,32 +41,27 @@ var saveOrder = function() {
 <a href="{{object.application.get_absolute_url}}">{{object.application.name}}</a> : {{object.name}}</h1>
 
 {% if_can_view object %}
-<div class="tabber">
-<ul>
-	<li><a href="#tab-push">Push</a></li>
-	{% if_can_edit object %}<li><a href="#tab-settings">Settings</a></li>{% end_can_edit %}
-	{% if_can_edit object %}<li><a href="#tab-stages">Stages</a></li>{% end_can_edit %}
-	{% if_can_edit object %}<li><a href="#tab-flags">Flags</a></li>{% end_can_edit %}
-	{% if_can_edit object %}<li><a href="#tab-clone">Clone</a></li>{% end_can_edit %}
-	{% if_can_edit object %}<li><a href="#tab-delete">Delete</a></li>{% end_can_edit %}
-	{% if_can_edit object %}<li><a href="#tab-permissions">Permissions</a></li>{% end_can_edit %}
-	</ul>
-<div id="tab-push">
 
-{% if object.push_set.count %}
-<div>
-{% with object.most_recent_push as recent_push %}
-<div id="push-status" class="{{recent_push.status}}">{{recent_push.status}}</div>
-{% endwith %}
-</div>
-{% endif %}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#tab-push" data-toggle="tab">Push</a></li>
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-settings">Settings</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-stages">Stages</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-flags">Flags</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-clone">Clone</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-delete">Delete</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-permissions">Permissions</a></li>{% end_can_edit %}
+	</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="tab-push">
+
 
 {% if_can_push object %}
-<form action="push/" method="post">
-<fieldset><legend>Push</legend>
+<form action="push/" method="post" class="form-inline">
+<div class="well">
 
 {% if object.flag_set.count %}
-<table>
+<table class="table table-bordered table-striped">
 {% for flag in object.flag_set.all %}
 <tr>
 <th>{{flag.name}}</th>
@@ -83,19 +79,29 @@ var saveOrder = function() {
 </table>
 {% endif %}
 
-Comment: <input type="text" name="comment" /> (<input type="checkbox" name="step" /> step )<input type="submit" value="push" />
-</fieldset>
+<input type="text" name="comment" placeholder="comment" />
+<label class="checkbox"><input type="checkbox" name="step" /> step </label>
+<input type="submit" value="push" class="btn btn-primary" />
+</div>
 </form>
 {% end_can_push %}
 
 {% if object.push_set.count %}
 <div>
 
-<table width="100%">
+<table class="table table-bordered table-striped table-condensed">
 {% for push in object.push_set.all %}
-<tr class="{{push.status}} {% cycle 'odd' 'even' %}">
-<th><a
-       href="{{push.get_absolute_url}}">{{push.start_time|date:"jS F Y H:i"}}</a></th>
+<tr>
+<td>
+{% ifequal push.status "ok" %}
+<i class="icon-ok" />
+{% endifequal %}
+{% ifequal push.status "failed" %}
+<i class="icon-exclamation-sign" />
+{% endifequal %}
+</td>
+<td><a
+       href="{{push.get_absolute_url}}">{{push.start_time|date:"jS F Y H:i"}}</a></td>
 <td>{% if push.user.last_name %}
 {{push.user.first_name}} {{push.user.last_name}}
 {% else %}
@@ -113,44 +119,41 @@ Comment: <input type="text" name="comment" /> (<input type="checkbox" name="step
 </div>
 
 {% if_can_edit object %}
-<div id="tab-settings">
+<div class="tab-pane" id="tab-settings">
 {% if object.setting_set.count %}
-<div>
-
 <form action="edit_settings/" method="post">
-<table width="100%">
+<table class="table table-striped">
 <tr><th>name</th><th>value</th></tr>
 {% for setting in object.setting_set.all %}
 <tr>
 <td><input type="text" name="setting_name_{{setting.id}}"
-value="{{setting.name}}"  style="width: 100%"/></td>
+value="{{setting.name}}" class="input-xxlarge" /></td>
 <td><input type="text" name="setting_value_{{setting.id}}" 
-value="{{setting.value}}" style="width: 100%" /></td>
+value="{{setting.value}}" class="input-xxlarge"/></td>
 </tr>
 {% endfor %}
 </table>
-<input type="submit" value="save settings" />
+<input type="submit" value="save settings" class="btn btn-primary"/>
 </form>
-</div>
 {% endif %}
 
 <form action="add_setting/" method="post">
 <fieldset>
 <legend>Add Setting</legend>
-<table width="100%">
+<table class="table table-striped">
 <tr><th>name</th><th>value</th></tr>
-<tr><td><input type="text" name="name" style="width: 100%"/></td>
-<td><input type="text" name="value" style="width: 100%"/></td>
+<tr><td><input type="text" name="name" class="input-xxlarge"/></td>
+<td><input type="text" name="value"  class="input-xxlarge"/></td>
 </tr>
 </table>
-<input type="submit" value="Add" />
+<input type="submit" value="Add" class="btn btn-primary" />
 </fieldset>
 </form>
 </div>
 {% end_can_edit %}
 
 {% if_can_edit object %}
-<div id="tab-stages">
+<div class="tab-pane" id="tab-stages">
 {% if object.stage_set.count %}
 <div>
 
@@ -211,12 +214,12 @@ value="{{setting.value}}" style="width: 100%" /></td>
 {% end_can_edit %}
 
 {% if_can_edit object %}
-<div id="tab-flags">
+<div class="tab-pane" id="tab-flags">
 
 <h2>Flags</h2>
 
 {% if object.flag_set.count %}
-<table>
+<table class="table table-striped">
 <tr>
   <th>Flag</th>
   <th>Variable Name</th>
@@ -226,28 +229,28 @@ value="{{setting.value}}" style="width: 100%" /></td>
   <th></th>
 </tr>
 {% for flag in object.flag_set.all %}
-<tr class="{% cycle 'odd' 'even' %}">
+<tr>
 <td>{{flag.name}}</td>
 <td>{{flag.varname}}</td>
 <td>{{flag.boolean}}</td>
 <td>{{flag.default}}</td>
 <td>{{flag.description|markdown}}</td>
-<td><form action="remove_flag/" method="post">
+<td><form action="remove_flag/" method="post" class="form-inline">
 <input type="hidden" name="flag_id" value="{{flag.id}}" />
 {% csrf_token %}
-<input type="submit" value="remove" /></form>
+<input type="submit" value="remove" class="btn btn-danger"/></form>
 </td>
 </tr>
 {% endfor %}
 </table>
 {% endif %}
 
-<form action="add_flag/" method="post">
+<form action="add_flag/" method="post" class="form-inline">
 <fieldset><label>Add Flag</label>
 <table>
 {{ object.add_flag_form.as_table }}
 </table>
-<input type="submit" value="add" />
+<input type="submit" value="add" class="btn btn-primary"/>
 </fieldset>
 </form>
 
@@ -257,10 +260,11 @@ value="{{setting.value}}" style="width: 100%" /></td>
 
 
 {% if_can_edit object %}
-<div id="tab-clone">
+<div class="tab-pane" id="tab-clone">
 <form action="clone/" method="post">
 <p>Clone this deployment.</p>
-<p>New deployment name: <input type="text" name="name" /></p>
+<p><input type="text" name="name"
+		placeholder="new deployment name"/></p>
 <p>In Application: 
 
 <select name="application_id">
@@ -276,22 +280,23 @@ selected="selected"
 {% endfor %}
 </select></p>
 
- <input type="submit" value="Clone"/>
+ <input type="submit" value="Clone" class="btn btn-primary" />
 </form>
 </div>
 {% end_can_edit %}
 
 {% if_can_edit object %}
-<div id="tab-delete">
-<form action="delete/" method="post">
-<p>Delete this deployment: <input type="submit" value="DELETE"/></p>
+<div class="tab-pane" id="tab-delete">
+<form action="delete/" method="post" class="form-inline">
+<p>Delete this deployment: <input type="submit" value="DELETE"
+																	class="btn btn-danger" /></p>
 </form>
 </div>
 {% end_can_edit %}
 
 
 {% if_can_edit object %}
-<div id="tab-permissions">
+<div class="tab-pane" id="tab-permissions">
 
 <h2>Permissions</h2>
 
@@ -304,7 +309,7 @@ selected="selected"
 	  method="post">
 <input type="hidden" name="permission_id" value="{{permission.id}}" />
 {% csrf_token %}
-<input type="submit" value="remove" /></form>
+<input type="submit" value="remove" class="btn btn-danger" /></form>
 </td>
 </tr>
 {% endfor %}
@@ -314,15 +319,15 @@ selected="selected"
 <table>
 {{ object.add_permission_form.as_table }}
 </table>
-<input type="submit" value="add" />
+<input type="submit" value="add" class="btn btn-primary" />
 </form>
 
 
 </div>
 {% end_can_edit %}
 
-
 </div>
+
 <script src="/site_media/js/prettify.js"></script>
 <script type="text/javascript">
 jQuery(function() {
@@ -336,7 +341,6 @@ jQuery(function() {
     ,stop: function (event,ui) { saveOrder();}
   });
   jQuery("#stages-table").disableSelection();
-  jQuery(".tabber").tabs();
   prettyPrint();
 });
 </script>

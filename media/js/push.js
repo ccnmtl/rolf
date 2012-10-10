@@ -118,12 +118,12 @@ function getNextStageId(current) {
 function togglePre (el) {
 	var td = el.parentNode;
 	var pre = td.getElementsByTagName("pre")[0];
-	if (hasElementClass(el,"hidden")) {
+	if (hasElementClass(el,"rolf-hidden")) {
 		showElement(pre);
-		swapElementClass(el,"hidden","showing");
+		swapElementClass(el,"rolf-hidden","rolf-showing");
 	} else {
 		hideElement(pre);
-		swapElementClass(el,"showing","hidden");
+		swapElementClass(el,"rolf-showing","rolf-hidden");
 	}
 }
 
@@ -131,7 +131,7 @@ function hideContent (td) {
 	var h3 = td.getElementsByTagName("h3")[0];
 	var pre = td.getElementsByTagName("pre")[0];
 	hideElement(pre);
-	addElementClass(h3,"hidden");
+	addElementClass(h3,"rolf-hidden");
 	h3.onclick = function () {togglePre(h3);return false;}
 }
 
