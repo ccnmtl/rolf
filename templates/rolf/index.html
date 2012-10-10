@@ -25,9 +25,9 @@
 {% if recent_deployments %}
 <div class="tab-pane active" id="recent-deployments">
 
-<table width="100%">
+<table width="100%" class="table table-striped">
 {% for deployment in recent_deployments %}
-<tr class="{% cycle "even" "odd" %}">
+<tr>
 <th><a
        href="{{deployment.application.category.get_absolute_url}}">{{deployment.application.category.name}}</a>
        :
@@ -51,10 +51,10 @@
 {% if recent_pushes %}
 <div class="tab-pane" id="recent-pushes">
 
-<table width="100%">
+<table width="100%" class="table table-striped table-condensed">
 {% for push in recent_pushes %}
-<tr class="{{push.status}} {% cycle "even" "odd" %}">
-<th><a
+<tr class="{{push.status}}">
+<td><a
        href="{{push.deployment.application.category.get_absolute_url}}">{{push.deployment.application.category.name}}</a>
        :
 <a
@@ -62,7 +62,14 @@
    :
 <a
    href="{{push.deployment.get_absolute_url}}">{{push.deployment.name}}</a>
-</th>
+{% ifequal push.status "ok" %}
+<i class="icon-ok" />
+{% endifequal %}
+{% ifequal push.status "failed" %}
+<i class="icon-exclamation-sign" />
+{% endifequal %}
+
+</td>
 <td>
 {% ifchanged push.start_time.day %}
 <a href="{{push.get_absolute_url}}">
