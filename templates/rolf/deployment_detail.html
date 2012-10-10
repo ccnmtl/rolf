@@ -37,7 +37,7 @@ var saveOrder = function() {
 {% if_can_view object %}
 
 <ul class="nav nav-tabs">
-	<li><a href="#tab-push" data-toggle="tab">Push</a></li>
+	<li class="active"><a href="#tab-push" data-toggle="tab">Push</a></li>
 	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-settings">Settings</a></li>{% end_can_edit %}
 	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-stages">Stages</a></li>{% end_can_edit %}
 	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-flags">Flags</a></li>{% end_can_edit %}

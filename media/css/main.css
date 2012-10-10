@@ -204,10 +204,6 @@ border-top: #000 solid 1px;
 
 .dragging { cursor: move;}
 
-/* jquery tabs */
-.ui-tabs .ui-tabs-hide {
-     display: none;
-}
 #recent-pushes th { font-size: 100%; white-space: nowrap;}
 
 #pagebody {
