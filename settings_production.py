@@ -11,7 +11,7 @@ STATICMEDIA_MOUNTS = (
 )
 
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 try:
