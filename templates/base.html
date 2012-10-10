@@ -3,114 +3,64 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>rolf: {% block title %}{% endblock %}</title>
+
+    <link href="/site_media/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/site_media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 	<link rel="stylesheet" href="/site_media/css/main.css?site=rolf" media="screen" />
 	<link rel="stylesheet" href="/site_media/css/prettify.css?site=rolf" media="screen" />
 	<link rel="stylesheet" href="/site_media/css/print.css?site=rolf" media="print" />
-	<!--[if IE 6]>
-	<link rel="stylesheet" href="/site_media/css/main_ie6_1col.css" media="screen" />
-	<![endif]-->
 	<link rel="shortcut icon" href="/site_media/img/favicon.ico" type="image/x-icon" />
-    <script type="text/javascript"
-    src="/site_media/js/hs.js"></script>
-
+    <script src="/site_media/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/site_media/js/hs.js"></script>
+    <script type="text/javascript" src="/site_media/bootstrap/js/bootstrap.min.js"></script>
 	{% block css %}{% endblock %}
 	{% block js %}{% endblock %}
 	{% block feeds %}{% endblock %}
 </head>
-<body class="one_column {% block widthtype %}fixed{% endblock %} {% block extra_body_classes %}{% endblock %}">
-{% comment %}
-###### FOR WIDTH TYPE--
-   fixed : fixed width, doesn't change with browser resize
-   fluid : variable width, changes with browser resize
-   You can move this to base template if you don't want to deal with it
-   all time in flatpages templates
-{% endcomment %}
+<body class="{% block extra_body_classes %}{% endblock %}">
 
-<div id="container">
-
-
-{% block masthead %}
-	<!-- ###### Site banner ###### -->
-	<div id="header">
-		<!-- Project title/logo --><h1 id="logo_project"><a href="./" title="Project Title: Project Django"><span>Project Title: Project Django </span></a></h1>	
-		{% block standardnav %}
-		<ul id="standardnav">
-		</ul>
-		{% endblock %}
-		<!-- CCNMTL title/logo --><h4 id="logo_ccnmtl"><a href="http://ccnmtl.columbia.edu" target="_blank" title="Columbia Center for New Media Teaching and Learning"><span>Produced by the Columbia Center for New Media Teaching and Learning</span></a></h4>
-	</div><!-- id="header" -->
-{% endblock %}
-
-	<!-- ###### Don't touch this ###### -->
-	<div class="visualclear"></div>
-	
-
-{% block primarynav %}
-	<!-- ###### Primary navigation ###### -->
-	<div id="primarynav">
-		<div class="encase" id="{% block navalignment %}leftside{% endblock %}">
-{% comment %}
-###### FOR ALIGNMENT OF TABS on the primary navigation--
-   leftside : all tabs aligning to the left, login to the right
-   rightside :  all tabs aligning to the right, login to the left
-{% endcomment %}
-
-			{% block primarynavtabs %}
-			<ul>
-				<li><a href="/">Home</a></li>
+{% block topnavbar %}
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <ul class="nav">
+          <li><a class="brand" href="/">Rolf</a></li>
 				{% if request.user.is_superuser %}<li><a href="/cookbook/">Cookbook</a></li>{% endif %}
 				{% if request.user.is_superuser %}<li><a href="/admin/">Django Admin</a></li>{% endif %}
-			</ul><!-- id="primarynavtabs" -->
-			{% endblock %}
-			
-			{% block usernav %}
-			{% if not request.user.is_anonymous %}
-			<ul>
-			  <li>logged in as {% if request.user.first_name %} 
-			    {{ request.user.first_name }}
-			    {{ request.user.last_name }}
-			    {% else %}
-			    {{ request.user.username }}
-			    {% endif %}
-			    [<a href="/logout/">logout</a>]</li>
-			</ul>
-			{% endif %}
-			{% endblock %}
 
-		</div><!-- id="leftside/rightside" -->
-	</div><!-- id="primarynav" -->
+          {% block topnavbarleftitems %}{% endblock %}
+        </ul>
+
+        <p class="navbar-text pull-right">
+          {% block topnavbarrightitems %}{% endblock %}
+{% block usernav %}
+          {% if request.user.is_anonymous %}
+          <a href="/accounts/login/?next=/" class="btn btn-success">login</a>
+          {% else %}
+          logged in as {% if request.user.last_name %}{{request.user.first_name}} {{request.user.last_name}}
+					{% else %}
+          {{request.user.username}}
+          {% endif %}
+          <a href="/logout/" class="btn btn-inverse">logout</a>
+          {% endif %}
+{% endblock %}
+       </p>
+
+       </div>
+     </div>
+  </div>
+
 {% endblock %}
 
-{% comment %} not using this now <div id="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div> {% endcomment %}
-
-
-	<!-- ###### Page: Sidebars and Content ###### -->
-	<div id="pagebody">
-
-
-		<!-- ###### Page Content ###### -->
-		<div id="content">
-			<div id="squish"><!-- Don't touch this div -->
-				<div class="block">
+<div id="container">
+	<div id="pagebody" class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
 					{% block pagetitle %}{% endblock %}
 					{% block content %}{% endblock %}
-
-				<!-- ###### Don't touch this ###### -->
-				<div class="visualclear"></div><!-- id="visualclear" -->				
-
-				</div><!-- class="block" -->
-			</div><!-- id="squish" -->
-		</div><!-- id="content" -->
-
-
-		<!-- ###### Don't touch this ###### -->
-		<div class="visualclear"></div>
-	
+      </div>
+    </div>
 	</div><!-- id="pagebody" -->
-
-
-
-
 </div><!-- id="container" -->
 </body>
 </html>

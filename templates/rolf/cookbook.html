@@ -2,13 +2,23 @@
 {% block extra_body_classes %}cookbook{% endblock %}
 {% block content %}
 {% if request.user.is_superuser %}
-<h1>Cookbook</h1>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#cookbook" data-toggle="tab">Recipes</a></li>
+  <li><a href="#add" data-toggle="tab">Add</a></li>
+</ul>
 
-<ul class="toc">
+<div class="tab-content">
+<div class="tab-pane active" id="cookbook">
+<h1>Cookbook</h1>
+<div class="row">
+<div class="span3">
+<ul class="nav nav-list affix">
 {% for recipe in all_recipes %}
-<li><a href="#recipe-{{recipe.id}}">{{recipe.name}}</a></li>
+<li><a href="#recipe-{{recipe.id}}">{{recipe.name}}<i class="icon-chevron-right"></i></a></li>
 {% endfor %}
 </ul>
+</div>
+<div class="span9">
 {% for recipe in all_recipes %}
 <div id="recipe-{{recipe.id}}">
 <h2><a href="/cookbook/{{recipe.id}}/">{{recipe.name}}</a></h2>
@@ -17,7 +27,11 @@
 <div class="code"><pre class="prettyprint linenums">{{recipe.code}}</pre></div>
 </div>
 {% endfor %}
+</div>
+</div>
+</div>
 
+<div class="tab-pane active" id="add">
 <form action="add/" method="post">
 <fieldset><legend>add recipe</legend>
 <table>
@@ -37,9 +51,12 @@ language <select name="language">
 </tr>
 
 </table>
-<input type="submit" value="add recipe" />
+<input type="submit" value="add recipe" class="btn btn-primary"/>
 </fieldset>
 </form>
+</div>
+</div>
+
 
 <script src="/site_media/js/prettify.js"></script>
 <script type="text/javascript">
