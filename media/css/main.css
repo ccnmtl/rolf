@@ -115,13 +115,13 @@ overflow: auto;
 
 h3 { font-size: 100%; margin: 0px; font-weight: normal; }
 
-h3.hidden { 
+h3.rolf-hidden { 
             cursor: pointer;
             padding-left: 15px;
             background: url(/site_media/img/arrow_right.png) no-repeat 0px 4px;
  }
 
-h3.showing { 
+h3.rolf-showing { 
              cursor: pointer;
              padding-left: 15px;
              background: url(/site_media/img/arrow_down.png) no-repeat 0px 4px;

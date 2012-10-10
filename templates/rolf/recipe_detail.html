@@ -48,17 +48,17 @@ language <select name="language">
 
 
 </table>
-<input type="submit" value="save"/>
+<input type="submit" value="save" class="btn btn-primary"/>
 </form>
 </div>
 
 {% if object.stage_set.count %}
 <div id="deployments-tab" class="tab-pane">
 <h2>Deployments using this recipe</h2>
-<table width="100%">
+<table class="table table-striped table-condensed table-bordered">
 {% for stage in object.stage_set.all %}
 {% if_can_edit stage.deployment %}
-<tr class="{% cycle 'odd' 'even' %}">
+<tr>
 <td>
 <a
    href="{{stage.deployment.application.category.get_absolute_url}}">{{stage.deployment.application.category.name}}</a>
@@ -74,9 +74,9 @@ language <select name="language">
 {% endif %}
 
 <div id="delete-tab" class="tab-pane">
-<form action="delete/" method="post">
+<form action="delete/" method="post" class="form-inline">
 <fieldset><legend>delete recipe</legend>
-<input type="submit" value="DELETE" />
+<input type="submit" value="DELETE" class="btn btn-danger"/>
 </fieldset>
 </form>
 </div>
