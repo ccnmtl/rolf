@@ -92,38 +92,51 @@
 
 {% if categories.count %}
 <div class="tab-pane" id="all-applications">
+<table width="100%" class="table table-striped table-condensed">
+
 {% for category in categories %}
-<div>
+<tr>
+<td colspan="3">
 <h2><a href="{{category.get_absolute_url}}">{{category.name}}</a></h2>
+</td>
+</tr>
 
 {% if category.application_set.count %}
 {% for application in category.application_set.all %}
-<div class="nest">
-  <table width="100%">
-    <tr><th width="30%"><a href="{{application.get_absolute_url}}">{{application.name}}</a></th>
-      <td>
-       {% comment %}Don't show deployments that are flagged as "deprecated".{%endcomment %}
-       {% for deployment in application.active_deployments %}
-	<div class="deployment nest nested-{{deployment.status}}">
-	  <a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
-	</div>
-	{% endfor %}
+    <tr>
+       <td colspan="3">
+         <h3><a href="{{application.get_absolute_url}}">{{application.name}}</a></h3>
+       </td>
+		</tr>
+    {% for deployment in application.active_deployments %}
+		<tr>
+			<td></td>
+     <td>
+{% ifequal deployment.status "ok" %}
+<i class="icon-ok" />
+{% endifequal %}
+{% ifequal deployment.status "failed" %}
+<i class="icon-exclamation-sign" />
+{% endifequal %}
       </td>
-  </tr>
-  </table>
-</div>
+      <td>
+    	  <a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
+      </td>
+   </tr>
+	{% endfor %}
 {% endfor %}
 {% endif %}
-</div>
+
 {% endfor %}
+  </table>
 </div>
 {% endif %}
 
 {% if request.user.is_superuser %}
 <div class="tab-pane" id="add-category">
-<form action="/category/add/" method="post">
-<p>Add A New Category: <input type="text" name="name" /> <input
-type="submit" value="Add" /></p>
+<form action="/category/add/" method="post" class="form-inline">
+<p>Add A New Category: <input type="text" name="name" placeholder="name" /> <input
+type="submit" value="Add" class="btn btn-primary"/></p>
 </form>
 </div>
 {% endif %}
