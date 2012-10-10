@@ -11,14 +11,14 @@
 {% if request.user.is_superuser %}
 <h1><a href="/cookbook/">Cookbook</a>: {{object.name}}</h1>
 
-<div id="tabber">
-<ul>
-  <li><a href="#edit-tab">Edit</a></li>
-{% if object.stage_set.count %}  <li><a href="#deployments-tab">Deployments using this
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#edit-tab" data-toggle="tab">Edit</a></li>
+{% if object.stage_set.count %}  <li><a href="#deployments-tab" data-toggle="tab">Deployments using this
   recipe</a></li>{% endif %}
-  <li><a href="#delete-tab">Delete</a></li>
+  <li><a href="#delete-tab" data-toggle="tab">Delete</a></li>
 </ul>
-<div id="edit-tab">
+<div class="tab-content">
+<div id="edit-tab" class="tab-pane active">
 <form action="edit/" method="post">
 <table>
 <tr><th>name</th>
@@ -53,7 +53,7 @@ language <select name="language">
 </div>
 
 {% if object.stage_set.count %}
-<div id="deployments-tab">
+<div id="deployments-tab" class="tab-pane">
 <h2>Deployments using this recipe</h2>
 <table width="100%">
 {% for stage in object.stage_set.all %}
@@ -73,7 +73,7 @@ language <select name="language">
 </div>
 {% endif %}
 
-<div id="delete-tab">
+<div id="delete-tab" class="tab-pane">
 <form action="delete/" method="post">
 <fieldset><legend>delete recipe</legend>
 <input type="submit" value="DELETE" />
@@ -81,11 +81,6 @@ language <select name="language">
 </form>
 </div>
 
-<script type="text/javascript">
-jQuery(function() {
-  jQuery("#tabber").tabs();
-});
-</script>
 {% else %}
 <p>Sorry, only superusers have access to the cookbook.</p>
 {% endif %}
