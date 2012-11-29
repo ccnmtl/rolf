@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rolf_main.models import Category, Application, Deployment
 from rolf_main.models import Setting, Stage, Recipe
 
+
 class CategoryTest(unittest.TestCase):
     def setUp(self):
         self.c = Category.objects.create(name="test")
