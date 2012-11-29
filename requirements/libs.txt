@@ -12,3 +12,4 @@ requirements/src/simplejson-2.0.9.tar.gz
 requirements/src/psycopg2-2.4-no-mx.tar.gz
 requirements/src/statsd-0.5.1.tar.gz
 requirements/src/itsdangerous-0.17.tar.gz
+requirements/src/nose-1.1.2.tar.gz

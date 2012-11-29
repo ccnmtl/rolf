@@ -1,5 +1,6 @@
 # Django settings for rolf project.
 import os.path
+import sys
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -18,6 +19,21 @@ DATABASES = {
         'PASSWORD': '',
         }
 }
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default' : {
+            'ENGINE' : 'django.db.backends.sqlite3',
+            'NAME' : ':memory:',
+            'HOST' : '',
+            'PORT' : '',
+            'USER' : '',
+            'PASSWORD' : '',
+            }
+    }
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+SOUTH_TESTS_MIGRATE = False
 
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
@@ -52,10 +68,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'rolf.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    # Put application templates before these fallback ones:
     "/var/www/rolf/templates/",
     os.path.join(os.path.dirname(__file__),"templates"),
 )
