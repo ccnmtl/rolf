@@ -3,3 +3,4 @@ pip-log.txt
 *.pyc
 *~
 ve
+.coverage
