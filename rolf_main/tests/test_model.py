@@ -69,10 +69,21 @@ class BasicPushTest(unittest.TestCase):
             code="print 'hello'",
             description="",
             )
+        self.shell_recipe = Recipe.objects.create(
+            name="test shell recipe",
+            language="shell",
+            code="echo $TEST_FOO",
+            description="",
+            )
         self.stage = Stage.objects.create(
             deployment=self.d,
             recipe=self.recipe,
             name="test stage",
+            )
+        self.stage2 = Stage.objects.create(
+            deployment=self.d,
+            recipe=self.shell_recipe,
+            name="test stage 2",
             )
 
     def tearDown(self):
@@ -86,7 +97,12 @@ class BasicPushTest(unittest.TestCase):
 
     def test_push(self):
         push = self.d.new_push(self.u, "test push")
+        # haven't run anything so it should be inprogress
         self.assertEquals(push.status, "inprogress")
         for s in self.d.stage_set.all():
             push.run_stage(s.id)
+        # should have completed successfully
         self.assertEquals(push.status, "ok")
+        # and let's make sure a setting variable has round-tripped
+        ps = push.pushstage_set.get(stage=self.stage2)
+        self.assertEquals(ps.stdout(), "TEST_BAR\n")
