@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'rolf_main',
     'django_statsd',
     'south',
+    'raven.contrib.django',
 )
 
 STATSD_CLIENT = 'statsd.client'
