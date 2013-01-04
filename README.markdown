@@ -1,5 +1,7 @@
 # Rolf is a web based deployment tool
 
+[![Build Status](https://travis-ci.org/ccnmtl/rolf.png)](https://travis-ci.org/ccnmtl/rolf)
+
 Rolf is aimed at letting you deploy an application to production (or
 staging, or wherever) in one step. If your deployment takes more than
 one step, you're doing it wrong. 
