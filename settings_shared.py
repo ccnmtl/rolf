@@ -109,5 +109,18 @@ SERVER_EMAIL = "rolf@yoursite.com"
 
 CHECKOUT_DIR = "/var/tmp/rolf/checkouts/"
 SCRIPT_DIR = "/var/tmp/rolf/scripts/"
+if 'test' in sys.argv:
+    import tempfile
+    base = tempfile.gettempdir()
+    CHECKOUT_DIR = os.path.join(base, "checkouts/")
+    try:
+        os.makedirs(CHECKOUT_DIR)
+    except:
+        pass
+    SCRIPT_DIR = os.path.join(base, "scripts/")
+    try:
+        os.makedirs(SCRIPT_DIR)
+    except:
+        pass
 
 API_SECRET = "YOU MUST SET THIS IN A local_settings.py FILE"
