@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'django_statsd',
     'south',
     'raven.contrib.django',
+    'smoketest',
 )
 
 STATSD_CLIENT = 'statsd.client'
