@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load perms %}
+{% block title %}{{object.name}}{% endblock %}
+
+{% block content %}
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#tab-deployments" data-toggle="tab">Deployments</a></li>
+{% if request.user.is_superuser %}
+	<li><a href="#tab-add" data-toggle="tab">Add</a></li>
+	<li><a href="#tab-delete" data-toggle="tab">Delete</a></li>
+{% endif %}
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="tab-deployments">
+<h1><a href="{{object.category.get_absolute_url}}">{{object.category.name}}</a> : {{object.name}}</h1>
+
+{% if object.deployment_set.count %}
+<table width="100%" class="table table-striped table-condensed">
+
+{% for deployment in object.deployment_set.all %}
+<tr>
+<td>
+{% ifequal deployment.status "ok" %}
+<i class="icon-ok" />
+{% endifequal %}
+{% ifequal deployment.status "failed" %}
+<i class="icon-exclamation-sign" />
+{% endifequal %}
+
+</td>
+<td>
+{% if_can_view deployment %}
+<a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
+{% else %}
+{{deployment.name}}
+{% end_can_view %}
+</td>
+<td>
+  {{deployment.last_message}}
+</td>
+</tr>
+{% endfor %}
+
+</table>
+{% endif %}
+</div>
+
+{% if request.user.is_superuser %}
+<div class="tab-pane" id="tab-add">
+<form action="add_deployment/" method="post" class="form-inline">
+<p>Add A New Deployment: <input type="text" name="name" /> <input
+type="submit" value="Add" class="btn btn-primary"/></p>
+</form>
+</div>
+
+
+<div class="tab-pane" id="tab-delete">
+<form action="delete/" method="post" class="form-inline">
+<p>Delete this application: <input type="submit" value="DELETE"
+																	 class="btn btn-danger"/></p>
+</form>
+</div>
+{% endif %}
+</div>
+{% endblock %}

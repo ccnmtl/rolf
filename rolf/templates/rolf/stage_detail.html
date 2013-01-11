@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load perms %}
+{% block content %}
+{% if_can_edit object.deployment %}
+<h1><a href="{{object.deployment.application.category.get_absolute_url}}">{{object.deployment.application.category.name}}</a> :
+<a
+   href="{{object.deployment.application.get_absolute_url}}">{{object.deployment.application.name}}</a> : 
+<a href="{{object.deployment.get_absolute_url}}">{{object.deployment.name}}</a> : 
+<a href="{{object.deployment.get_absolute_url}}#tab-stages">stages</a> : 
+{{object.name}}</h1>
+
+<form action="edit/" method="post">
+<table>
+<tr><th>name</th><td><input type="text" name="name" value="{{object.name}}"/></td></tr>
+<tr><th>recipe</th>
+
+{% if object.recipe.name %}
+<td>
+<a href="{{object.recipe.get_absolute_url}}">{{object.recipe.name}}</a>. Edit
+in the cookbook, or select a different one: <select name="recipe_id">
+<option value="">- Custom Recipe -</option>
+{% for recipe in object.deployment.all_recipes %}
+<option value="{{recipe.id}}" {% ifequal recipe.id object.recipe.id %}
+selected="selected"{% endifequal %}>{{recipe.name}}</option>
+{% endfor %}
+</select>
+</td>
+{% else %}
+<td>
+Select a Cookbook recipe <select
+name="recipe_id">
+<option value="">None - Add code below</option>
+{% for recipe in object.all_recipes %}
+<option value="{{recipe.id}}">{{recipe.name}}</option>
+{% endfor %}
+</select><br />
+Or edit code:<br />
+
+<select name="language">
+{% ifequal object.recipe.language "python" %}
+<option value="python" selected="selected">python</option>
+<option value="shell">shell</option>
+{% else %}
+<option value="python">python</option>
+<option value="shell" selected="selected">shell</option>
+{% endifequal %}
+</select>
+(<a href="{{object.recipe.get_absolute_url}}">promote this recipe to the cookbook</a>)
+<br />
+<textarea name="code" cols="60" rows="5">{{object.recipe.code}}</textarea>
+
+</td>{% endif %}</tr>
+</table><input type="submit" value="edit" />
+
+</form>
+
+<hr />
+
+<form action="delete/" method="post">
+<fieldset><legend>delete stage</legend>
+
+Delete this stage: <input type="submit" value="DELETE" />
+
+</fieldset>
+</form>
+{% else %}
+<p>Sorry, you don't have permission to edit this.</p>
+{% end_can_edit %}
+{% endblock %}

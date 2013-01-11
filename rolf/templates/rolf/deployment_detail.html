@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% load perms %}
+{% load markup %}
+{% block title %}{{object.name}}{% endblock %}
+{% block js %}
+
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
+        type="text/javascript" ></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+var saveOrder = function() {
+    var url = "reorder_stages/?";
+    var worktodo = 0;
+    jQuery("#stages-table tr").each(function(index,element) {
+       worktodo = 1;
+       var id = jQuery(element).attr('id').split("-")[1];
+       url += "stage_" + index + "=" + id + ";";
+    });
+    if (worktodo == 1) {
+        var req = new XMLHttpRequest();
+        req.open("POST",url,true);
+        req.send(null);
+    }
+};
+</script>
+
+<style type="text/css">
+	#stages-table .draggable { background-color: #ddd; }
+	.draghandle {float: left;}
+	.dragging {border: #f60 solid 1px;}
+	</style>
+{% endblock %}
+{% block content %}
+
+<h1><a
+       href="{{object.application.category.get_absolute_url}}">{{object.application.category.name}}</a> 
+: 
+<a href="{{object.application.get_absolute_url}}">{{object.application.name}}</a> : {{object.name}}</h1>
+
+{% if_can_view object %}
+
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#tab-push" data-toggle="tab">Push</a></li>
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-settings">Settings</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-stages">Stages</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-flags">Flags</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-clone">Clone</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-delete">Delete</a></li>{% end_can_edit %}
+	{% if_can_edit object %}<li><a data-toggle="tab" href="#tab-permissions">Permissions</a></li>{% end_can_edit %}
+	</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="tab-push">
+
+
+{% if_can_push object %}
+<form action="push/" method="post" class="form-inline">
+<div class="well">
+
+{% if object.flag_set.count %}
+<table class="table table-bordered table-striped">
+{% for flag in object.flag_set.all %}
+<tr>
+<th>{{flag.name}}</th>
+<td>{% if flag.boolean %}
+<input type="checkbox" name="flag_{{flag.id}}"
+{% if flag.default %}checked="checked"{% endif %}
+/>
+{% else %}
+<input type="text" name="flag_{{flag.id}}" value="{{flag.default}}" />
+{% endif %}
+</td>
+<td>{{flag.description|markdown}}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<input type="text" name="comment" placeholder="comment" />
+<label class="checkbox"><input type="checkbox" name="step" /> step </label>
+<input type="submit" value="push" class="btn btn-primary" />
+</div>
+</form>
+{% end_can_push %}
+
+{% if object.push_set.count %}
+<div>
+
+<table class="table table-bordered table-striped table-condensed">
+{% for push in object.push_set.all %}
+<tr>
+<td>
+{% ifequal push.status "ok" %}
+<i class="icon-ok" />
+{% endifequal %}
+{% ifequal push.status "failed" %}
+<i class="icon-exclamation-sign" />
+{% endifequal %}
+</td>
+<td><a
+       href="{{push.get_absolute_url}}">{{push.start_time|date:"jS F Y H:i"}}</a></td>
+<td>{% if push.user.last_name %}
+{{push.user.first_name}} {{push.user.last_name}}
+{% else %}
+{{push.user.username}}
+{% endif %}
+</td>
+<td>{{push.comment}}</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+{% endif %}
+</div>
+
+{% if_can_edit object %}
+<div class="tab-pane" id="tab-settings">
+{% if object.setting_set.count %}
+<form action="edit_settings/" method="post">
+<table class="table table-striped">
+<tr><th>name</th><th>value</th></tr>
+{% for setting in object.setting_set.all %}
+<tr>
+<td><input type="text" name="setting_name_{{setting.id}}"
+value="{{setting.name}}" class="input-xxlarge" /></td>
+<td><input type="text" name="setting_value_{{setting.id}}" 
+value="{{setting.value}}" class="input-xxlarge"/></td>
+</tr>
+{% endfor %}
+</table>
+<input type="submit" value="save settings" class="btn btn-primary"/>
+</form>
+{% endif %}
+
+<form action="add_setting/" method="post">
+<fieldset>
+<legend>Add Setting</legend>
+<table class="table table-striped">
+<tr><th>name</th><th>value</th></tr>
+<tr><td><input type="text" name="name" class="input-xxlarge"/></td>
+<td><input type="text" name="value"  class="input-xxlarge"/></td>
+</tr>
+</table>
+<input type="submit" value="Add" class="btn btn-primary" />
+</fieldset>
+</form>
+</div>
+{% end_can_edit %}
+
+{% if_can_edit object %}
+<div class="tab-pane" id="tab-stages">
+{% if object.stage_set.count %}
+<div>
+
+<table width="100%">
+<tbody id="stages-table">
+{% for stage in object.stage_set.all %}
+<tr class="draggable" id="stage-{{stage.id}}">
+<th><span title="drag to reorder stages" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span><a href="{{stage.get_absolute_url}}">{{stage.name|default:stage.id}}</a></th>
+<td>{% if stage.recipe.name %}
+<a href="{{stage.recipe.get_absolute_url}}">Cookbook Recipe:
+{{stage.recipe.name}}</a>
+{% else %}
+<div><b>{{stage.recipe.language}}</b><br />
+  <div class="code"><pre class="prettyprint linenums">{{stage.recipe.code}}</pre></div></div>
+{% endif %}
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+</div>
+{% endif %}
+
+<form action="add_stage/" method="post">
+<fieldset><legend>Add Stage</legend>
+<table>
+  <tr>
+    <th>name</th>
+    <td><input type="text" name="name"/></td>
+  </tr>
+  <tr>
+    <th>recipe</th>
+    <td>Select a Cookbook recipe 
+      <select name="recipe_id">
+	<option value="">None - Add code below</option>
+	{% for recipe in object.all_recipes %}
+	<option value="{{recipe.id}}">{{recipe.name}}</option>
+	{% endfor %}
+      </select><br />
+      Or enter new code:<br />
+      <select name="language">
+	<option value="shell">shell</option>
+	<option value="python">python</option>
+      </select><br />
+
+      <textarea name="code" cols="60" rows="5"></textarea>
+
+    </td>
+  </tr>
+</table>
+
+<input type="submit" value="add stage" />
+
+</fieldset>
+</form>
+</div>
+{% end_can_edit %}
+
+{% if_can_edit object %}
+<div class="tab-pane" id="tab-flags">
+
+<h2>Flags</h2>
+
+{% if object.flag_set.count %}
+<table class="table table-striped">
+<tr>
+  <th>Flag</th>
+  <th>Variable Name</th>
+  <th>Boolean?</th>
+  <th>Default</th>
+  <th>Description</th>
+  <th></th>
+</tr>
+{% for flag in object.flag_set.all %}
+<tr>
+<td>{{flag.name}}</td>
+<td>{{flag.varname}}</td>
+<td>{{flag.boolean}}</td>
+<td>{{flag.default}}</td>
+<td>{{flag.description|markdown}}</td>
+<td><form action="remove_flag/" method="post" class="form-inline">
+<input type="hidden" name="flag_id" value="{{flag.id}}" />
+{% csrf_token %}
+<input type="submit" value="remove" class="btn btn-danger"/></form>
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<form action="add_flag/" method="post" class="form-inline">
+<fieldset><label>Add Flag</label>
+<table>
+{{ object.add_flag_form.as_table }}
+</table>
+<input type="submit" value="add" class="btn btn-primary"/>
+</fieldset>
+</form>
+
+
+</div>
+{% end_can_edit %}
+
+
+{% if_can_edit object %}
+<div class="tab-pane" id="tab-clone">
+<form action="clone/" method="post">
+<p>Clone this deployment.</p>
+<p><input type="text" name="name"
+		placeholder="new deployment name"/></p>
+<p>In Application: 
+
+<select name="application_id">
+{% for category in object.all_categories %}
+<optgroup label="{{category.name}}">
+{% for application in category.application_set.all %}
+<option id="{{application.id}}" value="{{application.id}}"
+{% ifequal application.id object.application.id %}
+selected="selected"
+{% endifequal %}>{{application.name}}</option>
+{% endfor %}
+</optgroup>
+{% endfor %}
+</select></p>
+
+ <input type="submit" value="Clone" class="btn btn-primary" />
+</form>
+</div>
+{% end_can_edit %}
+
+{% if_can_edit object %}
+<div class="tab-pane" id="tab-delete">
+<form action="delete/" method="post" class="form-inline">
+<p>Delete this deployment: <input type="submit" value="DELETE"
+																	class="btn btn-danger" /></p>
+</form>
+</div>
+{% end_can_edit %}
+
+
+{% if_can_edit object %}
+<div class="tab-pane" id="tab-permissions">
+
+<h2>Permissions</h2>
+
+<table>
+{% for permission in object.permission_set.all %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{permission.group.name}}</td>
+<td>{{permission.capability}}</td>
+<td><form action="remove_permission/"
+	  method="post">
+<input type="hidden" name="permission_id" value="{{permission.id}}" />
+{% csrf_token %}
+<input type="submit" value="remove" class="btn btn-danger" /></form>
+</td>
+</tr>
+{% endfor %}
+</table>
+
+<form action="add_permission/" method="post">
+<table>
+{{ object.add_permission_form.as_table }}
+</table>
+<input type="submit" value="add" class="btn btn-primary" />
+</form>
+
+
+</div>
+{% end_can_edit %}
+
+</div>
+
+<script src="/site_media/js/prettify.js"></script>
+<script type="text/javascript">
+jQuery(function() {
+  jQuery("#stages-table").sortable({
+    containment : 'parent'
+    ,items : 'tr'
+    ,axis : 'y'
+    ,tolerance: 'pointer'
+    ,activeClass: 'dragging'
+    ,handle: '.draghandle'
+    ,stop: function (event,ui) { saveOrder();}
+  });
+  jQuery("#stages-table").disableSelection();
+  prettyPrint();
+});
+</script>
+
+
+{% else %}
+<p>Sorry, you don't have permission to view this deployment.</p>
+{% end_can_view %}
+{% endblock %}

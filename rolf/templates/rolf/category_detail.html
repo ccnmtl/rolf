@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}{{object.name}}{% endblock %}
+
+{% block content %}
+<h1>Category: {{object.name}}</h1>
+
+<ul class="nav nav-tabs">
+   {% if object.application_set.count %}
+    <li class="active"><a href="#tab-applications" data-toggle="tab">Applications</a></li>
+	 {% endif %}
+    <li><a href="#tab-add" data-toggle="tab">Add Appliction</a></li>
+    <li><a href="#tab-delete" data-toggle="tab">Delete</a></li>
+</ul>
+
+<div class="tab-content">
+{% if object.application_set.count %}
+<div class="tab-pane active" id="tab-applications">
+<table width="100%" class="table table-striped table-condensed">
+
+{% if object.application_set.count %}
+{% for application in object.application_set.all %}
+    <tr>
+       <td colspan="3">
+         <h2><a href="{{application.get_absolute_url}}">{{application.name}}</a></h2>
+       </td>
+		</tr>
+    {% for deployment in application.active_deployments %}
+		<tr>
+			<td></td>
+     <td>
+{% ifequal deployment.status "ok" %}
+<i class="icon-ok" />
+{% endifequal %}
+{% ifequal deployment.status "failed" %}
+<i class="icon-exclamation-sign" />
+{% endifequal %}
+      </td>
+      <td>
+    	  <a href="{{deployment.get_absolute_url}}">{{deployment.name}}</a>
+      </td>
+   </tr>
+	{% endfor %}
+{% endfor %}
+{% endif %}
+
+
+</table>
+</div>
+{% endif %}
+
+<div class="tab-pane" id="tab-add">
+<form action="add_application/" method="post" class="form-inline">
+<p>Add A New Application: <input type="text" name="name" /> <input
+type="submit" value="Add" class="btn btn-primary" /></p>
+</form>
+</div>
+
+<div class="tab-pane" id="tab-delete">
+<form action="delete/" method="post" class="form-inline">
+<p>Delete this category: <input type="submit" value="DELETE"
+																class="btn btn-danger"/></p>
+</form>
+</div>
+</div>
+
+{% endblock %}

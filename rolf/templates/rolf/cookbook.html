@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block extra_body_classes %}cookbook{% endblock %}
+{% block content %}
+{% if request.user.is_superuser %}
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#cookbook" data-toggle="tab">Recipes</a></li>
+  <li><a href="#add" data-toggle="tab">Add</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="cookbook">
+<h1>Cookbook</h1>
+<div class="row">
+<div class="span3">
+<ul class="nav nav-list affix">
+{% for recipe in all_recipes %}
+<li><a href="#recipe-{{recipe.id}}">{{recipe.name}}<i class="icon-chevron-right"></i></a></li>
+{% endfor %}
+</ul>
+</div>
+<div class="span9">
+{% for recipe in all_recipes %}
+<div id="recipe-{{recipe.id}}">
+<h2><a href="/cookbook/{{recipe.id}}/">{{recipe.name}}</a></h2>
+<p>{{recipe.description}}</p>
+<p><b>{{recipe.language}}</b></p>
+<div class="code"><pre class="prettyprint linenums">{{recipe.code}}</pre></div>
+</div>
+{% endfor %}
+</div>
+</div>
+</div>
+
+<div class="tab-pane active" id="add">
+<form action="add/" method="post">
+<fieldset><legend>add recipe</legend>
+<table>
+<tr><th>name</th>
+<td><input type="text" name="name" /></td></tr>
+<tr><th>description</th>
+<td><textarea name="description" rows="5" cols="60" class="resizable"></textarea></td>
+</tr>
+
+<tr><th>code</th>
+<td>
+language <select name="language">
+<option value="python">python</option>
+<option value="shell">shell</option>
+</select><br />
+<textarea name="code" rows="5" cols="60" class="resizable"></textarea></td>
+</tr>
+
+</table>
+<input type="submit" value="add recipe" class="btn btn-primary"/>
+</fieldset>
+</form>
+</div>
+</div>
+
+
+<script src="/site_media/js/prettify.js"></script>
+<script type="text/javascript">
+  prettyPrint();
+</script>
+{% else %}
+<p>Sorry, only superusers can view the cookbook.</p>
+{% endif %}
+{% endblock %}
