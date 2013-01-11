@@ -13,25 +13,11 @@ from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer
 from itsdangerous import BadSignature, SignatureExpired
 from django.conf import settings
 from django.contrib.auth.models import User
-
-
-class rendered_with(object):
-    def __init__(self, template_name):
-        self.template_name = template_name
-
-    def __call__(self, func):
-        def rendered_func(request, *args, **kwargs):
-            items = func(request, *args, **kwargs)
-            if type(items) == type({}):
-                return render_to_response(self.template_name, items,
-                             context_instance=RequestContext(request))
-            else:
-                return items
-        return rendered_func
+from annoying.decorators import render_to
 
 
 @login_required
-@rendered_with('rolf/index.html')
+@render_to('rolf/index.html')
 def index(request):
     recent_pushes = Push.objects.filter(user=request.user)
     recent_deployments = list(set([p.deployment for p in recent_pushes]))
@@ -287,7 +273,7 @@ def stage(request, object_id):
 
 
 @login_required
-@rendered_with('rolf/cookbook.html')
+@render_to('rolf/cookbook.html')
 def cookbook(request):
     return dict(all_recipes=Recipe.objects.all().exclude(name=""))
 
@@ -357,7 +343,7 @@ def generic_detail(request, object_id, model, template_name):
 
 
 @login_required
-@rendered_with('rolf/get_api_key.html')
+@render_to('rolf/get_api_key.html')
 def get_api_key(request):
     s1 = URLSafeSerializer(settings.API_SECRET, salt="rolf-ipaddress-key")
     k1 = s1.dumps(dict(username=request.user.username,
