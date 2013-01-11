@@ -214,7 +214,7 @@ class Push(models.Model):
         pushstage.run(rollback)
         all_stages = list(self.deployment.stage_set.all())
         if (pushstage.status == "failed" or
-            pushstage.stage.id == all_stages[-1].id):
+                pushstage.stage.id == all_stages[-1].id):
             # last stage, so set the push status
             self.status = pushstage.status
             self.end_time = datetime.now()

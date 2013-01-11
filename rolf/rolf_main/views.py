@@ -76,8 +76,9 @@ def remove_permission(request, object_id):
     deployment = get_object_or_404(Deployment, id=object_id)
     if request.method == "POST":
         if deployment.can_edit(request.user):
-            permission = get_object_or_404(Permission,
-                             id=request.POST.get('permission_id', -1))
+            permission = get_object_or_404(
+                Permission,
+                id=request.POST.get('permission_id', -1))
             permission.delete()
     return HttpResponseRedirect(deployment.get_absolute_url())
 
@@ -147,10 +148,11 @@ def add_stage(request, object_id):
             if recipe_id:
                 recipe = get_object_or_404(Recipe, id=recipe_id)
             else:
-                recipe = Recipe.objects.create(name="", description="",
-                                 language=request.POST.get('language',
-                                                           'python'),
-                                               code=code)
+                recipe = Recipe.objects.create(
+                    name="", description="",
+                    language=request.POST.get('language',
+                                              'python'),
+                    code=code)
             Stage.objects.create(deployment=deployment, recipe=recipe,
                                  name=request.POST.get('name',
                                                        'unknown stage'))
@@ -392,10 +394,11 @@ def api_push(request, deployment_id):
     statsd.incr('event.push')
     push = deployment.new_push(
         user=user, comment="")
-    stages = [dict(
+    stages = [
+        dict(
             name=stage.name,
             url="/api/1.0/push/%d/stage/%d/" % (push.id, stage.id))
-              for stage in deployment.stage_set.all()]
+        for stage in deployment.stage_set.all()]
     return HttpResponse(dumps(dict(stages=stages)),
                         mimetype="application/json")
 

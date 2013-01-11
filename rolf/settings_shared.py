@@ -5,7 +5,7 @@ import sys
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = ( )
+ADMINS = ()
 
 MANAGERS = ADMINS
 
@@ -17,19 +17,19 @@ DATABASES = {
         'PORT': 5432,
         'USER': '',
         'PASSWORD': '',
-        }
+    }
 }
 
 if 'test' in sys.argv:
     DATABASES = {
-        'default' : {
-            'ENGINE' : 'django.db.backends.sqlite3',
-            'NAME' : ':memory:',
-            'HOST' : '',
-            'PORT' : '',
-            'USER' : '',
-            'PASSWORD' : '',
-            }
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+            'HOST': '',
+            'PORT': '',
+            'USER': '',
+            'PASSWORD': '',
+        }
     }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -58,7 +58,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'rolf.rolf_main.context_processors.wind_settings',
-    )
+)
 
 MIDDLEWARE_CLASSES = (
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
@@ -74,7 +74,7 @@ ROOT_URLCONF = 'rolf.urls'
 
 TEMPLATE_DIRS = (
     "/var/www/rolf/templates/",
-    os.path.join(os.path.dirname(__file__),"templates"),
+    os.path.join(os.path.dirname(__file__), "templates"),
 )
 
 INSTALLED_APPS = (

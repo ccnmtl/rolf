@@ -63,29 +63,29 @@ class BasicPushTest(unittest.TestCase):
         self.setting = Setting.objects.create(
             deployment=self.d, name="TEST_FOO",
             value="TEST_BAR"
-            )
+        )
         self.recipe = Recipe.objects.create(
             name="test recipe",
             language="python",
             code="print 'hello'",
             description="",
-            )
+        )
         self.shell_recipe = Recipe.objects.create(
             name="test shell recipe",
             language="shell",
             code="echo $TEST_FOO",
             description="",
-            )
+        )
         self.stage = Stage.objects.create(
             deployment=self.d,
             recipe=self.recipe,
             name="test stage",
-            )
+        )
         self.stage2 = Stage.objects.create(
             deployment=self.d,
             recipe=self.shell_recipe,
             name="test stage 2",
-            )
+        )
 
     def tearDown(self):
         self.stage.delete()
