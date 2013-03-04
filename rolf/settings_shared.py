@@ -50,7 +50,7 @@ JENKINS_TASKS = (
     'django_jenkins.tasks.run_pyflakes',
 )
 
-PROJECT_APPS = ['rolf.rolf_main',]
+PROJECT_APPS = ['rolf.rolf_main', ]
 
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
