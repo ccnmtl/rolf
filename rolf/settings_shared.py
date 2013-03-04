@@ -59,6 +59,7 @@ USE_I18N = False
 MEDIA_ROOT = "/var/www/rolf/uploads/"
 MEDIA_URL = '/uploads/'
 ADMIN_MEDIA_PREFIX = '/media/'
+STATIC_URL = "/media/"
 SECRET_KEY = 'OVERRIDE THIS IN YOUR local_settings.py'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -78,6 +79,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -126,7 +128,7 @@ STATSD_CLIENT = 'statsd.client'
 STATSD_PREFIX = 'rolf'
 STATSD_HOST = 'localhost'
 STATSD_PORT = 8125
-if 'test' in sys.argv:
+if 'test' in sys.argv or 'jenkins' in sys.argv:
     STATSD_HOST = '127.0.0.1'
 
 STATSD_PATCHES = ['django_statsd.patches.db', ]
@@ -138,7 +140,7 @@ SERVER_EMAIL = "rolf@yoursite.com"
 
 CHECKOUT_DIR = "/var/tmp/rolf/checkouts/"
 SCRIPT_DIR = "/var/tmp/rolf/scripts/"
-if 'test' in sys.argv:
+if 'test' in sys.argv or 'jenkins' in sys.argv:
     import tempfile
     base = tempfile.gettempdir()
     CHECKOUT_DIR = os.path.join(base, "checkouts/")
