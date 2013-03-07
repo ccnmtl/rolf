@@ -6,13 +6,26 @@
 <p>This key is for your IP Address ({{remote_addr}}):</p>
 <pre>{{k1}}</pre>
 
+{% if ip %}
+<p>This key is for the specified IP Address ({{ip}}):</p>
+<pre>{{k3}}</pre>
+
+{% else %}
 <p>If you are on a dynamic connection, use this key instead which is
 	valid for 1-week (then you'll have to log in and come back here to
-	get a new one. Sorry, best we can do)</p>
+	get a new one)</p>
 
 <pre>{{k2}}</pre>
 
+<p>Alternatively, you can enter an IP address here and get a key for
+	it:</p>
+<form method="get">
+	<input type="text" name="ip" />
+  <input type="submit" value="get key" />
+</form>
+
 <p>If you don't understand what that means, back away slowly. You
 	probably shouldn't be in here.</p>
+{% endif %}
 
 {% endblock %}

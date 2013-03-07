@@ -352,7 +352,13 @@ def get_api_key(request):
                        remote_addr=request.META['REMOTE_ADDR']))
     s2 = URLSafeTimedSerializer(settings.API_SECRET, salt="rolf-timed-key")
     k2 = s2.dumps(dict(username=request.user.username))
-    return dict(k1=k1, k2=k2, remote_addr=request.META['REMOTE_ADDR'])
+
+    k3 = None
+    ip = request.GET.get('ip', None)
+    if ip:
+        k3 = s1.dumps(dict(username=request.user.username, remote_addr=ip))
+    return dict(k1=k1, k2=k2, k3=k3, ip=ip,
+                remote_addr=request.META['REMOTE_ADDR'])
 
 
 def verify_key(request):
