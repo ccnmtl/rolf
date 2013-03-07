@@ -26,3 +26,19 @@ class LoginTest(TestCase):
         self.c.login(username="testuser", password="test")
         response = self.c.get("/")
         self.assertEquals(response.status_code, 200)
+
+
+class ApiTest(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+
+    def tearDown(self):
+        self.u.delete()
+
+    def test_plain_getkey(self):
+        response = self.c.get("/api/1.0/get_key/")
+        assert "<h2>Get API Key</h2>" in response.content
