@@ -42,3 +42,8 @@ class ApiTest(TestCase):
     def test_plain_getkey(self):
         response = self.c.get("/api/1.0/get_key/")
         assert "<h2>Get API Key</h2>" in response.content
+
+    def test_key_for_other_ip(self):
+        response = self.c.get("/api/1.0/get_key/?ip=128.59.1.1")
+        assert ("This key is for the specified IP "
+                "Address (128.59.1.1)") in response.content
