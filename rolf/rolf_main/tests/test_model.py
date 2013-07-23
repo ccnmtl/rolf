@@ -1,82 +1,79 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from factories import CategoryFactory, ApplicationFactory, DeploymentFactory
 from rolf.rolf_main.models import Category, Application, Deployment
 from rolf.rolf_main.models import Setting, Stage, Recipe
 
 
 class CategoryTest(TestCase):
-    def setUp(self):
-        self.c = Category.objects.create(name="test")
-
     def test_basics(self):
-        self.assertEquals(unicode(self.c), "test")
-        self.assertEquals(self.c.get_absolute_url(),
-                          "/category/%d/" % self.c.id)
+        c = CategoryFactory()
+        self.assertEquals(unicode(c), "test")
+        self.assertEquals(c.get_absolute_url(),
+                          "/category/%d/" % c.id)
 
 
 class ApplicationTest(TestCase):
-    def setUp(self):
-        self.c = Category.objects.create(name="test category")
-        self.a = Application.objects.create(name="test application",
-                                            category=self.c)
-
     def test_basics(self):
-        self.assertEquals(unicode(self.a), "test application")
-        self.assertEquals(self.a.get_absolute_url(),
-                          "/application/%d/" % self.a.id)
+        a = ApplicationFactory()
+        self.assertEquals(unicode(a), "test application")
+        self.assertEquals(a.get_absolute_url(),
+                          "/application/%d/" % a.id)
 
     def test_active_deployments(self):
-        self.assertEquals(self.a.active_deployments().count(), 0)
+        a = ApplicationFactory()
+        self.assertEquals(a.active_deployments().count(), 0)
 
 
 class DeploymentTest(TestCase):
-    def setUp(self):
-        self.c = Category.objects.create(name="test category")
-        self.a = Application.objects.create(name="test application",
-                                            category=self.c)
-        self.d = Deployment.objects.create(name="test deployment",
-                                           application=self.a)
-
     def test_basics(self):
-        self.assertEquals(unicode(self.d), "test deployment")
-        self.assertEquals(self.d.get_absolute_url(),
-                          "/deployment/%d/" % self.d.id)
+        d = DeploymentFactory()
+        self.assertEquals(unicode(d), "test deployment")
+        self.assertEquals(d.get_absolute_url(),
+                          "/deployment/%d/" % d.id)
 
     def test_all_categories(self):
-        self.assertEquals(self.d.all_categories().count(), 1)
+        d = DeploymentFactory()
+        self.assertEquals(d.all_categories().count(), 1)
 
     def test_status(self):
-        self.assertEquals(self.d.status(), "unknown")
+        d = DeploymentFactory()
+        self.assertEquals(d.status(), "unknown")
 
     def test_last_message(self):
-        self.assertEquals(self.d.last_message(), None)
+        d = DeploymentFactory()
+        self.assertEquals(d.last_message(), None)
 
     def test_all_recipes(self):
-        self.assertEquals(self.d.all_recipes().count(), 0)
+        d = DeploymentFactory()
+        self.assertEquals(d.all_recipes().count(), 0)
 
     def test_can_edit(self):
+        d = DeploymentFactory()
         u = User.objects.create(username='testuserce')
-        self.assertFalse(self.d.can_edit(u))
-        u.delete()
+        self.assertFalse(d.can_edit(u))
 
     def test_can_push(self):
+        d = DeploymentFactory()
         u = User.objects.create(username='testuserce')
-        self.assertFalse(self.d.can_push(u))
-        u.delete()
+        self.assertFalse(d.can_push(u))
 
     def test_can_view(self):
+        d = DeploymentFactory()
         u = User.objects.create(username='testuserce')
-        self.assertFalse(self.d.can_view(u))
-        u.delete()
+        self.assertFalse(d.can_view(u))
 
     def test_add_permission_form(self):
-        self.d.add_permission_form()
+        d = DeploymentFactory()
+        d.add_permission_form()
 
     def test_add_flag_form(self):
-        self.d.add_flag_form()
+        d = DeploymentFactory()
+        d.add_flag_form()
 
     def test_last_push_date(self):
-        self.assertEquals(self.d.last_push_date(), None)
+        d = DeploymentFactory()
+        self.assertEquals(d.last_push_date(), None)
 
 
 class BasicPushTest(TestCase):
