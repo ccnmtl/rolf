@@ -1,4 +1,4 @@
-(function () {
+(function (jQuery) {
     var M = MochiKit;
     var MA = MochiKit.Async;
     var MB = MochiKit.Base;
@@ -164,40 +164,27 @@
     }
 
     function togglePre(el) {
-        var td = el.parentNode;
-        var pre = td.getElementsByTagName("pre")[0];
-        if (MD.hasElementClass(el, "rolf-hidden")) {
-            MS.showElement(pre);
-            MD.swapElementClass(el, "rolf-hidden", "rolf-showing");
+        var pre = jQuery(jQuery(el).parent().children("pre")[0]);
+        if (jQuery(el).hasClass("rolf-hidden")) {
+            pre.show();
         } else {
-            MS.hideElement(pre);
-            MD.swapElementClass(el, "rolf-showing", "rolf-hidden");
+            pre.hide();
         }
+        jQuery(el).toggleClass("rolf-hidden");
+        jQuery(el).toggleClass("rolf-showing");
     }
 
     function hideContent(td) {
-        var h3 = td.getElementsByTagName("h3")[0];
-        var pre = td.getElementsByTagName("pre")[0];
-        MS.hideElement(pre);
-        MD.addElementClass(h3, "rolf-hidden");
-        h3.onclick = function () {togglePre(h3); return false; };
+        var h3 = jQuery(td).children("h3")[0];
+        jQuery(td).children("pre").hide();
+        jQuery(h3).addClass("rolf-hidden");
+        jQuery(h3).click(function () {togglePre(h3); return false; });
     }
 
     function initPush() {
-        var contents = MD.getElementsByTagAndClassName("td", "stdout");
-        for (var i = 0; i < contents.length; i++) {
-            hideContent(contents[i]);
-        }
-
-        var errors = MD.getElementsByTagAndClassName("td", "stderr");
-        for (var i2 = 0; i2 < errors.length; i2++) {
-            hideContent(errors[i2]);
-        }
-
-        var commands = MD.getElementsByTagAndClassName("td", "command");
-        for (var i3 = 0; i3 < commands.length; i3++) {
-            hideContent(commands[i3]);
-        }
+        jQuery("td.stdout").each(function () { hideContent(this); });
+        jQuery("td.stderr").each(function () { hideContent(this); });
+        jQuery("td.command").each(function () { hideContent(this); });
 
         MI.forEach(MD.getElementsByTagAndClassName("tr", "stage-row"),
                 function (element) {
@@ -206,13 +193,11 @@
                 }
                );
 
-        var autorun = $('autorun');
-        if (autorun) {
-            if (autorun.value === 'autorun') {
-                runAllStages();
-            }
+        var autorun = jQuery('#autorun');
+        if (autorun.val() === 'autorun') {
+            runAllStages();
         }
     }
 
     MD.addLoadEvent(initPush);
-}());
+}(jQuery));
