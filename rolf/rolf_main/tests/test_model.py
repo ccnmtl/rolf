@@ -1,15 +1,12 @@
-from django.utils import unittest
+from django.test import TestCase
 from django.contrib.auth.models import User
 from rolf.rolf_main.models import Category, Application, Deployment
 from rolf.rolf_main.models import Setting, Stage, Recipe
 
 
-class CategoryTest(unittest.TestCase):
+class CategoryTest(TestCase):
     def setUp(self):
         self.c = Category.objects.create(name="test")
-
-    def tearDown(self):
-        self.c.delete()
 
     def test_basics(self):
         self.assertEquals(unicode(self.c), "test")
@@ -17,15 +14,11 @@ class CategoryTest(unittest.TestCase):
                           "/category/%d/" % self.c.id)
 
 
-class ApplicationTest(unittest.TestCase):
+class ApplicationTest(TestCase):
     def setUp(self):
         self.c = Category.objects.create(name="test category")
         self.a = Application.objects.create(name="test application",
                                             category=self.c)
-
-    def tearDown(self):
-        self.a.delete()
-        self.c.delete()
 
     def test_basics(self):
         self.assertEquals(unicode(self.a), "test application")
@@ -36,18 +29,13 @@ class ApplicationTest(unittest.TestCase):
         self.assertEquals(self.a.active_deployments().count(), 0)
 
 
-class DeploymentTest(unittest.TestCase):
+class DeploymentTest(TestCase):
     def setUp(self):
         self.c = Category.objects.create(name="test category")
         self.a = Application.objects.create(name="test application",
                                             category=self.c)
         self.d = Deployment.objects.create(name="test deployment",
                                            application=self.a)
-
-    def tearDown(self):
-        self.d.delete()
-        self.a.delete()
-        self.c.delete()
 
     def test_basics(self):
         self.assertEquals(unicode(self.d), "test deployment")
@@ -91,7 +79,7 @@ class DeploymentTest(unittest.TestCase):
         self.assertEquals(self.d.last_push_date(), None)
 
 
-class BasicPushTest(unittest.TestCase):
+class BasicPushTest(TestCase):
     def setUp(self):
         self.u = User.objects.create(username='testuser')
         self.c = Category.objects.create(name="test category")
@@ -125,16 +113,6 @@ class BasicPushTest(unittest.TestCase):
             recipe=self.shell_recipe,
             name="test stage 2",
         )
-
-    def tearDown(self):
-        self.stage.delete()
-        self.recipe.delete()
-        self.shell_recipe.delete()
-        self.setting.delete()
-        self.d.delete()
-        self.a.delete()
-        self.c.delete()
-        self.u.delete()
 
     def test_push(self):
         push = self.d.new_push(self.u, "test push")
