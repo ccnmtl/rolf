@@ -25,8 +25,9 @@
         d.addErrback(options.error);
     };
 
-    function runStage(stage_id) {
-        var stages = new Stages();
+    var RunStageView = function (options) {
+        var stages = options.stages;
+        var stage_id = options.stage_id;
         var rollback_id = "";
         if ($('rollback')) {
             rollback_id = $('rollback').value;
@@ -40,6 +41,11 @@
             });
         var stage_row = $("stage-" + stage_id);
         MD.swapElementClass(stage_row, "unknown", "inprogress");
+    };
+
+    function runStage(stage_id) {
+        var stages = new Stages();
+        new RunStageView({stages: stages, stage_id: stage_id});
     }
 
     function myErrback(result) {
