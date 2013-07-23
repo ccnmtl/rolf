@@ -68,9 +68,7 @@
                     'class' : result.status}, result.status));
     }
 
-    function stageResults(result) {
-        var stage_row = $("stage-" + result.stage_id);
-
+    function makeLogRows(result) {
         var rows = [];
 
         for (var i = 0; i < result.logs.length; i++) {
@@ -85,6 +83,13 @@
                 rows.push(makeStderrTR(log, result));
             }
         }
+        return rows;
+    }
+
+    function stageResults(result) {
+        var stage_row = $("stage-" + result.stage_id);
+
+        var rows = makeLogRows(result);
 
         for (var i2 = rows.length - 1; i2 > -1; i2--) {
             MD.insertSiblingNodesAfter(stage_row, rows[i2]);
