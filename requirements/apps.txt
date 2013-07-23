@@ -1,4 +1,5 @@
 -r libs.txt
+requirements/src/factory_boy-2.1.1.tar.gz
 requirements/src/djangowind-0.10.3.tar.gz
 requirements/src/django-extensions-0.4.1.tar.gz
 requirements/src/django-munin-0.1.1.tar.gz
