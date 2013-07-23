@@ -52,6 +52,15 @@
         return MD.TR({}, stdouttd);
     }
 
+    function makeStderrTR(log, result) {
+        var stderrtd = MD.TD({'colspan' : '2', 'class' : 'stderr'},
+                             [MD.H3(null, "STDERR"), MD.PRE(null, log.stderr)]);
+        if (result.status === "ok") {
+            hideContent(stderrtd);
+        }
+        return MD.TR({}, stderrtd);
+    }
+
     function stageResults(result) {
         var stage_row = $("stage-" + result.stage_id);
 
@@ -59,23 +68,14 @@
 
         for (var i = 0; i < result.logs.length; i++) {
             var log = result.logs[i];
-
             if (log.command) {
                 rows.push(makeLogTR(log, result));
             }
-
             if (log.stdout) {
                 rows.push(makeStdoutTR(log, result));
             }
-
             if (log.stderr) {
-                var stderrtd = MD.TD({'colspan' : '2', 'class' : 'stderr'},
-                                  [MD.H3(null, "STDERR"), MD.PRE(null, log.stderr)]);
-                if (result.status === "ok") {
-                    hideContent(stderrtd);
-                }
-                var stderr_row = MD.TR({}, stderrtd);
-                rows.push(stderr_row);
+                rows.push(makeStderrTR(log, result));
             }
         }
 
@@ -132,7 +132,7 @@
         var td = el.parentNode;
         var pre = td.getElementsByTagName("pre")[0];
         if (MD.hasElementClass(el, "rolf-hidden")) {
-            MD.showElement(pre);
+            MS.showElement(pre);
             MD.swapElementClass(el, "rolf-hidden", "rolf-showing");
         } else {
             MS.hideElement(pre);
