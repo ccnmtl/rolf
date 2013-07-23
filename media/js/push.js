@@ -97,6 +97,15 @@
         return runAll && (result.status !== "failed");
     }
 
+    function nextStageOrFinish(result) {
+        var nextId = getNextStageId(result.stage_id);
+        if (nextId !== -1) {
+            runStage(nextId);
+        } else {
+            setPushStatus(result);
+        }
+    }
+
     function stageResults(result) {
         var stage_row = $("stage-" + result.stage_id);
 
@@ -107,14 +116,8 @@
         MD.swapElementClass(stage_row, "unknown", result.status);
         MD.swapDOM($("execute-" + result.stage_id), MD.SPAN(null, result.end_time));
         if (continuePush(result)) {
-            var nextId = getNextStageId(result.stage_id);
-            if (nextId !== -1) {
-                runStage(nextId);
-            } else {
-                setPushStatus(result);
-            }
+            nextStageOrFinish(result);
         }
-
         if (result.status === "failed") {
             setPushStatus(result);
         } else {
