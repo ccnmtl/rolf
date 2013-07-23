@@ -3,7 +3,6 @@
     var MA = MochiKit.Async;
     var MB = MochiKit.Base;
     var MD = MochiKit.DOM;
-    var MI = MochiKit.Iter;
     var MS = MochiKit.Style;
     var $ = MochiKit.DOM.$;
     var runAll = false;
@@ -29,8 +28,8 @@
         var stages = options.stages;
         var stage_id = options.stage_id;
         var rollback_id = "";
-        if ($('rollback')) {
-            rollback_id = $('rollback').value;
+        if (jQuery('#rollback')) {
+            rollback_id = jQuery('#rollback').val();
         }
         stages.run(
             {
@@ -39,8 +38,9 @@
                 'success': stageResults,
                 'error': myErrback
             });
-        var stage_row = $("stage-" + stage_id);
-        MD.swapElementClass(stage_row, "unknown", "inprogress");
+        var stage_row = jQuery("#stage-" + stage_id);
+        stage_row.toggleClass("unknown");
+        stage_row.toggleClass("inprogress");
     };
 
     function runStage(stage_id) {
@@ -144,7 +144,7 @@
                 if (getNextStageId(result.stage_id) === -1) {
                     // last stage
                     setPushStatus(result);
-                    $('runall-button').disabled = true;
+                    jQuery('#runall-button').attr("disabled", "disabled");
                 }
             }
         }
@@ -186,12 +186,10 @@
         jQuery("td.stderr").each(function () { hideContent(this); });
         jQuery("td.command").each(function () { hideContent(this); });
 
-        MI.forEach(MD.getElementsByTagAndClassName("tr", "stage-row"),
-                function (element) {
-                    var stage_id = element.id.split("-")[1];
-                    stageIds.push(stage_id);
-                }
-               );
+        jQuery("tr.stage-row").each(function () {
+            var stage_id = jQuery(this).attr('id').split("-")[1];
+            stageIds.push(stage_id);
+        });
 
         var autorun = jQuery('#autorun');
         if (autorun.val() === 'autorun') {
