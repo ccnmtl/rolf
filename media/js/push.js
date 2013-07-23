@@ -3,7 +3,6 @@
     var MA = MochiKit.Async;
     var MB = MochiKit.Base;
     var MD = MochiKit.DOM;
-    var MS = MochiKit.Style;
     var $ = MochiKit.DOM.$;
     var runAll = false;
     var stageIds = [];
@@ -81,10 +80,10 @@
     }
 
     function setPushStatus(result) {
-        MD.swapDOM(
-            $('push-status'),
-            MD.DIV({'id' : 'push-status',
-                    'class' : result.status}, result.status));
+        jQuery("#push-status")
+            .removeClass("inprogress")
+            .addClass(result.status)
+            .text(result.status);
     }
 
     function makeLogRows(result) {
@@ -131,9 +130,14 @@
         var rows = makeLogRows(result);
         insertLogRows(stage_row, rows);
 
-        MD.swapElementClass(stage_row, "inprogress", result.status);
-        MD.swapElementClass(stage_row, "unknown", result.status);
-        MD.swapDOM($("execute-" + result.stage_id), MD.SPAN(null, result.end_time));
+        jQuery("#stage-" + result.stage_id)
+            .removeClass("inprogress")
+            .removeClass("unknown")
+            .addClass(result.status);
+
+        jQuery("#execute-" + result.stage_id)
+            .replaceWith(jQuery("<span/>", {'text': result.end_time }));
+
         if (continuePush(result)) {
             nextStageOrFinish(result);
         }
