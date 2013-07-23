@@ -1,4 +1,5 @@
 import factory
+from django.contrib.auth.models import User
 from rolf.rolf_main.models import Category, Application, Deployment
 
 
@@ -17,3 +18,8 @@ class DeploymentFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Deployment
     name = "test deployment"
     application = factory.SubFactory(ApplicationFactory)
+
+
+class UserFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = User
+    username = 'testuser'

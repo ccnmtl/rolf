@@ -1,6 +1,6 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
 from factories import CategoryFactory, ApplicationFactory, DeploymentFactory
+from factories import UserFactory
 from rolf.rolf_main.models import Category, Application, Deployment
 from rolf.rolf_main.models import Setting, Stage, Recipe
 
@@ -50,17 +50,17 @@ class DeploymentTest(TestCase):
 
     def test_can_edit(self):
         d = DeploymentFactory()
-        u = User.objects.create(username='testuserce')
+        u = UserFactory(username='testuserce')
         self.assertFalse(d.can_edit(u))
 
     def test_can_push(self):
         d = DeploymentFactory()
-        u = User.objects.create(username='testuserce')
+        u = UserFactory(username='testuserce')
         self.assertFalse(d.can_push(u))
 
     def test_can_view(self):
         d = DeploymentFactory()
-        u = User.objects.create(username='testuserce')
+        u = UserFactory(username='testuserce')
         self.assertFalse(d.can_view(u))
 
     def test_add_permission_form(self):
@@ -78,12 +78,8 @@ class DeploymentTest(TestCase):
 
 class BasicPushTest(TestCase):
     def setUp(self):
-        self.u = User.objects.create(username='testuser')
-        self.c = Category.objects.create(name="test category")
-        self.a = Application.objects.create(name="test application",
-                                            category=self.c)
-        self.d = Deployment.objects.create(name="test deployment",
-                                           application=self.a)
+        self.u = UserFactory()
+        self.d = DeploymentFactory()
         self.setting = Setting.objects.create(
             deployment=self.d, name="TEST_FOO",
             value="TEST_BAR"
