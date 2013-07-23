@@ -1,7 +1,7 @@
 import factory
 from django.contrib.auth.models import User
 from rolf.rolf_main.models import Category, Application, Deployment
-from rolf.rolf_main.models import Recipe, Setting
+from rolf.rolf_main.models import Recipe, Setting, Stage
 
 
 class CategoryFactory(factory.DjangoModelFactory):
@@ -45,3 +45,10 @@ class SettingFactory(factory.DjangoModelFactory):
     name = "TEST_FOO"
     value = "TEST_BAR"
     deployment = factory.SubFactory(DeploymentFactory)
+
+
+class StageFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Stage
+    name = "test stage"
+    deployment = factory.SubFactory(DeploymentFactory)
+    recipe = factory.SubFactory(RecipeFactory)

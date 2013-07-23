@@ -1,9 +1,7 @@
 from django.test import TestCase
 from factories import CategoryFactory, ApplicationFactory, DeploymentFactory
 from factories import UserFactory, RecipeFactory, ShellRecipeFactory
-from factories import SettingFactory
-from rolf.rolf_main.models import Category, Application, Deployment
-from rolf.rolf_main.models import Stage
+from factories import SettingFactory, StageFactory
 
 
 class CategoryTest(TestCase):
@@ -84,17 +82,14 @@ class BasicPushTest(TestCase):
         self.setting = SettingFactory(deployment=self.d)
         self.recipe = RecipeFactory()
         self.shell_recipe = ShellRecipeFactory()
-        self.stage = Stage.objects.create(
+        self.stage = StageFactory(
             deployment=self.d,
-            recipe=self.recipe,
-            name="test stage",
-        )
-        self.stage2 = Stage.objects.create(
+            recipe=self.recipe)
+        self.stage2 = StageFactory(
             deployment=self.d,
             recipe=self.shell_recipe,
             name="test stage 2",
         )
-
         push = self.d.new_push(self.u, "test push")
         # haven't run anything so it should be inprogress
         self.assertEquals(push.status, "inprogress")
@@ -127,31 +122,15 @@ class BasicPushTest(TestCase):
             "/cookbook/%d/" % self.recipe.id)
 
     def test_stage_absolute_url(self):
-        self.d = DeploymentFactory()
-        self.recipe = RecipeFactory()
-        self.stage = Stage.objects.create(
-            deployment=self.d,
-            recipe=self.recipe,
-            name="test stage",
-        )
+        self.stage = StageFactory()
         self.assertEquals(
             self.stage.get_absolute_url(),
             "/stage/%d/" % self.stage.id)
 
     def test_stage_all_recipes(self):
-        self.d = DeploymentFactory()
-        self.recipe = RecipeFactory()
         self.shell_recipe = ShellRecipeFactory()
-        self.stage = Stage.objects.create(
-            deployment=self.d,
-            recipe=self.recipe,
-            name="test stage",
-        )
-        self.stage2 = Stage.objects.create(
-            deployment=self.d,
-            recipe=self.shell_recipe,
-            name="test stage 2",
-        )
+        self.stage = StageFactory()
+        self.stage2 = StageFactory(recipe=self.shell_recipe)
 
         self.assertEquals(
             [r.id for r in self.stage.all_recipes()],
