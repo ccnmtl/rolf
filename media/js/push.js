@@ -43,6 +43,15 @@
         return MD.TR({}, td);
     }
 
+    function makeStdoutTR(log, result) {
+        var stdouttd = MD.TD({'colspan' : '2', 'class' : 'stdout'},
+                             [MD.H3(null, "STDOUT"), MD.PRE(null, log.stdout)]);
+        if (result.status === "ok") {
+            hideContent(stdouttd);
+        }
+        return MD.TR({}, stdouttd);
+    }
+
     function stageResults(result) {
         var stage_row = $("stage-" + result.stage_id);
 
@@ -56,13 +65,7 @@
             }
 
             if (log.stdout) {
-                var stdouttd = MD.TD({'colspan' : '2', 'class' : 'stdout'},
-                                  [MD.H3(null, "STDOUT"), MD.PRE(null, log.stdout)]);
-                if (result.status === "ok") {
-                    hideContent(stdouttd);
-                }
-                var stdout_row = MD.TR({}, stdouttd);
-                rows.push(stdout_row);
+                rows.push(makeStdoutTR(log, result));
             }
 
             if (log.stderr) {
