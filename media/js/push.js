@@ -92,6 +92,11 @@
         }
     }
 
+    // are we done or might there be more stages to run?
+    function continuePush(result) {
+        return runAll && (result.status !== "failed");
+    }
+
     function stageResults(result) {
         var stage_row = $("stage-" + result.stage_id);
 
@@ -101,7 +106,7 @@
         MD.swapElementClass(stage_row, "inprogress", result.status);
         MD.swapElementClass(stage_row, "unknown", result.status);
         MD.swapDOM($("execute-" + result.stage_id), MD.SPAN(null, result.end_time));
-        if (runAll && (result.status !== "failed")) {
+        if (continuePush(result)) {
             var nextId = getNextStageId(result.stage_id);
             if (nextId !== -1) {
                 runStage(nextId);
