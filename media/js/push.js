@@ -61,6 +61,13 @@
         return MD.TR({}, stderrtd);
     }
 
+    function setPushStatus(result) {
+        MD.swapDOM(
+            $('push-status'),
+            MD.DIV({'id' : 'push-status',
+                    'class' : result.status}, result.status));
+    }
+
     function stageResults(result) {
         var stage_row = $("stage-" + result.stage_id);
 
@@ -91,24 +98,17 @@
             if (nextId !== -1) {
                 runStage(nextId);
             } else {
-                // last stage. here we can set the push's status
-                var newStatus = MD.DIV({'id' : 'push-status',
-                                     'class' : result.status}, result.status);
-                MD.swapDOM($('push-status'), newStatus);
+                setPushStatus(result);
             }
         }
 
         if (result.status === "failed") {
-            MD.swapDOM($('push-status'),
-                    MD.DIV({'id' : 'push-status',
-                         'class' : result.status}, result.status));
+            setPushStatus(result);
         } else {
             if (!runAll) {
                 if (getNextStageId(result.stage_id) === -1) {
                     // last stage
-                    MD.swapDOM($('push-status'),
-                            MD.DIV({'id' : 'push-status',
-                                 'class' : result.status}, result.status));
+                    setPushStatus(result);
                     $('runall-button').disabled = true;
                 }
             }
