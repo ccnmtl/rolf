@@ -14,21 +14,24 @@
         runStage(stageIds[0]);
     }
 
-    function runStageBackend(options) {
+    var Stages = function () {
+    };
+    Stages.prototype.run = function (options) {
         var d = MA.loadJSONDoc("stage/?" + MB.queryString({
             'stage_id' : options.stage_id,
             'rollback_id' : options.rollback_id
         }));
         d.addCallback(options.success);
         d.addErrback(options.error);
-    }
+    };
 
     function runStage(stage_id) {
+        var stages = new Stages();
         var rollback_id = "";
         if ($('rollback')) {
             rollback_id = $('rollback').value;
         }
-        runStageBackend(
+        stages.run(
             {
                 'stage_id': stage_id,
                 'rollback_id': rollback_id,
