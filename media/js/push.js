@@ -33,6 +33,16 @@
         alert("stage failed: " + result);
     }
 
+    function makeLogTR(log, result) {
+        var td = MD.TD({'colspan' : '2', 'class' : 'command'},
+                       [MD.H3(null, "Code"),
+                        MD.PRE(null, log.command)]);
+        if (result.status === "ok") {
+            hideContent(td);
+        }
+        return MD.TR({}, td);
+    }
+
     function stageResults(result) {
         var stage_row = $("stage-" + result.stage_id);
 
@@ -42,13 +52,7 @@
             var log = result.logs[i];
 
             if (log.command) {
-                var td = MD.TD({'colspan' : '2', 'class' : 'command'},
-                            [MD.H3(null, "Code"),
-                             MD.PRE(null, log.command)]);
-                if (result.status === "ok") {
-                    hideContent(td);
-                }
-                rows.push(MD.TR({}, td));
+                rows.push(makeLogTR(log, result));
             }
 
             if (log.stdout) {
