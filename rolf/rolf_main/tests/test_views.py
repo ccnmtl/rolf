@@ -28,6 +28,23 @@ class LoginTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
 
+class CrudTest(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.u = UserFactory(is_staff=True)
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username=self.u.username, password="test")
+
+    def test_category_crud(self):
+        r = self.c.get("/")
+        self.assertFalse("test category" in r.content)
+        r = self.c.post("/category/add/", {'name': 'test category'})
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get("/")
+        self.assertTrue("test category" in r.content)
+
+
 class ApiTest(TestCase):
     def setUp(self):
         self.c = Client()
