@@ -14,13 +14,13 @@
         runStage(stageIds[0]);
     }
 
-    function runStageBackend(stage_id, rollback_id) {
+    function runStageBackend(options) {
         var d = MA.loadJSONDoc("stage/?" + MB.queryString({
-            'stage_id' : stage_id,
-            'rollback_id' : rollback_id
+            'stage_id' : options.stage_id,
+            'rollback_id' : options.rollback_id
         }));
-        d.addCallback(stageResults);
-        d.addErrback(myErrback);
+        d.addCallback(options.success);
+        d.addErrback(options.error);
     }
 
     function runStage(stage_id) {
@@ -28,7 +28,13 @@
         if ($('rollback')) {
             rollback_id = $('rollback').value;
         }
-        runStageBackend(stage_id, rollback_id);
+        runStageBackend(
+            {
+                'stage_id': stage_id,
+                'rollback_id': rollback_id,
+                'success': stageResults,
+                'error': myErrback
+            });
         var stage_row = $("stage-" + stage_id);
         MD.swapElementClass(stage_row, "unknown", "inprogress");
     }
