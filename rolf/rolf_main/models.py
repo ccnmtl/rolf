@@ -88,6 +88,12 @@ class Deployment(models.Model):
         """ helper to make this available in generic templates """
         return Recipe.objects.all().exclude(name="")
 
+    def add_editor(self, user):
+        for group in user.groups.all():
+            Permission.objects.create(deployment=self,
+                                      group=group,
+                                      capability="edit")
+
     def can_edit(self, user):
         edit_groups = set([p.group.id for p
                            in self.permission_set.filter(capability="edit")])

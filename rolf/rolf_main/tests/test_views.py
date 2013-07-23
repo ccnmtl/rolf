@@ -1,6 +1,8 @@
+from django.contrib.auth.models import Group
 from django.test import TestCase
 from django.test.client import Client
 from factories import UserFactory, CategoryFactory, ApplicationFactory
+from factories import DeploymentFactory
 
 
 class SimpleTest(TestCase):
@@ -34,6 +36,10 @@ class CrudTest(TestCase):
         self.u = UserFactory(is_staff=True)
         self.u.set_password("test")
         self.u.save()
+        # need to make the user have at least one group
+        g = Group.objects.create(name=self.u.username)
+        g.user_set.add(self.u)
+        g.save()
         self.c.login(username=self.u.username, password="test")
 
     def test_category_crud(self):
@@ -63,6 +69,17 @@ class CrudTest(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get(a.get_absolute_url())
         self.assertTrue("test deployment" in r.content)
+
+    def test_setting_crud(self):
+        d = DeploymentFactory()
+        d.add_editor(self.u)
+        r = self.c.get(d.get_absolute_url())
+        self.assertFalse("test setting" in r.content)
+        r = self.c.post(d.get_absolute_url() + "add_setting/",
+                        {'name': 'test setting', 'value': 'test value'})
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(d.get_absolute_url())
+        self.assertTrue("test setting" in r.content)
 
 
 class ApiTest(TestCase):
