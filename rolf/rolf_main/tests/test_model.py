@@ -1,8 +1,9 @@
 from django.test import TestCase
 from factories import CategoryFactory, ApplicationFactory, DeploymentFactory
-from factories import UserFactory
+from factories import UserFactory, RecipeFactory, ShellRecipeFactory
+from factories import SettingFactory
 from rolf.rolf_main.models import Category, Application, Deployment
-from rolf.rolf_main.models import Setting, Stage, Recipe
+from rolf.rolf_main.models import Stage
 
 
 class CategoryTest(TestCase):
@@ -77,25 +78,12 @@ class DeploymentTest(TestCase):
 
 
 class BasicPushTest(TestCase):
-    def setUp(self):
+    def test_push(self):
         self.u = UserFactory()
         self.d = DeploymentFactory()
-        self.setting = Setting.objects.create(
-            deployment=self.d, name="TEST_FOO",
-            value="TEST_BAR"
-        )
-        self.recipe = Recipe.objects.create(
-            name="test recipe",
-            language="python",
-            code="print 'hello'\nself.execute(['echo', 'foo'])",
-            description="",
-        )
-        self.shell_recipe = Recipe.objects.create(
-            name="test shell recipe",
-            language="shell",
-            code="echo $TEST_FOO",
-            description="",
-        )
+        self.setting = SettingFactory(deployment=self.d)
+        self.recipe = RecipeFactory()
+        self.shell_recipe = ShellRecipeFactory()
         self.stage = Stage.objects.create(
             deployment=self.d,
             recipe=self.recipe,
@@ -107,7 +95,6 @@ class BasicPushTest(TestCase):
             name="test stage 2",
         )
 
-    def test_push(self):
         push = self.d.new_push(self.u, "test push")
         # haven't run anything so it should be inprogress
         self.assertEquals(push.status, "inprogress")
@@ -134,16 +121,38 @@ class BasicPushTest(TestCase):
             self.assertEquals(pstage.setting('foo'), '')
 
     def test_recipe_absolute_url(self):
+        self.recipe = RecipeFactory()
         self.assertEquals(
             self.recipe.get_absolute_url(),
             "/cookbook/%d/" % self.recipe.id)
 
     def test_stage_absolute_url(self):
+        self.d = DeploymentFactory()
+        self.recipe = RecipeFactory()
+        self.stage = Stage.objects.create(
+            deployment=self.d,
+            recipe=self.recipe,
+            name="test stage",
+        )
         self.assertEquals(
             self.stage.get_absolute_url(),
             "/stage/%d/" % self.stage.id)
 
     def test_stage_all_recipes(self):
+        self.d = DeploymentFactory()
+        self.recipe = RecipeFactory()
+        self.shell_recipe = ShellRecipeFactory()
+        self.stage = Stage.objects.create(
+            deployment=self.d,
+            recipe=self.recipe,
+            name="test stage",
+        )
+        self.stage2 = Stage.objects.create(
+            deployment=self.d,
+            recipe=self.shell_recipe,
+            name="test stage 2",
+        )
+
         self.assertEquals(
             [r.id for r in self.stage.all_recipes()],
             [self.shell_recipe.id])

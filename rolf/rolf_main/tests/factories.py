@@ -1,6 +1,7 @@
 import factory
 from django.contrib.auth.models import User
 from rolf.rolf_main.models import Category, Application, Deployment
+from rolf.rolf_main.models import Recipe, Setting
 
 
 class CategoryFactory(factory.DjangoModelFactory):
@@ -23,3 +24,24 @@ class DeploymentFactory(factory.DjangoModelFactory):
 class UserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = User
     username = 'testuser'
+
+
+class RecipeFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Recipe
+    name = "test recipe"
+    language = "python"
+    code = "print 'hello'\nself.execute(['echo', 'foo'])"
+    description = ""
+
+
+class ShellRecipeFactory(RecipeFactory):
+    name = "test shell recipe"
+    language = "shell"
+    code = "echo $TEST_FOO"
+
+
+class SettingFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Setting
+    name = "TEST_FOO"
+    value = "TEST_BAR"
+    deployment = factory.SubFactory(DeploymentFactory)
