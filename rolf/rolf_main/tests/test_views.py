@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.test.client import Client
-from factories import UserFactory
+from factories import UserFactory, CategoryFactory, ApplicationFactory
 
 
 class SimpleTest(TestCase):
@@ -43,6 +43,26 @@ class CrudTest(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get("/")
         self.assertTrue("test category" in r.content)
+
+    def test_application_crud(self):
+        c = CategoryFactory()
+        r = self.c.get(c.get_absolute_url())
+        self.assertFalse("test application" in r.content)
+        r = self.c.post(c.get_absolute_url() + "add_application/",
+                        {'name': 'test application'})
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(c.get_absolute_url())
+        self.assertTrue("test application" in r.content)
+
+    def test_deployment_crud(self):
+        a = ApplicationFactory()
+        r = self.c.get(a.get_absolute_url())
+        self.assertFalse("test deployment" in r.content)
+        r = self.c.post(a.get_absolute_url() + "add_deployment/",
+                        {'name': 'test deployment'})
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(a.get_absolute_url())
+        self.assertTrue("test deployment" in r.content)
 
 
 class ApiTest(TestCase):
