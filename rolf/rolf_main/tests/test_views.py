@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.test.client import Client
-from django.contrib.auth.models import User
+from factories import UserFactory
 
 
 class SimpleTest(TestCase):
@@ -17,17 +17,13 @@ class SimpleTest(TestCase):
 
 
 class LoginTest(TestCase):
-    def setUp(self):
+    def test_root(self):
         self.c = Client()
-        self.u = User.objects.create(username="testuser")
+        self.u = UserFactory()
         self.u.set_password("test")
         self.u.save()
 
-    def tearDown(self):
-        self.u.delete()
-
-    def test_root(self):
-        self.c.login(username="testuser", password="test")
+        self.c.login(username=self.u.username, password="test")
         response = self.c.get("/")
         self.assertEquals(response.status_code, 200)
 
@@ -35,13 +31,10 @@ class LoginTest(TestCase):
 class ApiTest(TestCase):
     def setUp(self):
         self.c = Client()
-        self.u = User.objects.create(username="testuser")
+        self.u = UserFactory()
         self.u.set_password("test")
         self.u.save()
-        self.c.login(username="testuser", password="test")
-
-    def tearDown(self):
-        self.u.delete()
+        self.c.login(username=self.u.username, password="test")
 
     def test_plain_getkey(self):
         response = self.c.get("/api/1.0/get_key/")
