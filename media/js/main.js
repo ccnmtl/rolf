@@ -24,8 +24,9 @@ require.config({
 require([
     'jquery',
     'underscore',
-    'backbone'
-], function ($, _, Backbone) {
+    'backbone',
+    'models/pushstatus'
+], function ($, _, Backbone, PushStatus) {
         var runAll = false;
         var stageIds = [];
 
@@ -116,11 +117,6 @@ require([
             return tr;
         }
 
-        var PushStatusModel = Backbone.Model.extend({
-            defaults: {
-                'status': 'inprogress'
-            }
-        });
         var PushStatusView = Backbone.View.extend({
             template: _.template($('#push-status-template').html()),
             el: $('#push-status'),
@@ -134,6 +130,7 @@ require([
                 return this;
             }
         });
+        var psm = new PushStatusView({model: new PushStatus});
         var setPushStatus = function (result) {
             $("#push-status")
                 .removeClass("inprogress")
