@@ -1,4 +1,4 @@
-(function (jQuery) {
+(function ($) {
     var runAll = false;
     var stageIds = [];
 
@@ -12,7 +12,7 @@
     Stages.prototype.run = function (options) {
         var url = "stage/?stage_id=" + options.stage_id +
             "&rollback_id=" + options.rollback_id;
-        jQuery.ajax({
+        $.ajax({
             url: url,
             success: options.success,
             error: options.error
@@ -23,8 +23,8 @@
         var stages = options.stages;
         var stage_id = options.stage_id;
         var rollback_id = "";
-        if (jQuery('#rollback')) {
-            rollback_id = jQuery('#rollback').val() || "";
+        if ($('#rollback')) {
+            rollback_id = $('#rollback').val() || "";
         }
         stages.run(
             {
@@ -33,7 +33,7 @@
                 'success': stageResults,
                 'error': myErrback
             });
-        var stage_row = jQuery("#stage-" + stage_id);
+        var stage_row = $("#stage-" + stage_id);
         stage_row.toggleClass("unknown");
         stage_row.toggleClass("inprogress");
     };
@@ -47,11 +47,15 @@
         alert("stage failed: " + result);
     }
 
+    var NewLogView = function (options) {
+
+    };
+
     function makeLogTR(log, result) {
-        var tr = jQuery("<tr>");
-        var td = jQuery("<td>", {"colspan": "2", "class": "command"});
-        var h3 = jQuery("<h3>", {"text": "Code"});
-        var pre = jQuery("<pre>", {"text": log.command});
+        var tr = $("<tr>");
+        var td = $("<td>", {"colspan": "2", "class": "command"});
+        var h3 = $("<h3>", {"text": "Code"});
+        var pre = $("<pre>", {"text": log.command});
         td.append(h3).append(pre);
         if (result.status === "ok") {
             hideContent(td);
@@ -61,10 +65,10 @@
     }
 
     function makeStdoutTR(log, result) {
-        var tr = jQuery("<tr>");
-        var td = jQuery("<td>", {'colspan' : '2', 'class' : 'stdout'});
-        var h3 = jQuery("<h3>", {"text": "STDOUT"});
-        var pre = jQuery("<pre>", {"text": log.stdout});
+        var tr = $("<tr>");
+        var td = $("<td>", {'colspan' : '2', 'class' : 'stdout'});
+        var h3 = $("<h3>", {"text": "STDOUT"});
+        var pre = $("<pre>", {"text": log.stdout});
         td.append(h3).append(pre);
         if (result.status === "ok") {
             hideContent(td);
@@ -74,10 +78,10 @@
     }
 
     function makeStderrTR(log, result) {
-        var tr = jQuery("<tr>");
-        var td = jQuery("<td>", {'colspan' : '2', 'class' : 'stderr'});
-        var h3 = jQuery("<h3>", {"text": "STDERR"});
-        var pre = jQuery("<pre>", {"text": log.stderr});
+        var tr = $("<tr>");
+        var td = $("<td>", {'colspan' : '2', 'class' : 'stderr'});
+        var h3 = $("<h3>", {"text": "STDERR"});
+        var pre = $("<pre>", {"text": log.stderr});
         td.append(h3).append(pre);
         if (result.status === "ok") {
             hideContent(td);
@@ -86,12 +90,12 @@
         return tr;
     }
 
-    function setPushStatus(result) {
-        jQuery("#push-status")
+    var setPushStatus = function (result) {
+        $("#push-status")
             .removeClass("inprogress")
             .addClass(result.status)
             .text(result.status);
-    }
+    };
 
     function makeLogRows(result) {
         var rows = [];
@@ -113,7 +117,7 @@
 
     function insertLogRows(stage_row, rows) {
         for (var i2 = rows.length - 1; i2 > -1; i2--) {
-            jQuery(stage_row).after(jQuery(rows[i2]));
+            $(stage_row).after($(rows[i2]));
         }
     }
 
@@ -132,18 +136,18 @@
     }
 
     function stageResults(result) {
-        var stage_row = jQuery("#stage-" + result.stage_id);
+        var stage_row = $("#stage-" + result.stage_id);
 
         var rows = makeLogRows(result);
         insertLogRows(stage_row, rows);
 
-        jQuery("#stage-" + result.stage_id)
+        $("#stage-" + result.stage_id)
             .removeClass("inprogress")
             .removeClass("unknown")
             .addClass(result.status);
 
-        jQuery("#execute-" + result.stage_id)
-            .replaceWith(jQuery("<span/>", {'text': result.end_time }));
+        $("#execute-" + result.stage_id)
+            .replaceWith($("<span/>", {'text': result.end_time }));
 
         if (continuePush(result)) {
             nextStageOrFinish(result);
@@ -155,7 +159,7 @@
                 if (getNextStageId(result.stage_id) === -1) {
                     // last stage
                     setPushStatus(result);
-                    jQuery('#runall-button').attr("disabled", "disabled");
+                    $('#runall-button').attr("disabled", "disabled");
                 }
             }
         }
@@ -175,38 +179,44 @@
     }
 
     function togglePre(el) {
-        var pre = jQuery(jQuery(el).parent().children("pre")[0]);
-        if (jQuery(el).hasClass("rolf-hidden")) {
+        var pre = $($(el).parent().children("pre")[0]);
+        if ($(el).hasClass("rolf-hidden")) {
             pre.show();
         } else {
             pre.hide();
         }
-        jQuery(el).toggleClass("rolf-hidden");
-        jQuery(el).toggleClass("rolf-showing");
+        $(el).toggleClass("rolf-hidden");
+        $(el).toggleClass("rolf-showing");
     }
 
     function hideContent(td) {
-        var h3 = jQuery(td).children("h3")[0];
-        jQuery(td).children("pre").hide();
-        jQuery(h3).addClass("rolf-hidden");
-        jQuery(h3).click(function () {togglePre(h3); return false; });
+        var h3 = $(td).children("h3")[0];
+        $(td).children("pre").hide();
+        $(h3).addClass("rolf-hidden");
+        $(h3).click(function () {togglePre(h3); return false; });
     }
 
     function initPush() {
-        jQuery("td.stdout").each(function () { hideContent(this); });
-        jQuery("td.stderr").each(function () { hideContent(this); });
-        jQuery("td.command").each(function () { hideContent(this); });
+        $("td.stdout").each(function () { hideContent(this); });
+        $("td.stderr").each(function () { hideContent(this); });
+        $("td.command").each(function () { hideContent(this); });
 
-        jQuery("tr.stage-row").each(function () {
-            var stage_id = jQuery(this).attr('id').split("-")[1];
+        $("tr.stage-row").each(function () {
+            var stage_id = $(this).attr('id').split("-")[1];
             stageIds.push(stage_id);
         });
 
-        var autorun = jQuery('#autorun');
+        var autorun = $('#autorun');
         if (autorun.val() === 'autorun') {
             runAllStages();
         }
     }
 
-    jQuery(document).ready(initPush);
+    var NewMainView = function (options) {
+        initPush();
+    };
+
+    $(document).ready(function () {
+        new NewMainView();
+    });
 }(jQuery));
