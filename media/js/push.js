@@ -2,7 +2,6 @@
     var M = MochiKit;
     var MA = MochiKit.Async;
     var MB = MochiKit.Base;
-    var MD = MochiKit.DOM;
     var $ = MochiKit.DOM.$;
     var runAll = false;
     var stageIds = [];
@@ -212,5 +211,5 @@
         }
     }
 
-    MD.addLoadEvent(initPush);
+    jQuery(document).ready(initPush);
 }(jQuery));
