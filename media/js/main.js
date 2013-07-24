@@ -2,19 +2,30 @@ require.config({
     paths: {
         // Major libraries
         jquery: 'libs/jquery/jquery-1.7.2.min',
-        underscore: 'libs/underscore/underscore-min',
-        backbone: 'libs/backbone/backbone-min',
+        underscore: 'libs/underscore/underscore-1.5.1-min',
+        backbone: 'libs/backbone/backbone-1.0.0-min',
 
         // Require.js plugins
         text: 'libs/require/text',
         order: 'libs/require/order'
     },
-    urlArgs: "bust=" +  (new Date()).getTime()
+    urlArgs: "bust=" +  (new Date()).getTime(),
+    shim: {
+        'backbone': {
+            deps: ['jquery', 'underscore'],
+            exports: 'Backbone'
+        },
+        'underscore': {
+            exports: '_'
+        }
+    }
 });
 
 require([
-		'jquery'
-    ], function ($) {
+    'jquery',
+    'underscore',
+    'backbone'
+], function ($, _, Backbone) {
         var runAll = false;
         var stageIds = [];
 
@@ -104,7 +115,25 @@ require([
             tr.append(td);
             return tr;
         }
-        
+
+        var PushStatusModel = Backbone.Model.extend({
+            defaults: {
+                'status': 'inprogress'
+            }
+        });
+        var PushStatusView = Backbone.View.extend({
+            template: _.template($('#push-status-template').html()),
+            el: $('#push-status'),
+
+            initialize: function () {
+                this.model.bind('change', this.render, this);
+            },
+
+            render: function () {
+                $(this.el).html(this.template(this.model.toJSON()));
+                return this;
+            }
+        });
         var setPushStatus = function (result) {
             $("#push-status")
                 .removeClass("inprogress")
