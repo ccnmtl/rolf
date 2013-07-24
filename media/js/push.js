@@ -52,13 +52,20 @@
     }
 
     function makeLogTR(log, result) {
-        var td = MD.TD({'colspan' : '2', 'class' : 'command'},
-                       [MD.H3(null, "Code"),
-                        MD.PRE(null, log.command)]);
+        var tr = jQuery("<tr>");
+        var td = jQuery("<td>", {
+            "colspan": "2",
+            "class": "command",
+        });
+        var h3 = jQuery("<h3>", {"text": "Code"});
+        var pre = jQuery("<pre>", {"text": log.command});
+        td.append(h3);
+        td.append(pre);
         if (result.status === "ok") {
             hideContent(td);
         }
-        return MD.TR({}, td);
+        tr.append(td);
+        return tr.get();
     }
 
     function makeStdoutTR(log, result) {
