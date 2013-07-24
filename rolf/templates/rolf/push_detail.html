@@ -2,9 +2,7 @@
 {% load perms %}
 {% block title %}{{object.name}}{% endblock %}
 {% block js %}
-<script type="text/javascript" src="/site_media/js/underscore-1.5.1-min.js"></script>
-<script type="text/javascript" src="/site_media/js/backbone-1.0.0-min.js"></script>
-<script type="text/javascript" src="/site_media/js/push.js"></script>
+<script data-main="/site_media/js/main" src="/site_media/js/libs/require/require.js"></script>
 {% endblock %}
 {% block content %}
 {% if_can_view object.deployment %}
