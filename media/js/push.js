@@ -1,8 +1,6 @@
 (function (jQuery) {
-    var M = MochiKit;
     var MA = MochiKit.Async;
     var MB = MochiKit.Base;
-    var $ = MochiKit.DOM.$;
     var runAll = false;
     var stageIds = [];
 
@@ -135,7 +133,7 @@
     }
 
     function stageResults(result) {
-        var stage_row = $("stage-" + result.stage_id);
+        var stage_row = jQuery("#stage-" + result.stage_id);
 
         var rows = makeLogRows(result);
         insertLogRows(stage_row, rows);
