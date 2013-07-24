@@ -78,12 +78,16 @@
     }
 
     function makeStderrTR(log, result) {
-        var stderrtd = MD.TD({'colspan' : '2', 'class' : 'stderr'},
-                             [MD.H3(null, "STDERR"), MD.PRE(null, log.stderr)]);
+        var tr = jQuery("<tr>");
+        var td = jQuery("<td>", {'colspan' : '2', 'class' : 'stderr'});
+        var h3 = jQuery("<h3>", {"text": "STDERR"});
+        var pre = jQuery("<pre>", {"text": log.stderr});
+        td.append(h3).append(pre);
         if (result.status === "ok") {
-            hideContent(stderrtd);
+            hideContent(td);
         }
-        return MD.TR({}, stderrtd);
+        tr.append(td);
+        return tr;
     }
 
     function setPushStatus(result) {
@@ -113,7 +117,7 @@
 
     function insertLogRows(stage_row, rows) {
         for (var i2 = rows.length - 1; i2 > -1; i2--) {
-            MD.insertSiblingNodesAfter(stage_row, rows[i2]);
+            jQuery(stage_row).after(jQuery(rows[i2]));
         }
     }
 
