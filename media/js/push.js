@@ -53,14 +53,10 @@
 
     function makeLogTR(log, result) {
         var tr = jQuery("<tr>");
-        var td = jQuery("<td>", {
-            "colspan": "2",
-            "class": "command",
-        });
+        var td = jQuery("<td>", {"colspan": "2", "class": "command"});
         var h3 = jQuery("<h3>", {"text": "Code"});
         var pre = jQuery("<pre>", {"text": log.command});
-        td.append(h3);
-        td.append(pre);
+        td.append(h3).append(pre);
         if (result.status === "ok") {
             hideContent(td);
         }
@@ -69,12 +65,16 @@
     }
 
     function makeStdoutTR(log, result) {
-        var stdouttd = MD.TD({'colspan' : '2', 'class' : 'stdout'},
-                             [MD.H3(null, "STDOUT"), MD.PRE(null, log.stdout)]);
+        var tr = jQuery("<tr>");
+        var td = jQuery("<td>", {'colspan' : '2', 'class' : 'stdout'});
+        var h3 = jQuery("<h3>", {"text": "STDOUT"});
+        var pre = jQuery("<pre>", {"text": log.stdout});
+        td.append(h3).append(pre);
         if (result.status === "ok") {
-            hideContent(stdouttd);
+            hideContent(td);
         }
-        return MD.TR({}, stdouttd);
+        tr.append(td);
+        return tr.get();
     }
 
     function makeStderrTR(log, result) {
