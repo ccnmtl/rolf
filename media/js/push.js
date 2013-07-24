@@ -1,6 +1,5 @@
 (function (jQuery) {
     var MA = MochiKit.Async;
-    var MB = MochiKit.Base;
     var runAll = false;
     var stageIds = [];
 
@@ -12,10 +11,8 @@
     var Stages = function () {
     };
     Stages.prototype.run = function (options) {
-        var d = MA.loadJSONDoc("stage/?" + MB.queryString({
-            'stage_id' : options.stage_id,
-            'rollback_id' : options.rollback_id
-        }));
+        var d = MA.loadJSONDoc("stage/?stage_id=" + options.stage_id +
+                               "&rollback_id=" + options.rollback_id);
         d.addCallback(options.success);
         d.addErrback(options.error);
     };
@@ -25,7 +22,7 @@
         var stage_id = options.stage_id;
         var rollback_id = "";
         if (jQuery('#rollback')) {
-            rollback_id = jQuery('#rollback').val();
+            rollback_id = jQuery('#rollback').val() || "";
         }
         stages.run(
             {
