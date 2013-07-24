@@ -1,5 +1,4 @@
 (function (jQuery) {
-    var MA = MochiKit.Async;
     var runAll = false;
     var stageIds = [];
 
@@ -11,10 +10,13 @@
     var Stages = function () {
     };
     Stages.prototype.run = function (options) {
-        var d = MA.loadJSONDoc("stage/?stage_id=" + options.stage_id +
-                               "&rollback_id=" + options.rollback_id);
-        d.addCallback(options.success);
-        d.addErrback(options.error);
+        var url = "stage/?stage_id=" + options.stage_id +
+            "&rollback_id=" + options.rollback_id;
+        jQuery.ajax({
+            url: url,
+            success: options.success,
+            error: options.error
+        });
     };
 
     var RunStageView = function (options) {
