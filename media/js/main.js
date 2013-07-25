@@ -36,14 +36,13 @@ require([
              PushStatusView, ResultView // views
             ) {
     var runAll = false;
-    var stageIds = [];
 
     var push_status = new PushStatus();
     var psv = new PushStatusView({model: push_status});
     
     function runAllStages() {
         runAll = true;
-        runStage(stageIds[0]);
+        runStage(getStageIds()[0]);
     }
     
     var Stages = function () {
@@ -69,7 +68,7 @@ require([
             stage_id: stage_id,
             push_status: push_status,
             run_all: runAll,
-            stage_ids: stageIds
+            stage_ids: getStageIds()
         });
 
         var rv = new ResultView({model: r});
@@ -101,12 +100,17 @@ require([
         $("td.command").each(function () { hideContent(this); });
     }
 
-    function initPush() {
-        hideOutput();
+    function getStageIds() {
+        var ids = [];
         $("tr.stage-row").each(function () {
             var stage_id = $(this).attr('id').split("-")[1];
-            stageIds.push(stage_id);
+            ids.push(stage_id);
         });
+        return ids;
+    }
+
+    function initPush() {
+        hideOutput();
         
         var autorun = $('#autorun');
         if (autorun.val() === 'autorun') {
