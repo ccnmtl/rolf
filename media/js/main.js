@@ -22,15 +22,19 @@ require.config({
 });
 
 require([
-    'jquery',
-    'underscore',
-    'backbone',
-    'models/pushstatus',
-    'models/log',
-    'models/result',
+    // common
+    'jquery', 'underscore', 'backbone',
+    // models
+    'models/pushstatus', 'models/log', 'models/result',
+    // utils
     'utils/hidecontent',
-    'views/pushstatus'
-], function ($, _, Backbone, PushStatus, Log, Result, hideContent, PushStatusView) {
+    // views
+    'views/pushstatus', 'views/result'
+], function ($, _, Backbone, // common
+             PushStatus, Log, Result, // models
+             hideContent, // utils
+             PushStatusView, ResultView // views
+            ) {
     var runAll = false;
     var stageIds = [];
 
@@ -91,6 +95,7 @@ require([
                             stage_ids: stageIds,
                             end_time: result.end_time
                            });
+        var rv = new ResultView({model: r});
         r.insertLogRows();
         r.setStageClass();
         r.displayExecuteTime();
