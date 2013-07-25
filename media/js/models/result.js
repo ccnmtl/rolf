@@ -58,13 +58,16 @@ define([
                 .set({status: this.status()});
         },
 
-        nextStageOrFinish: function (runStage) {
-            var nextId = this.getNextStageId();
-            if (nextId !== -1) {
-                runStage(nextId);
-            } else {
+        noMoreStages: function () {
+            return this.getNextStageId() === -1;
+        },
+
+        nextStageOrFinish: function (runStageCallback) {
+            if (this.noMoreStages()) {
                 this.setPushStatus();
+                return;
             }
+            runStageCallback(this.getNextStageId());
         },
 
         getNextStageId: function () {
@@ -103,7 +106,7 @@ define([
                 return;
             } 
             if (!this.get('run_all')) {
-                if (this.getNextStageId() === -1) {
+                if (this.noMoreStages()) {
                     // last stage
                     this.setPushStatus();
                     $('#runall-button').attr("disabled", "disabled");
