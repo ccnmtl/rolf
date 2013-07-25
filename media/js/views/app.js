@@ -70,12 +70,6 @@ define([
         alert("stage failed: " + result);
     }
 
-    function hideOutput() {
-        $("td.stdout").each(function () { hideContent(this); });
-        $("td.stderr").each(function () { hideContent(this); });
-        $("td.command").each(function () { hideContent(this); });
-    }
-
     function getStageIds() {
         var ids = [];
         $("tr.stage-row").each(function () {
@@ -87,11 +81,17 @@ define([
 
     var AppView = Backbone.View.extend({
         'initialize': function () {
-            hideOutput();
+            this.hideOutput();
         
             if ($('#autorun').val() === 'autorun') {
                 runAllStages();
             }
+        },
+
+        hideOutput: function () {
+            $("td.stdout").each(function () { hideContent(this); });
+            $("td.stderr").each(function () { hideContent(this); });
+            $("td.command").each(function () { hideContent(this); });
         }
     });
     return AppView;
