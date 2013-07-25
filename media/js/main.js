@@ -79,31 +79,25 @@ require([
     var NewLogView = function (options) {
     };
     
-    function makeLogTR(log, result) {
-        var template = _.template($('#command-template').html())
-        var tr = $(template({command: log.command}));
+    function makeTR(log, result, template_id, data) {
+        var template = _.template($(template_id).html());
+        var tr = $(template(data));
         if (result.status === "ok") {
             hideContent(tr.children("td"));
         }
         return tr;
+    }
+
+    function makeLogTR(log, result) {
+        return makeTR(log, result, "#command-template", {command: log.command});
     }
     
     function makeStdoutTR(log, result) {
-        var template = _.template($('#stdout-template').html())
-        var tr = $(template({stdout: log.stdout}));
-        if (result.status === "ok") {
-            hideContent(tr.children("td"));
-        }
-        return tr;
+        return makeTR(log, result, "#stdout-template", {stdout: log.stdout});
     }
     
     function makeStderrTR(log, result) {
-        var template = _.template($('#stderr-template').html())
-        var tr = $(template({stderr: log.stderr}));
-        if (result.status === "ok") {
-            hideContent(tr.children("td"));
-        }
-        return tr;
+        return makeTR(log, result, "#stderr-template", {stderr: log.stderr});
     }
     
     var push_status = new PushStatus();
