@@ -35,7 +35,7 @@ define([
             this.model.stageElement()
                 .removeClass("inprogress")
                 .removeClass("unknown")
-                .addClass(this.model.status());
+                .addClass(this.model.getStatus());
         },
 
         makeLogRows: function () {

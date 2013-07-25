@@ -8,11 +8,11 @@ define([
         logs: [],
         status: "inprogress",
 
-        stageElement: function() {
+        stageElement: function () {
             return $("#stage-" + this.get('stage_id'));
         },
 
-        status: function() {
+        getStatus: function () {
             return this.get('status');
         },
 
@@ -27,12 +27,12 @@ define([
 
         // are we done or might there be more stages to run?
         continuePush: function () {
-            return this.get('run_all') && (this.status() !== "failed");
+            return this.get('run_all') && (this.getStatus() !== "failed");
         },
 
-        setPushStatus: function() {
+        setPushStatus: function () {
             this.get('push_status')
-                .set({status: this.status()});
+                .set({status: this.getStatus()});
         },
 
         noMoreStages: function () {
@@ -66,10 +66,10 @@ define([
             if (this.continuePush()) {
                 this.nextStageOrFinish(runStage);
             }
-            if (this.status() === "failed") {
+            if (this.getStatus() === "failed") {
                 this.setPushStatus();
                 return;
-            } 
+            }
             if (!this.get('run_all')) {
                 if (this.noMoreStages()) {
                     // last stage
