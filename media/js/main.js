@@ -29,11 +29,11 @@ require([
     // utils
     'utils/hidecontent',
     // views
-    'views/pushstatus', 'views/result'
+    'views/app', 'views/pushstatus', 'views/result'
 ], function ($, _, Backbone, // common
              PushStatus, Result, // models
              hideContent, // utils
-             PushStatusView, ResultView // views
+             App, PushStatusView, ResultView // views
             ) {
     var runAll = false;
 
