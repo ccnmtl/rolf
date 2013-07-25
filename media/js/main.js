@@ -81,7 +81,7 @@ require([
     
     function makeTR(log, result, template_id, data) {
         var template = _.template($(template_id).html());
-        var tr = $(template(data));
+        var tr = $(template({log: log}));
         if (result.status === "ok") {
             hideContent(tr.children("td"));
         }
@@ -89,15 +89,15 @@ require([
     }
 
     function makeLogTR(log, result) {
-        return makeTR(log, result, "#command-template", {command: log.command});
+        return makeTR(log, result, "#command-template");
     }
     
     function makeStdoutTR(log, result) {
-        return makeTR(log, result, "#stdout-template", {stdout: log.stdout});
+        return makeTR(log, result, "#stdout-template");
     }
     
     function makeStderrTR(log, result) {
-        return makeTR(log, result, "#stderr-template", {stderr: log.stderr});
+        return makeTR(log, result, "#stderr-template");
     }
     
     var push_status = new PushStatus();
