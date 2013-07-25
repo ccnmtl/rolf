@@ -26,8 +26,11 @@ require([
     'underscore',
     'backbone',
     'models/pushstatus',
-    'views/pushstatus'
-], function ($, _, Backbone, PushStatus, PushStatusView) {
+    'models/log',
+    'utils/hidecontent',
+    'views/pushstatus',
+    'views/logcommand'
+], function ($, _, Backbone, PushStatus, Log, hideContent, PushStatusView, LogCommandView) {
     var runAll = false;
     var stageIds = [];
     
@@ -75,10 +78,7 @@ require([
     function myErrback(result) {
         alert("stage failed: " + result);
     }
-    
-    var NewLogView = function (options) {
-    };
-    
+
     function makeTR(log, result, template_id, data) {
         var template = _.template($(template_id).html());
         var tr = $(template({log: log}));
@@ -89,7 +89,9 @@ require([
     }
 
     function makeLogTR(log, result) {
-        return makeTR(log, result, "#command-template");
+        var l = new Log({log: log, result: result});
+        var lv = new LogCommandView({model: l});
+        return lv.render().$el;
     }
     
     function makeStdoutTR(log, result) {
@@ -182,24 +184,6 @@ require([
         }
         // reached the end without hitting it
         return -1;
-    }
-    
-    function togglePre(el) {
-        var pre = $($(el).parent().children("pre")[0]);
-        if ($(el).hasClass("rolf-hidden")) {
-            pre.show();
-        } else {
-            pre.hide();
-        }
-        $(el).toggleClass("rolf-hidden");
-        $(el).toggleClass("rolf-showing");
-    }
-    
-    function hideContent(td) {
-        var h3 = $(td).children("h3")[0];
-        $(td).children("pre").hide();
-        $(h3).addClass("rolf-hidden");
-        $(h3).click(function () {togglePre(h3); return false; });
     }
     
     function initPush() {
