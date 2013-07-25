@@ -8,6 +8,34 @@
   <div id="push-status" class="<%= status %>"><%= status %></div>
 </script>
 
+<script type="text/template" id="command-template">
+<tr>
+	<td colspan="2" class="command">
+		<h3>Code</h3>
+		<pre><%= command %></pre>
+	</td>
+</tr>
+</script>
+
+<script type="text/template" id="stdout-template">
+<tr>
+	<td colspan="2" class="stdout">
+		<h3>STDOUT</h3>
+		<pre><%= stdout %></pre>
+	</td>
+</tr>
+</script>
+
+<script type="text/template" id="stderr-template">
+<tr>
+	<td colspan="2" class="stderr">
+		<h3>STDERR</h3>
+		<pre><%= stderr %></pre>
+	</td>
+</tr>
+</script>
+
+
 {% endblock %}
 {% block content %}
 {% if_can_view object.deployment %}

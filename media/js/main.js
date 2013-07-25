@@ -80,41 +80,29 @@ require([
     };
     
     function makeLogTR(log, result) {
-        var tr = $("<tr>");
-        var td = $("<td>", {"colspan": "2", "class": "command"});
-        var h3 = $("<h3>", {"text": "Code"});
-        var pre = $("<pre>", {"text": log.command});
-        td.append(h3).append(pre);
+        var template = _.template($('#command-template').html())
+        var tr = $(template({command: log.command}));
         if (result.status === "ok") {
-            hideContent(td);
+            hideContent(tr.children("td"));
         }
-        tr.append(td);
-        return tr.get();
+        return tr;
     }
     
     function makeStdoutTR(log, result) {
-        var tr = $("<tr>");
-        var td = $("<td>", {'colspan' : '2', 'class' : 'stdout'});
-        var h3 = $("<h3>", {"text": "STDOUT"});
-        var pre = $("<pre>", {"text": log.stdout});
-        td.append(h3).append(pre);
+        var template = _.template($('#stdout-template').html())
+        var tr = $(template({stdout: log.stdout}));
         if (result.status === "ok") {
-            hideContent(td);
+            hideContent(tr.children("td"));
         }
-        tr.append(td);
-        return tr.get();
+        return tr;
     }
     
     function makeStderrTR(log, result) {
-        var tr = $("<tr>");
-        var td = $("<td>", {'colspan' : '2', 'class' : 'stderr'});
-        var h3 = $("<h3>", {"text": "STDERR"});
-        var pre = $("<pre>", {"text": log.stderr});
-        td.append(h3).append(pre);
+        var template = _.template($('#stderr-template').html())
+        var tr = $(template({stderr: log.stderr}));
         if (result.status === "ok") {
-            hideContent(td);
+            hideContent(tr.children("td"));
         }
-        tr.append(td);
         return tr;
     }
     
