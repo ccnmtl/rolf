@@ -31,10 +31,83 @@ define([
             }
             return rows;
         },
-        insertLogRows: function (stage_row) {
+
+        stageElement: function() {
+            return $("#stage-" + this.get('stage_id'));
+        },
+
+        status: function() {
+            return this.get('status');
+        },
+
+        insertLogRows: function () {
+            var stage_row = this.stageElement();
             var rows = this.makeLogRows();
             for (var i2 = rows.length - 1; i2 > -1; i2--) {
-                $(stage_row).after($(rows[i2]));
+                stage_row.after($(rows[i2]));
+            }
+        },
+
+        // are we done or might there be more stages to run?
+        continuePush: function () {
+            return this.get('run_all') && (this.status() !== "failed");
+        },
+
+        setPushStatus: function() {
+            this.get('push_status')
+                .set({status: this.status()});
+        },
+
+        nextStageOrFinish: function (runStage) {
+            var nextId = this.getNextStageId();
+            if (nextId !== -1) {
+                runStage(nextId);
+            } else {
+                this.setPushStatus();
+            }
+        },
+
+        getNextStageId: function () {
+            var current = this.get('stage_id');
+            var stageIds = this.get('stage_ids');
+            if (stageIds.length < 2) {
+                return -1;
+            }
+            for (var i = 0; i < stageIds.length - 1; i++) {
+                if (stageIds[i] == current) {
+                    return stageIds[i + 1];
+                }
+            }
+            // reached the end without hitting it
+            return -1;
+        },
+
+        setStageClass: function () {
+            this.stageElement()
+                .removeClass("inprogress")
+                .removeClass("unknown")
+                .addClass(this.status());
+        },
+
+        displayExecuteTime: function() {
+            $("#execute-" + this.get('stage_id'))
+                .replaceWith($("<span/>", {'text': this.get('end_time') }));
+        },
+
+        continueOrCleanUp: function (runStage) {
+            if (this.continuePush()) {
+                this.nextStageOrFinish(runStage);
+            }
+            if (this.status() === "failed") {
+                this.setPushStatus();
+                return;
+            } 
+            if (!this.get('run_all')) {
+                if (this.getNextStageId() === -1) {
+                    // last stage
+                    this.setPushStatus();
+                    $('#runall-button').attr("disabled", "disabled");
+                }
             }
         }
     });
