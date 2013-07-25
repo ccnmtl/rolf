@@ -85,18 +85,6 @@ define([
             return -1;
         },
 
-        setStageClass: function () {
-            this.stageElement()
-                .removeClass("inprogress")
-                .removeClass("unknown")
-                .addClass(this.status());
-        },
-
-        displayExecuteTime: function() {
-            $("#execute-" + this.get('stage_id'))
-                .replaceWith($("<span/>", {'text': this.get('end_time') }));
-        },
-
         continueOrCleanUp: function (runStage) {
             if (this.continuePush()) {
                 this.nextStageOrFinish(runStage);

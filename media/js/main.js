@@ -97,8 +97,8 @@ require([
                            });
         var rv = new ResultView({model: r});
         r.insertLogRows();
-        r.setStageClass();
-        r.displayExecuteTime();
+        rv.setStageClass();
+        rv.displayExecuteTime();
         r.continueOrCleanUp(runStage);
     }
     
