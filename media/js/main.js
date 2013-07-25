@@ -112,8 +112,7 @@ require([
     function initPush() {
         hideOutput();
         
-        var autorun = $('#autorun');
-        if (autorun.val() === 'autorun') {
+        if ($('#autorun').val() === 'autorun') {
             runAllStages();
         }
     }
