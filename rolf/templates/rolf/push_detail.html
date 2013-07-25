@@ -5,7 +5,7 @@
 <script data-main="/site_media/js/main" src="/site_media/js/libs/require/require.js"></script>
 
 <script type="text/template" id="push-status-template">
-  <div class="<%= status %=>"><%= status %=></div>
+  <div id="push-status" class="<%= status %>"><%= status %></div>
 </script>
 
 {% endblock %}
@@ -26,7 +26,9 @@
 <p>Started at <b>{{object.start_time}}</b>
   by <b>{{object.user.first_name}} {{object.user.last_name}}</b></p>
 
-<div id="push-status" class="{{object.status}}">{{object.status}}</div>
+<div id="ps-app">
+<div id="push-status" class="inprogress">In Progress</div>
+</div>
 
 {% if not object.pushstage_set.count %}
 <div>

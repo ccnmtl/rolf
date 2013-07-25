@@ -25,8 +25,9 @@ require([
     'jquery',
     'underscore',
     'backbone',
-    'models/pushstatus'
-], function ($, _, Backbone, PushStatus) {
+    'models/pushstatus',
+    'views/pushstatus'
+], function ($, _, Backbone, PushStatus, PushStatusView) {
         var runAll = false;
         var stageIds = [];
 
@@ -117,26 +118,8 @@ require([
             return tr;
         }
 
-        var PushStatusView = Backbone.View.extend({
-            template: _.template($('#push-status-template').html()),
-            el: $('#push-status'),
-
-            initialize: function () {
-                this.model.bind('change', this.render, this);
-            },
-
-            render: function () {
-                $(this.el).html(this.template(this.model.toJSON()));
-                return this;
-            }
-        });
-        var psm = new PushStatusView({model: new PushStatus});
-        var setPushStatus = function (result) {
-            $("#push-status")
-                .removeClass("inprogress")
-                .addClass(result.status)
-                .text(result.status);
-        };
+        var push_status = new PushStatus();
+        var psm = new PushStatusView({model: push_status});
         
         function makeLogRows(result) {
             var rows = [];
@@ -172,7 +155,7 @@ require([
             if (nextId !== -1) {
                 runStage(nextId);
             } else {
-                setPushStatus(result);
+                push_status.set({status: result.status});
             }
         }
         
@@ -194,12 +177,12 @@ require([
                 nextStageOrFinish(result);
             }
             if (result.status === "failed") {
-                setPushStatus(result);
+                push_status.set({status: result.status});
             } else {
                 if (!runAll) {
                     if (getNextStageId(result.stage_id) === -1) {
                         // last stage
-                        setPushStatus(result);
+                        push_status.set({status: result.status});
                         $('#runall-button').attr("disabled", "disabled");
                     }
                 }
