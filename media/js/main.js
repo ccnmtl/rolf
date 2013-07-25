@@ -29,8 +29,11 @@ require([
     'models/log',
     'utils/hidecontent',
     'views/pushstatus',
-    'views/logcommand'
-], function ($, _, Backbone, PushStatus, Log, hideContent, PushStatusView, LogCommandView) {
+    'views/logcommand',
+    'views/logstderr',
+    'views/logstdout'
+], function ($, _, Backbone, PushStatus, Log, hideContent, PushStatusView, LogCommandView,
+             LogStderrView, LogStdoutView) {
     var runAll = false;
     var stageIds = [];
     
@@ -79,29 +82,6 @@ require([
         alert("stage failed: " + result);
     }
 
-    function makeTR(log, result, template_id, data) {
-        var template = _.template($(template_id).html());
-        var tr = $(template({log: log}));
-        if (result.status === "ok") {
-            hideContent(tr.children("td"));
-        }
-        return tr;
-    }
-
-    function makeLogTR(log, result) {
-        var l = new Log({log: log, result: result});
-        var lv = new LogCommandView({model: l});
-        return lv.render().$el;
-    }
-    
-    function makeStdoutTR(log, result) {
-        return makeTR(log, result, "#stdout-template");
-    }
-    
-    function makeStderrTR(log, result) {
-        return makeTR(log, result, "#stderr-template");
-    }
-    
     var push_status = new PushStatus();
     var psm = new PushStatusView({model: push_status});
     
@@ -110,14 +90,18 @@ require([
         
         for (var i = 0; i < result.logs.length; i++) {
             var log = result.logs[i];
+            var l = new Log({log: log, result: result});
             if (log.command) {
-                rows.push(makeLogTR(log, result));
+                var lvc = new LogCommandView({model: l});
+                rows.push(lvc.render().$el);
             }
             if (log.stdout) {
-                rows.push(makeStdoutTR(log, result));
+                var lvo = new LogStdoutView({model: l});
+                rows.push(lvo.render().$el);
             }
             if (log.stderr) {
-                rows.push(makeStderrTR(log, result));
+                var lve = new LogStderrView({model: l});
+                rows.push(lve.render().$el);
             }
         }
         return rows;
