@@ -25,13 +25,13 @@ require([
     // common
     'jquery', 'underscore', 'backbone',
     // models
-    'models/pushstatus', 'models/log', 'models/result',
+    'models/pushstatus', 'models/result',
     // utils
     'utils/hidecontent',
     // views
     'views/pushstatus', 'views/result'
 ], function ($, _, Backbone, // common
-             PushStatus, Log, Result, // models
+             PushStatus, Result, // models
              hideContent, // utils
              PushStatusView, ResultView // views
             ) {
@@ -65,12 +65,15 @@ require([
         if ($('#rollback')) {
             rollback_id = $('#rollback').val() || "";
         }
-        var r = new Result({push_status: push_status,
-                            run_all: runAll,
-                            stage_ids: stageIds
-                           });
+        var r = new Result({
+            stage_id: stage_id,
+            push_status: push_status,
+            run_all: runAll,
+            stage_ids: stageIds
+        });
 
         var rv = new ResultView({model: r});
+        rv.markInProgress();
 
         stages.run(
             {
@@ -81,9 +84,6 @@ require([
                 },
                 'error': myErrback
             });
-        var stage_row = $("#stage-" + stage_id);
-        stage_row.toggleClass("unknown");
-        stage_row.toggleClass("inprogress");
     };
     
     function runStage(stage_id) {
@@ -95,11 +95,14 @@ require([
         alert("stage failed: " + result);
     }
 
-    function initPush() {
+    function hideOutput() {
         $("td.stdout").each(function () { hideContent(this); });
         $("td.stderr").each(function () { hideContent(this); });
         $("td.command").each(function () { hideContent(this); });
-        
+    }
+
+    function initPush() {
+        hideOutput();
         $("tr.stage-row").each(function () {
             var stage_id = $(this).attr('id').split("-")[1];
             stageIds.push(stage_id);

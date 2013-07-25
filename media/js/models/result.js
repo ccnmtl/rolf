@@ -20,7 +20,6 @@ define([
             this.set({
                 logs: result.logs,
                 status: result.status,
-                stage_id: result.stage_id,
                 end_time: result.end_time
             });
             this.continueOrCleanUp(runStageCallback);

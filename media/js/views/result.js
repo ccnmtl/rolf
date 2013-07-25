@@ -20,7 +20,13 @@ define([
             return this;
         },
 
-        displayExecuteTime: function() {
+        markInProgress: function () {
+            var stage_row = this.model.stageElement();
+            stage_row.toggleClass("unknown");
+            stage_row.toggleClass("inprogress");
+        },
+
+        displayExecuteTime: function () {
             $("#execute-" + this.model.get('stage_id'))
                 .replaceWith($("<span/>", {'text': this.model.get('end_time') }));
         },
