@@ -16,6 +16,16 @@ define([
             return this.get('status');
         },
 
+        handleResults: function (result, runStageCallback) {
+            this.set({
+                logs: result.logs,
+                status: result.status,
+                stage_id: result.stage_id,
+                end_time: result.end_time
+            });
+            this.continueOrCleanUp(runStageCallback);
+        },
+
         // are we done or might there be more stages to run?
         continuePush: function () {
             return this.get('run_all') && (this.status() !== "failed");

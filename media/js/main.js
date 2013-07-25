@@ -77,13 +77,7 @@ require([
                 'stage_id': stage_id,
                 'rollback_id': rollback_id,
                 'success': function (result) {
-                    r.set({
-                        logs: result.logs,
-                        status: result.status,
-                        stage_id: result.stage_id,
-                        end_time: result.end_time
-                    });
-                    r.continueOrCleanUp(runStage);
+                    r.handleResults(result, runStage);
                 },
                 'error': myErrback
             });
