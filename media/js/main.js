@@ -109,16 +109,12 @@ require([
         return ids;
     }
 
-    function initPush() {
+    var NewMainView = function (options) {
         hideOutput();
         
         if ($('#autorun').val() === 'autorun') {
             runAllStages();
         }
-    }
-    
-    var NewMainView = function (options) {
-        initPush();
     };
     
     $(document).ready(function () {
