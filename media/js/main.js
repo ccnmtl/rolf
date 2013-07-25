@@ -27,13 +27,10 @@ require([
     'backbone',
     'models/pushstatus',
     'models/log',
+    'models/result',
     'utils/hidecontent',
-    'views/pushstatus',
-    'views/logcommand',
-    'views/logstderr',
-    'views/logstdout'
-], function ($, _, Backbone, PushStatus, Log, hideContent, PushStatusView, LogCommandView,
-             LogStderrView, LogStdoutView) {
+    'views/pushstatus'
+], function ($, _, Backbone, PushStatus, Log, Result, hideContent, PushStatusView) {
     var runAll = false;
     var stageIds = [];
     
@@ -77,42 +74,14 @@ require([
         var stages = new Stages();
         new RunStageView({stages: stages, stage_id: stage_id});
     }
-    
+
     function myErrback(result) {
         alert("stage failed: " + result);
     }
 
     var push_status = new PushStatus();
     var psm = new PushStatusView({model: push_status});
-    
-    function makeLogRows(result) {
-        var rows = [];
-        
-        for (var i = 0; i < result.logs.length; i++) {
-            var log = result.logs[i];
-            var l = new Log({log: log, result: result});
-            if (log.command) {
-                var lvc = new LogCommandView({model: l});
-                rows.push(lvc.render().$el);
-            }
-            if (log.stdout) {
-                var lvo = new LogStdoutView({model: l});
-                rows.push(lvo.render().$el);
-            }
-            if (log.stderr) {
-                var lve = new LogStderrView({model: l});
-                rows.push(lve.render().$el);
-            }
-        }
-        return rows;
-    }
-    
-    function insertLogRows(stage_row, rows) {
-        for (var i2 = rows.length - 1; i2 > -1; i2--) {
-            $(stage_row).after($(rows[i2]));
-        }
-    }
-    
+
     // are we done or might there be more stages to run?
     function continuePush(result) {
         return runAll && (result.status !== "failed");
@@ -130,8 +99,9 @@ require([
     function stageResults(result) {
         var stage_row = $("#stage-" + result.stage_id);
         
-        var rows = makeLogRows(result);
-        insertLogRows(stage_row, rows);
+        var r = new Result({logs: result.logs,
+                            status: result.status});
+        r.insertLogRows(stage_row);
         
         $("#stage-" + result.stage_id)
             .removeClass("inprogress")

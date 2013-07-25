@@ -12,7 +12,7 @@ define([
         },
         render: function () {
             this.$el.html(this.template(this.model.toJSON()));
-            if (this.model.get('result').status === "ok") {
+            if (this.model.get('result').get('status') === "ok") {
                 hideContent(this.$('td'));
             }
             return this;
