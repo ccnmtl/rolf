@@ -65,11 +65,26 @@ require([
         if ($('#rollback')) {
             rollback_id = $('#rollback').val() || "";
         }
+        var r = new Result({push_status: push_status,
+                            run_all: runAll,
+                            stage_ids: stageIds
+                           });
+
+        var rv = new ResultView({model: r});
+
         stages.run(
             {
                 'stage_id': stage_id,
                 'rollback_id': rollback_id,
-                'success': stageResults,
+                'success': function (result) {
+                    r.set({
+                        logs: result.logs,
+                        status: result.status,
+                        stage_id: result.stage_id,
+                        end_time: result.end_time
+                    });
+                    r.continueOrCleanUp(runStage);
+                },
                 'error': myErrback
             });
         var stage_row = $("#stage-" + stage_id);
@@ -86,22 +101,6 @@ require([
         alert("stage failed: " + result);
     }
 
-    function stageResults(result) {
-        var r = new Result({logs: result.logs,
-                            status: result.status,
-                            stage_id: result.stage_id,
-                            push_status: push_status,
-                            run_all: runAll,
-                            stage_ids: stageIds,
-                            end_time: result.end_time
-                           });
-        var rv = new ResultView({model: r});
-        r.insertLogRows();
-        rv.setStageClass();
-        rv.displayExecuteTime();
-        r.continueOrCleanUp(runStage);
-    }
-    
     function initPush() {
         $("td.stdout").each(function () { hideContent(this); });
         $("td.stderr").each(function () { hideContent(this); });
