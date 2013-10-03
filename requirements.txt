@@ -21,7 +21,7 @@ logilab-astng==0.24.1
 pylint==0.26.0
 
 factory_boy==2.1.1
-djangowind==0.10.4
+djangowind==0.11.0
 django-extensions==0.4.1
 django-munin==0.1.1
 django-statsd-mozilla==0.3.3
