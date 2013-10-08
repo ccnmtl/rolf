@@ -155,3 +155,8 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
         pass
 
 API_SECRET = "YOU MUST SET THIS IN A local_settings.py FILE"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+}

@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import patterns, include
 from django.contrib import admin
 from django.conf import settings
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
+from django.views.generic.edit import DeleteView
 import os.path
 admin.autodiscover()
 from rolf.rolf_main.models import Category, Application, Deployment
@@ -56,17 +57,15 @@ urlpatterns = patterns(
      'rolf.rolf_main.views.generic_detail', category_info_dict),
     (r'^category/(?P<object_id>\d+)/add_application/$',
      'rolf.rolf_main.views.add_application'),
-    (r'^category/(?P<object_id>\d+)/delete/$',
-     'django.views.generic.create_update.delete_object',
-     dict(model=Category, post_delete_redirect="/")),
+    (r'^category/(?P<pk>\d+)/delete/$',
+     DeleteView.as_view(model=Category, success_url="/")),
 
     (r'^application/(?P<object_id>\d+)/$',
      'rolf.rolf_main.views.generic_detail', application_info_dict),
     (r'^application/(?P<object_id>\d+)/add_deployment/$',
      'rolf.rolf_main.views.add_deployment'),
-    (r'^application/(?P<object_id>\d+)/delete/$',
-     'django.views.generic.create_update.delete_object',
-     dict(model=Application, post_delete_redirect="/")),
+    (r'^application/(?P<pk>\d+)/delete/$',
+     DeleteView.as_view(model=Application, success_url="/")),
 
     (r'^deployment/(?P<object_id>\d+)/$',
      'rolf.rolf_main.views.generic_detail', deployment_info_dict),
@@ -94,33 +93,29 @@ urlpatterns = patterns(
      'rolf.rolf_main.views.rollback'),
     (r'^deployment/(?P<object_id>\d+)/reorder_stages/$',
      'rolf.rolf_main.views.reorder_stages'),
-    (r'^deployment/(?P<object_id>\d+)/delete/$',
-     'django.views.generic.create_update.delete_object',
-     dict(model=Deployment, post_delete_redirect="/")),
+    (r'^deployment/(?P<pk>\d+)/delete/$',
+     DeleteView.as_view(model=Deployment, success_url="/")),
 
     (r'^push/(?P<object_id>\d+)/$',
      'rolf.rolf_main.views.generic_detail', push_info_dict),
     (r'^push/(?P<object_id>\d+)/stage/$', 'rolf.rolf_main.views.stage'),
-    (r'^push/(?P<object_id>\d+)/delete/$',
-     'django.views.generic.create_update.delete_object',
-     dict(model=Push, post_delete_redirect="/")),
+    (r'^push/(?P<pk>\d+)/delete/$',
+     DeleteView.as_view(model=Push, success_url="/")),
 
     (r'^cookbook/$', 'rolf.rolf_main.views.cookbook'),
     (r'^cookbook/(?P<object_id>\d+)/$',
      'rolf.rolf_main.views.generic_detail', recipe_info_dict),
     (r'^cookbook/(?P<object_id>\d+)/edit/$',
      'rolf.rolf_main.views.edit_recipe'),
-    (r'^cookbook/(?P<object_id>\d+)/delete/$',
-     'django.views.generic.create_update.delete_object',
-     dict(model=Recipe, post_delete_redirect="/cookbook/")),
+    (r'^cookbook/(?P<pk>\d+)/delete/$',
+     DeleteView.as_view(model=Recipe, success_url="/cookbook/")),
     (r'^cookbook/add/$', 'rolf.rolf_main.views.add_cookbook_recipe'),
 
     (r'^stage/(?P<object_id>\d+)/$',
      'rolf.rolf_main.views.generic_detail', stage_info_dict),
     (r'^stage/(?P<object_id>\d+)/edit/$', 'rolf.rolf_main.views.edit_stage'),
-    (r'^stage/(?P<object_id>\d+)/delete/$',
-     'django.views.generic.create_update.delete_object',
-     dict(model=Stage, post_delete_redirect="/")),
+    (r'^stage/(?P<pk>\d+)/delete/$',
+     DeleteView.as_view(model=Stage, success_url="/")),
 
     (r'^api/1.0/get_key/$',
      'rolf.rolf_main.views.get_api_key'),
@@ -135,7 +130,7 @@ urlpatterns = patterns(
     (r'^stats/total_pushes/$', 'rolf.rolf_main.views.total_pushes'),
     (r'^stats/current_pushes/$', 'rolf.rolf_main.views.current_pushes'),
     ('^munin/', include('munin.urls')),
-    (r'^stats/', direct_to_template, {'template': 'stats.html'}),
+    (r'^stats/$', TemplateView.as_view(template_name="stats.html")),
     (r'smoketest/', include('smoketest.urls')),
     (r'^site_media/(?P<path>.*)$',
      'django.views.static.serve', {'document_root': site_media_root}),

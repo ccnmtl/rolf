@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.test.client import Client
 from factories import UserFactory, CategoryFactory, ApplicationFactory
 from factories import DeploymentFactory
+from rolf.rolf_main.models import Category
 
 
 class SimpleTest(TestCase):
@@ -49,6 +50,11 @@ class CrudTest(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get("/")
         self.assertTrue("test category" in r.content)
+        category = Category.objects.get(name="test category")
+        r = self.c.post("/category/%d/delete/" % category.id, dict())
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get("/")
+        self.assertFalse("test category" in r.content)
 
     def test_application_crud(self):
         c = CategoryFactory()
