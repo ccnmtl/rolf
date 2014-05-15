@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, include
+from django.conf.urls import patterns, include
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
@@ -127,9 +127,6 @@ urlpatterns = patterns(
     accounts_tuple,
     (r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     (r'^admin/', include(admin.site.urls)),
-    (r'^stats/total_pushes/$', 'rolf.rolf_main.views.total_pushes'),
-    (r'^stats/current_pushes/$', 'rolf.rolf_main.views.current_pushes'),
-    ('^munin/', include('munin.urls')),
     (r'^stats/$', TemplateView.as_view(template_name="stats.html")),
     (r'smoketest/', include('smoketest.urls')),
     (r'^site_media/(?P<path>.*)$',

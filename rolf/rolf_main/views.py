@@ -6,8 +6,6 @@ from django.shortcuts import render_to_response, get_object_or_404
 from models import Category, Push, Application, Deployment, Permission
 from models import Setting, Flag, Recipe, Stage, FlagValue
 from simplejson import dumps
-from munin.helpers import muninview
-from datetime import datetime, timedelta
 from django_statsd.clients import statsd
 from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer
 from itsdangerous import BadSignature, SignatureExpired
@@ -432,19 +430,3 @@ def api_run_stage(request, push_id, stage_id):
                    end_time=str(pushstage.end_time),
                    stage_id=pushstage.stage.id)),
         mimetype='application/json')
-
-
-@muninview(config="""graph_title Total Pushes
-graph_vlabel pushes
-graph_category rolf""")
-def total_pushes(request):
-    return [("pushes", Push.objects.all().count())]
-
-
-@muninview(config="""graph_title Pushes
-graph_vlabel pushes
-graph_category rolf""")
-def current_pushes(request):
-    return [("pushes",
-             Push.objects.filter(start_time__gt=datetime.now() -
-                                 timedelta(minutes=6)).count())]

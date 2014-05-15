@@ -45,7 +45,6 @@ NOSE_ARGS = [
 JENKINS_TASKS = (
     'django_jenkins.tasks.run_pylint',
     'django_jenkins.tasks.with_coverage',
-    'django_jenkins.tasks.django_tests',
     'django_jenkins.tasks.run_pep8',
     'django_jenkins.tasks.run_pyflakes',
 )
@@ -98,10 +97,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'django.contrib.markup',
     'django.contrib.admin',
     'django_extensions',
-    'munin',
     'rolf.rolf_main',
     'django_statsd',
     'south',
@@ -109,19 +106,18 @@ INSTALLED_APPS = [
     'smoketest',
     'debug_toolbar',
     'django_jenkins',
+    'django_markwhat',
 ]
 
 INTERNAL_IPS = ('127.0.0.1', )
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',
     'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
     'debug_toolbar.panels.headers.HeaderDebugPanel',
     'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
     'debug_toolbar.panels.template.TemplateDebugPanel',
     'debug_toolbar.panels.sql.SQLDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
-    'debug_toolbar.panels.logger.LoggingPanel',
 )
 
 STATSD_CLIENT = 'statsd.client'
@@ -130,8 +126,6 @@ STATSD_HOST = 'localhost'
 STATSD_PORT = 8125
 if 'test' in sys.argv or 'jenkins' in sys.argv:
     STATSD_HOST = '127.0.0.1'
-
-STATSD_PATCHES = ['django_statsd.patches.db', ]
 
 EMAIL_SUBJECT_PREFIX = "[rolf] "
 EMAIL_HOST = 'localhost'
