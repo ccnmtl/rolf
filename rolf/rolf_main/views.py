@@ -170,17 +170,7 @@ def clone_deployment(request, object_id):
                 name=request.POST['name'],
                 application=application)
             deployment.clone_settings(new_deployment)
-            # clone stages
-            for stage in deployment.stage_set.all():
-                recipe = stage.recipe
-                r = recipe
-                if recipe.name == "":
-                    # not a cookbook recipe, so we clone it
-                    r = Recipe.objects.create(name="",
-                                              language=recipe.language,
-                                              code=recipe.code)
-                Stage.objects.create(deployment=new_deployment,
-                                     name=stage.name, recipe=r)
+            deployment.clone_stages(new_deployment)
             # clone permissions
             for perm in deployment.permission_set.all():
                 Permission.objects.create(deployment=new_deployment,

@@ -153,6 +153,18 @@ class Deployment(models.Model):
                                    name=setting.name,
                                    value=setting.value)
 
+    def clone_stages(self, new_deployment):
+        for stage in self.stage_set.all():
+            recipe = stage.recipe
+            r = recipe
+            if recipe.name == "":
+                # not a cookbook recipe, so we clone it
+                r = Recipe.objects.create(name="",
+                                          language=recipe.language,
+                                          code=recipe.code)
+            Stage.objects.create(deployment=new_deployment,
+                                 name=stage.name, recipe=r)
+
 
 class Permission(models.Model):
     deployment = models.ForeignKey(Deployment)
