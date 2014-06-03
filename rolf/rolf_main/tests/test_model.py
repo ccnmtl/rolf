@@ -74,6 +74,20 @@ class DeploymentTest(TestCase):
         d = DeploymentFactory()
         self.assertEquals(d.last_push_date(), None)
 
+    def test_clone_settings(self):
+        s = SettingFactory()
+        d1 = s.deployment
+        d2 = DeploymentFactory()
+        d1.clone_settings(d2)
+        self.assertTrue(d2.setting_set.all().count() > 0)
+
+    def test_clone_stage(self):
+        s = StageFactory()
+        d1 = s.deployment
+        d2 = DeploymentFactory()
+        d1.clone_stages(d2)
+        self.assertTrue(d2.stage_set.all().count() > 0)
+
 
 class BasicPushTest(TestCase):
     def test_push(self):
