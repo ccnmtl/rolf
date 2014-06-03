@@ -166,11 +166,19 @@ class Deployment(models.Model):
                                  name=stage.name, recipe=r)
 
     def clone_permissions(self, new_deployment):
-        # clone permissions
         for perm in self.permission_set.all():
             Permission.objects.create(deployment=new_deployment,
                                       group=perm.group,
                                       capability=perm.capability)
+
+    def clone_flags(self, new_deployment):
+        for flag in self.flag_set.all():
+            Flag.objects.create(deployment=new_deployment,
+                                name=flag.name,
+                                varname=flag.varname,
+                                boolean=flag.boolean,
+                                default=flag.default,
+                                description=flag.description)
 
 
 class Permission(models.Model):

@@ -172,15 +172,7 @@ def clone_deployment(request, object_id):
             deployment.clone_settings(new_deployment)
             deployment.clone_stages(new_deployment)
             deployment.clone_permissions(new_deployment)
-            # clone flags
-            for flag in deployment.flag_set.all():
-                Flag.objects.create(deployment=new_deployment,
-                                    name=flag.name,
-                                    varname=flag.varname,
-                                    boolean=flag.boolean,
-                                    default=flag.default,
-                                    description=flag.description)
-
+            deployment.clone_flags(new_deployment)
             return HttpResponseRedirect(new_deployment.get_absolute_url())
     return HttpResponseRedirect(deployment.get_absolute_url())
 
