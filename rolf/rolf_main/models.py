@@ -165,6 +165,13 @@ class Deployment(models.Model):
             Stage.objects.create(deployment=new_deployment,
                                  name=stage.name, recipe=r)
 
+    def clone_permissions(self, new_deployment):
+        # clone permissions
+        for perm in self.permission_set.all():
+            Permission.objects.create(deployment=new_deployment,
+                                      group=perm.group,
+                                      capability=perm.capability)
+
 
 class Permission(models.Model):
     deployment = models.ForeignKey(Deployment)

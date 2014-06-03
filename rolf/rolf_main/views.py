@@ -171,12 +171,7 @@ def clone_deployment(request, object_id):
                 application=application)
             deployment.clone_settings(new_deployment)
             deployment.clone_stages(new_deployment)
-            # clone permissions
-            for perm in deployment.permission_set.all():
-                Permission.objects.create(deployment=new_deployment,
-                                          group=perm.group,
-                                          capability=perm.capability)
-
+            deployment.clone_permissions(new_deployment)
             # clone flags
             for flag in deployment.flag_set.all():
                 Flag.objects.create(deployment=new_deployment,
