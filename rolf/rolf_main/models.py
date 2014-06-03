@@ -147,6 +147,12 @@ class Deployment(models.Model):
         else:
             return self.push_set.all()[0].start_time
 
+    def clone_settings(self, new_deployment):
+        for setting in self.setting_set.all():
+            Setting.objects.create(deployment=new_deployment,
+                                   name=setting.name,
+                                   value=setting.value)
+
 
 class Permission(models.Model):
     deployment = models.ForeignKey(Deployment)

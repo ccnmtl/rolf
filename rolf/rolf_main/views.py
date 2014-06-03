@@ -169,11 +169,7 @@ def clone_deployment(request, object_id):
             new_deployment = Deployment.objects.create(
                 name=request.POST['name'],
                 application=application)
-            # clone settings
-            for setting in deployment.setting_set.all():
-                Setting.objects.create(deployment=new_deployment,
-                                       name=setting.name,
-                                       value=setting.value)
+            deployment.clone_settings(new_deployment)
             # clone stages
             for stage in deployment.stage_set.all():
                 recipe = stage.recipe
