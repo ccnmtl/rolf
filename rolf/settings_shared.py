@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.admin',
+    'django.contrib.staticfiles',
     'django_extensions',
     'rolf.rolf_main',
     'django_statsd',
