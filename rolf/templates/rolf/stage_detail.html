@@ -10,7 +10,7 @@
 {{object.name}}</h1>
 
 <form action="edit/" method="post">
-<table>
+<table width="100%">
 <tr><th>name</th><td><input type="text" name="name" value="{{object.name}}"/></td></tr>
 <tr><th>recipe</th>
 
@@ -28,7 +28,7 @@ selected="selected"{% endifequal %}>{{recipe.name}}</option>
 {% else %}
 <td>
 Select a Cookbook recipe <select
-name="recipe_id">
+name="recipe_id" class="form-control">
 <option value="">None - Add code below</option>
 {% for recipe in object.all_recipes %}
 <option value="{{recipe.id}}">{{recipe.name}}</option>
@@ -36,7 +36,7 @@ name="recipe_id">
 </select><br />
 Or edit code:<br />
 
-<select name="language">
+<select name="language" class="form-control">
 {% ifequal object.recipe.language "python" %}
 <option value="python" selected="selected">python</option>
 <option value="shell">shell</option>
@@ -45,9 +45,9 @@ Or edit code:<br />
 <option value="shell" selected="selected">shell</option>
 {% endifequal %}
 </select>
-(<a href="{{object.recipe.get_absolute_url}}">promote this recipe to the cookbook</a>)
+<a href="{{object.recipe.get_absolute_url}}">(promote this recipe to the cookbook)</a>
 <br />
-<textarea name="code" cols="60" rows="5">{{object.recipe.code}}</textarea>
+<textarea name="code" cols="60" rows="10" class="input-block-level">{{object.recipe.code}}</textarea>
 
 </td>{% endif %}</tr>
 </table><input type="submit" value="edit" />
@@ -59,7 +59,8 @@ Or edit code:<br />
 <form action="delete/" method="post">
 <fieldset><legend>delete stage</legend>
 
-Delete this stage: <input type="submit" value="DELETE" />
+Delete this stage: <input type="submit" value="DELETE" class="btn
+													btn-danger" />
 
 </fieldset>
 </form>
