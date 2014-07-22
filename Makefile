@@ -2,10 +2,22 @@ MANAGE=./manage.py
 APP=rolf
 FLAKE8=./ve/bin/flake8
 
-jenkins: ./ve/bin/python validate test flake8
+jenkins: ./ve/bin/python validate jshint jscs flake8 test
 
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
+
+jshint: node_modules/jshint/bin/jshint
+	./node_modules/jshint/bin/jshint media/js/main.js media/js/models/ media/js/collections/ media/js/views/ media/js/utils/
+
+jscs: node_modules/jscs/bin/jscs
+	./node_modules/jscs/bin/jscs media/js/main.js media/js/models/ media/js/collections/ media/js/views/ media/js/utils/
+
+node_modules/jshint/bin/jshint:
+	npm install jshint
+
+node_modules/jscs/bin/jscs:
+	npm install jscs
 
 test: ./ve/bin/python
 	$(MANAGE) jenkins

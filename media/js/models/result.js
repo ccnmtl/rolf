@@ -6,10 +6,10 @@ define([
 
     var Result = Backbone.Model.extend({
         logs: [],
-        status: "inprogress",
+        status: 'inprogress',
 
         stageElement: function () {
-            return $("#stage-" + this.get('stage_id'));
+            return $('#stage-' + this.get('stageId'));
         },
 
         getStatus: function () {
@@ -20,18 +20,18 @@ define([
             this.set({
                 logs: result.logs,
                 status: result.status,
-                end_time: result.end_time
+                endTime: result.endTime
             });
             this.continueOrCleanUp(runStageCallback);
         },
 
         // are we done or might there be more stages to run?
         continuePush: function () {
-            return this.get('run_all') && (this.getStatus() !== "failed");
+            return this.get('runAll') && (this.getStatus() !== 'failed');
         },
 
         setPushStatus: function () {
-            this.get('push_status')
+            this.get('pushStatus')
                 .set({status: this.getStatus()});
         },
 
@@ -48,8 +48,8 @@ define([
         },
 
         getNextStageId: function () {
-            var current = this.get('stage_id');
-            var stageIds = this.get('stage_ids');
+            var current = this.get('stageId');
+            var stageIds = this.get('stageIds');
             if (stageIds.length < 2) {
                 return -1;
             }
@@ -66,15 +66,15 @@ define([
             if (this.continuePush()) {
                 this.nextStageOrFinish(runStage);
             }
-            if (this.getStatus() === "failed") {
+            if (this.getStatus() === 'failed') {
                 this.setPushStatus();
                 return;
             }
-            if (!this.get('run_all')) {
+            if (!this.get('runAll')) {
                 if (this.noMoreStages()) {
                     // last stage
                     this.setPushStatus();
-                    $('#runall-button').attr("disabled", "disabled");
+                    $('#runall-button').attr('disabled', 'disabled');
                 }
             }
         }

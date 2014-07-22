@@ -9,7 +9,7 @@ require.config({
         text: 'libs/require/text',
         order: 'libs/require/order'
     },
-    urlArgs: "bust=" +  (new Date()).getTime(),
+    urlArgs: 'bust=' +  (new Date()).getTime(),
     shim: {
         'backbone': {
             deps: ['jquery', 'underscore'],

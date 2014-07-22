@@ -6,7 +6,7 @@ define([
     var PushStatusView = Backbone.View.extend({
         template: _.template($('#push-status-template').html()),
         el: $('#ps-app'),
-        
+
         initialize: function () {
             this.model.bind('change', this.render, this);
         },

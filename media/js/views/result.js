@@ -7,7 +7,8 @@ define([
     'views/logcommand',
     'views/logstdout',
     'views/logstderr'
-], function ($, _, Backbone, Log, LogCommandView, LogStdoutView, LogStderrView) {
+], function ($, _, Backbone, Log, LogCommandView, LogStdoutView,
+             LogStderrView) {
     var ResultView = Backbone.View.extend({
         initialize: function () {
             this.model.bind('change', this.render, this);
@@ -21,20 +22,21 @@ define([
         },
 
         markInProgress: function () {
-            var stage_row = this.model.stageElement();
-            stage_row.toggleClass("unknown");
-            stage_row.toggleClass("inprogress");
+            var stageRow = this.model.stageElement();
+            stageRow.toggleClass('unknown');
+            stageRow.toggleClass('inprogress');
         },
 
         displayExecuteTime: function () {
-            $("#execute-" + this.model.get('stage_id'))
-                .replaceWith($("<span/>", {'text': this.model.get('end_time') }));
+            $('#execute-' + this.model.get('stageId'))
+                .replaceWith(
+                    $('<span/>', {'text': this.model.get('endTime') }));
         },
 
         setStageClass: function () {
             this.model.stageElement()
-                .removeClass("inprogress")
-                .removeClass("unknown")
+                .removeClass('inprogress')
+                .removeClass('unknown')
                 .addClass(this.model.getStatus());
         },
 
@@ -61,10 +63,10 @@ define([
         },
 
         insertLogRows: function () {
-            var stage_row = this.model.stageElement();
+            var stageRow = this.model.stageElement();
             var rows = this.makeLogRows();
             for (var i2 = rows.length - 1; i2 > -1; i2--) {
-                stage_row.after($(rows[i2]));
+                stageRow.after($(rows[i2]));
             }
         }
     });

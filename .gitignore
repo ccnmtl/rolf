@@ -6,3 +6,4 @@ ve
 .coverage
 ._*
 reports
+node_modules/
