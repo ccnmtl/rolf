@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 from models import Category, Push, Application, Deployment, Permission
 from models import Setting, Flag, Recipe, Stage, FlagValue
-from simplejson import dumps
+from json import dumps
 from django_statsd.clients import statsd
 from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer
 from itsdangerous import BadSignature, SignatureExpired
