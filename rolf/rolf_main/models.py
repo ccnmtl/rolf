@@ -320,7 +320,7 @@ class PushStage(models.Model):
                 os.makedirs(self.push.checkout_dir())
             except:
                 pass
-            #TODO: setup timeout
+            # TODO: setup timeout
             env = self.push.env()
             if rollback is not None:
                 env['ROLLBACK_URL'] = rollback.rollback_url

@@ -21,7 +21,7 @@ if ret: exit(ret)
 ret = subprocess.call(
     [os.path.join(vedir, 'bin', 'pip'), "install",
      "--index-url=http://pypi.ccnmtl.columbia.edu/",
-     "wheel==0.21.0"])
+     "wheel==0.24.0"])
 
 if ret:
     exit(ret)
