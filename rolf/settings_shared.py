@@ -132,6 +132,24 @@ EMAIL_HOST = 'localhost'
 SERVER_EMAIL = "rolf@yoursite.com"
 
 
+CAS_BASE = "https://cas.columbia.edu/"
+AUTHENTICATION_BACKENDS = ('djangowind.auth.SAMLAuthBackend',
+                           'django.contrib.auth.backends.ModelBackend', )
+
+WIND_PROFILE_HANDLERS = ['djangowind.auth.CDAPProfileHandler']
+WIND_AFFIL_HANDLERS = ['whitelistaffilmapper.WhitelistAffilGroupMapper',
+                       'djangowind.auth.StaffMapper',
+                       'djangowind.auth.SuperuserMapper']
+AFFILS_WHITELIST = [
+    'tlcxml.cunix.local:columbia.edu',
+]
+WIND_STAFF_MAPPER_GROUPS = ['tlc.cunix.local:columbia.edu']
+WIND_SUPERUSER_MAPPER_GROUPS = ['anp8', 'jb2410', 'zm4',
+                                'sld2131', 'amm8', 'mar227', 'jed2161',
+                                'njn2118']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
 CHECKOUT_DIR = "/var/tmp/rolf/checkouts/"
 SCRIPT_DIR = "/var/tmp/rolf/scripts/"
 if 'test' in sys.argv or 'jenkins' in sys.argv:

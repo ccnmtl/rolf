@@ -19,6 +19,7 @@ sqlparse==0.1.11
 six==1.7.3
 requests==2.3.0
 piprot==0.6.0
+whitelistaffilmapper==0.1.0
 
 factory_boy==2.4.1
 djangowind==0.13.1

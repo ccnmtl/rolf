@@ -2,7 +2,7 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 
-{% block stylesheet %}{% load adminmedia %}{% admin_media_prefix %}css/login.css{% endblock %}
+{% block stylesheet %}{{STATIC_URL}}css/login.css{% endblock %}
 
 {% block bodyclass %}login{% endblock %}
 
@@ -17,11 +17,10 @@
 <div id="content-main">
 {% if wind_base %}
 
-<form method="get" action="{{ wind_base }}login">
-<input type="hidden" name="service" value="{{ wind_service }}" />
-<input type="hidden" name="destination" value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/accounts/windlogin/?next=/admin/&this_is_the_login_form=1" />
+<form method="get" action="https://cas.columbia.edu/cas/login">
+<input type="hidden" name="destination" value="https://{{ request.get_host }}/accounts/caslogin/?next=/admin/&this_is_the_login_form=1" />
 <p>If you have a Columbia UNI, you already have an account and can
-login through WIND with it</p>
+login through CAS with it</p>
 <input type="submit" value="Here" />
 </form>
 <p>otherwise: </p>

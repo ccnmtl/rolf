@@ -43,12 +43,6 @@ site_media_root = os.path.join(os.path.dirname(__file__), "../media")
 
 accounts_tuple = (r'^accounts/', include('django.contrib.auth.urls'))
 
-if hasattr(settings, 'WIND_BASE'):
-    # we have a centralized auth system at Columbia,
-    # so if that is configured (in local_settings), use it
-    # instead of regular django auth
-    accounts_tuple = ('^accounts/', include('djangowind.urls'))
-
 urlpatterns = patterns(
     '',
     (r'^$', 'rolf.rolf_main.views.index'),
@@ -124,7 +118,7 @@ urlpatterns = patterns(
     (r'^api/1.0/push/(?P<push_id>\d+)/stage/(?P<stage_id>\d+)/$',
      'rolf.rolf_main.views.api_run_stage'),
 
-    accounts_tuple,
+    (r'^accounts/', include('djangowind.urls')),
     (r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     (r'^admin/', include(admin.site.urls)),
     (r'^stats/$', TemplateView.as_view(template_name="stats.html")),
