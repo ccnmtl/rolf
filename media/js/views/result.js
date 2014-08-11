@@ -30,7 +30,7 @@ define([
         displayExecuteTime: function () {
             $('#execute-' + this.model.get('stageId'))
                 .replaceWith(
-                    $('<span/>', {'text': this.model.get('endTime') }));
+                    $('<span/>', {'text': this.model.get('endTime')}));
         },
 
         setStageClass: function () {
