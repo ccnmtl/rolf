@@ -14,10 +14,10 @@ jscs: node_modules/jscs/bin/jscs
 	./node_modules/jscs/bin/jscs media/js/main.js media/js/models/ media/js/collections/ media/js/views/ media/js/utils/
 
 node_modules/jshint/bin/jshint:
-	npm install jshint
+	npm install jshint --prefix .
 
 node_modules/jscs/bin/jscs:
-	npm install jscs
+	npm install jscs --prefix .
 
 test: ./ve/bin/python
 	$(MANAGE) jenkins
@@ -41,8 +41,8 @@ clean:
 	rm -rf ve
 	rm -rf media/CACHE
 	rm -rf reports
-	rm celerybeat-schedule
-	rm .coverage
+	rm -f celerybeat-schedule
+	rm -f .coverage
 	find . -name '*.pyc' -exec rm {} \;
 
 pull:
