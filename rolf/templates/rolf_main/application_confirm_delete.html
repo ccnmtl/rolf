@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="." method="post">
+
+	<fieldset>
+		<legend>Delete</legend>
+		<p>This can't be undone. Are you sure?</p>
+		<input type="submit" value="yes, delete it" class="btn btn-danger"
+		/>
+	</fieldset>
+</form>
+{% endblock %}
