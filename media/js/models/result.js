@@ -2,21 +2,21 @@ define([
     'jquery',
     'backbone',
     'models/log',
-], function ($, Backbone) {
+], function($, Backbone) {
 
     var Result = Backbone.Model.extend({
         logs: [],
         status: 'inprogress',
 
-        stageElement: function () {
+        stageElement: function() {
             return $('#stage-' + this.get('stageId'));
         },
 
-        getStatus: function () {
+        getStatus: function() {
             return this.get('status');
         },
 
-        handleResults: function (result, runStageCallback) {
+        handleResults: function(result, runStageCallback) {
             this.set({
                 logs: result.logs,
                 status: result.status,
@@ -26,20 +26,20 @@ define([
         },
 
         // are we done or might there be more stages to run?
-        continuePush: function () {
+        continuePush: function() {
             return this.get('runAll') && (this.getStatus() !== 'failed');
         },
 
-        setPushStatus: function () {
+        setPushStatus: function() {
             this.get('pushStatus')
                 .set({status: this.getStatus()});
         },
 
-        noMoreStages: function () {
+        noMoreStages: function() {
             return this.getNextStageId() === -1;
         },
 
-        nextStageOrFinish: function (runStageCallback) {
+        nextStageOrFinish: function(runStageCallback) {
             if (this.noMoreStages()) {
                 this.setPushStatus();
                 return;
@@ -47,7 +47,7 @@ define([
             runStageCallback(this.getNextStageId());
         },
 
-        getNextStageId: function () {
+        getNextStageId: function() {
             var current = this.get('stageId');
             var stageIds = this.get('stageIds');
             if (stageIds.length < 2) {
@@ -62,7 +62,7 @@ define([
             return -1;
         },
 
-        continueOrCleanUp: function (runStage) {
+        continueOrCleanUp: function(runStage) {
             if (this.continuePush()) {
                 this.nextStageOrFinish(runStage);
             }

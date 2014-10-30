@@ -6,13 +6,13 @@ define([
     'utils/hidecontent',
     // views
     'views/pushstatus', 'views/result'
-], function ($, _, Backbone,
+], function($, _, Backbone,
              PushStatus, Result, // models
              hideContent, // utils
              PushStatusView, ResultView // views
 ) {
     var AppView = Backbone.View.extend({
-        initialize: function () {
+        initialize: function() {
             this.pushStatus = new PushStatus();
             var psv = new PushStatusView({model: this.pushStatus});
 
@@ -24,13 +24,13 @@ define([
             }
         },
 
-        hideOutput: function () {
-            $('td.stdout').each(function () { hideContent(this); });
-            $('td.stderr').each(function () { hideContent(this); });
-            $('td.command').each(function () { hideContent(this); });
+        hideOutput: function() {
+            $('td.stdout').each(function() { hideContent(this); });
+            $('td.stderr').each(function() { hideContent(this); });
+            $('td.command').each(function() { hideContent(this); });
         },
 
-        getStageResult:  function (options) {
+        getStageResult:  function(options) {
             var url = 'stage/?stage_id=' + options.stageId +
                 '&rollback_id=' + options.rollbackId;
             $.ajax({
@@ -40,7 +40,7 @@ define([
             });
         },
 
-        runStage: function (stageId) {
+        runStage: function(stageId) {
             var rollbackId = '';
             if ($('#rollback')) {
                 rollbackId = $('#rollback').val() || '';
@@ -55,26 +55,26 @@ define([
             var rv = new ResultView({model: r});
             rv.markInProgress();
             var self = this;
-            var callback = function (si) {
+            var callback = function(si) {
                 self.runStage(si);
             };
             this.getStageResult({
                 stageId: stageId,
                 rollbackId: rollbackId,
-                'success': function (result) {
+                'success': function(result) {
                     r.handleResults(result, callback);
                 },
                 'error': this.myErrback
             });
         },
 
-        myErrback: function (result) {
+        myErrback: function(result) {
             alert('stage failed: ' + result);
         },
 
-        getStageIds: function () {
+        getStageIds: function() {
             var ids = [];
-            $('tr.stage-row').each(function () {
+            $('tr.stage-row').each(function() {
                 var stageId = $(this).attr('id').split('-')[1];
                 ids.push(stageId);
             });
