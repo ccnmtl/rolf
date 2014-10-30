@@ -36,7 +36,6 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
     }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-SOUTH_TESTS_MIGRATE = False
 
 NOSE_ARGS = [
     '--with-coverage',
@@ -44,7 +43,6 @@ NOSE_ARGS = [
 ]
 
 JENKINS_TASKS = (
-    'django_jenkins.tasks.with_coverage',
     'django_jenkins.tasks.run_pep8',
     'django_jenkins.tasks.run_pyflakes',
 )
@@ -101,7 +99,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'rolf.rolf_main',
     'django_statsd',
-    'south',
     'raven.contrib.django',
     'smoketest',
     'debug_toolbar',
