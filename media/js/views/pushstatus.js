@@ -2,16 +2,16 @@ define([
     'jquery',
     'underscore',
     'backbone'
-], function ($, _, Backbone) {
+], function($, _, Backbone) {
     var PushStatusView = Backbone.View.extend({
         template: _.template($('#push-status-template').html()),
         el: $('#ps-app'),
 
-        initialize: function () {
+        initialize: function() {
             this.model.bind('change', this.render, this);
         },
 
-        render: function () {
+        render: function() {
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
         }

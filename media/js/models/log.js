@@ -1,6 +1,6 @@
 define([
     'backbone'
-], function (Backbone) {
+], function(Backbone) {
     var Log = Backbone.Model.extend({
         defaults: {}
     });

@@ -1,6 +1,6 @@
 define([
     'backbone'
-], function (Backbone) {
+], function(Backbone) {
     var PushStatus = Backbone.Model.extend({
         defaults: {
             'status': 'inprogress'
