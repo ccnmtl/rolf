@@ -240,7 +240,7 @@ def stage(request, object_id):
                                        logs=logs,
                                        end_time=str(pushstage.end_time),
                                        stage_id=pushstage.stage.id)),
-                            mimetype='application/json')
+                            content_type='application/json')
     else:
         return HttpResponse("permission denied")
 
@@ -377,7 +377,7 @@ def api_push(request, deployment_id):
             url="/api/1.0/push/%d/stage/%d/" % (push.id, stage.id))
         for stage in deployment.stage_set.all()]
     return HttpResponse(dumps(dict(stages=stages)),
-                        mimetype="application/json")
+                        content_type="application/json")
 
 
 def api_run_stage(request, push_id, stage_id):
@@ -402,4 +402,4 @@ def api_run_stage(request, push_id, stage_id):
                    logs=logs,
                    end_time=str(pushstage.end_time),
                    stage_id=pushstage.stage.id)),
-        mimetype='application/json')
+        content_type='application/json')
