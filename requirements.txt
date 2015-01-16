@@ -1,6 +1,4 @@
 Django==1.7.3
-httplib2==0.9
-restclient==0.11.0
 Markdown==2.4.1
 psycopg2==2.5.4
 statsd==3.0
