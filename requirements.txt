@@ -1,4 +1,4 @@
-Django==1.7.5
+Django==1.7.6
 Markdown==2.4.1
 psycopg2==2.5.4
 statsd==3.0
