@@ -27,7 +27,7 @@ django-nose==1.2
 raven==5.1.1
 django-annoying==0.8.0
 django-smoketest==0.3.0
-django-debug-toolbar==1.2.1
+django-debug-toolbar==1.2.2
 django-jenkins==0.16.3
 django-markwhat==2014.9.20
 
