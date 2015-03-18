@@ -12,7 +12,7 @@ flake8==2.1.0
 logilab-common==0.62.0
 logilab-astng==0.24.3
 astroid==1.1.1
-pylint==1.2.1
+pylint==1.4.1
 sqlparse==0.1.11
 six==1.7.3
 requests==2.3.0
