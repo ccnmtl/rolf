@@ -22,7 +22,7 @@ whitelistaffilmapper==0.1.0
 factory_boy==2.4.1
 djangowind==0.13.2
 django-extensions==1.3.8
-django-statsd-mozilla==0.3.12
+django-statsd-mozilla==0.3.14
 django-nose==1.2
 raven==5.1.1
 django-annoying==0.8.0
