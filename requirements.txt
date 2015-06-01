@@ -19,7 +19,7 @@ piprot==0.6.0
 whitelistaffilmapper==0.1.0
 
 factory_boy==2.4.1
-djangowind==0.13.2
+djangowind==0.13.3
 django-extensions==1.4.9
 django-statsd-mozilla==0.3.14
 raven==5.2.0
