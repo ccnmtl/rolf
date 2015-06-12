@@ -94,7 +94,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'rolf.rolf_main',
     'django_statsd',
-    'raven.contrib.django',
     'smoketest',
     'debug_toolbar',
     'django_jenkins',
