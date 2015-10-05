@@ -4,9 +4,9 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic.edit import DeleteView
 import os.path
-admin.autodiscover()
 from rolf.rolf_main.models import Category, Application, Deployment
 from rolf.rolf_main.models import Push, Recipe, Stage
+admin.autodiscover()
 
 category_info_dict = {
     'model': Category,
