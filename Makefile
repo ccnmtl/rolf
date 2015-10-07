@@ -2,7 +2,7 @@ MANAGE=./manage.py
 APP=rolf
 FLAKE8=./ve/bin/flake8
 
-jenkins: ./ve/bin/python check jshint jscs flake8 test
+jenkins: ./ve/bin/python check flake8 test
 
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
