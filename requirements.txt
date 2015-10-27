@@ -20,8 +20,9 @@ ndg-httpsclient==0.4.0
 requests==2.7.0
 piprot==0.6.0
 whitelistaffilmapper==0.1.0
+fake-factory==0.5.3
 
-factory_boy==2.4.1
+factory_boy==2.6.0
 djangowind==0.14.1
 django-extensions==1.4.9
 django-statsd-mozilla==0.3.15

@@ -5,29 +5,34 @@ from rolf.rolf_main.models import Recipe, Setting, Stage
 
 
 class CategoryFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Category
+    class Meta:
+        model = Category
     name = "test"
 
 
 class ApplicationFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Application
+    class Meta:
+        model = Application
     name = "test application"
     category = factory.SubFactory(CategoryFactory)
 
 
 class DeploymentFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Deployment
+    class Meta:
+        model = Deployment
     name = "test deployment"
     application = factory.SubFactory(ApplicationFactory)
 
 
 class UserFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = User
+    class Meta:
+        model = User
     username = 'testuser'
 
 
 class RecipeFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Recipe
+    class Meta:
+        model = Recipe
     name = "test recipe"
     language = "python"
     code = "print 'hello'\nself.execute(['echo', 'foo'])"
@@ -41,14 +46,16 @@ class ShellRecipeFactory(RecipeFactory):
 
 
 class SettingFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Setting
+    class Meta:
+        model = Setting
     name = "TEST_FOO"
     value = "TEST_BAR"
     deployment = factory.SubFactory(DeploymentFactory)
 
 
 class StageFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Stage
+    class Meta:
+        model = Stage
     name = "test stage"
     deployment = factory.SubFactory(DeploymentFactory)
     recipe = factory.SubFactory(RecipeFactory)
