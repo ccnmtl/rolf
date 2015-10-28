@@ -208,3 +208,7 @@ border-top: #000 solid 1px;
 #pagebody {
   margin-top: 60px;
 }
+
+textarea[name="code"] {
+    font-family: monospace;
+}
