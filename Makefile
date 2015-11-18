@@ -67,3 +67,7 @@ install: ./ve/bin/python check jenkins
 	createdb $(APP)
 	$(MANAGE) syncdb --noinput
 	make migrate
+
+# Docker related stuff
+build:
+	docker build -t ccnmtl/$(APP) .

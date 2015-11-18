@@ -1,3 +1,4 @@
+--index-url https://pypi.ccnmtl.columbia.edu/
 Django==1.8.5
 Markdown==2.6.2
 psycopg2==2.6.1
@@ -32,4 +33,12 @@ django-smoketest==0.3.0
 django-debug-toolbar==1.4
 django-jenkins==0.17.0
 django-markwhat==1.4
+gunicorn==19.3.0
+django-compressor==1.5
+django-impersonate==0.9.1
+django-waffle==0.10.1
+django-appconf==1.0.1
+django-stagingcontext==0.1.0
+django-ga-context==0.1.0
 
+ccnmtlsettings==0.1.0
