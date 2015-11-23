@@ -1,3 +1,4 @@
+ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 MANAGE=./manage.py
 APP=rolf
 FLAKE8=./ve/bin/flake8
@@ -69,5 +70,19 @@ install: ./ve/bin/python check jenkins
 	make migrate
 
 # Docker related stuff
-build:
-	docker build -t ccnmtl/$(APP) .
+# use wheelhouse/requirements.txt as the sentinal so make
+# knows whether it needs to rebuild the wheel directory or not
+# has the added advantage that it can just pip install
+# from that later on as well
+
+wheelhouse/requirements.txt: requirements.txt
+	mkdir -p wheelhouse
+	docker run --rm \
+	-v $(ROOT_DIR):/app \
+	-v $(ROOT_DIR)/wheelhouse:/wheelhouse \
+	ccnmtl/django.build
+	cp requirements.txt wheelhouse/requirements.txt
+	touch wheelhouse/requirements.txt
+
+build: wheelhouse/requirements.txt
+	docker build -t ccnmtl/rolf .
