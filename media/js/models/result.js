@@ -54,7 +54,7 @@ define([
                 return -1;
             }
             for (var i = 0; i < stageIds.length - 1; i++) {
-                if (stageIds[i] == current) {
+                if (stageIds[i] === current) {
                     return stageIds[i + 1];
                 }
             }
