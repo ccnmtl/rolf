@@ -37,7 +37,7 @@ django-debug-toolbar==1.4
 django-jenkins==0.17.0
 django-markwhat==1.4
 gunicorn==19.3.0
-django-compressor==1.5
+django-compressor==1.6
 django-impersonate==0.9.1
 django-waffle==0.10.1
 django-appconf==1.0.1
