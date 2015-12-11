@@ -24,7 +24,7 @@ futures==3.0.3
 piprot==0.9.4
 whitelistaffilmapper==0.1.0
 fake-factory==0.5.3
-certifi==2015.11.20
+certifi==2015.11.20.1
 
 factory_boy==2.6.0
 djangowind==0.14.1
