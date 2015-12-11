@@ -2,10 +2,7 @@ language: python
 sudo: false
 python:
   - "2.7"
-install:
-  - ./bootstrap.py
 script:
-  - ./ve/bin/flake8 rolf
-  - ./manage.py test
+  - make
 notifications:
   slack: ccnmtl:GizSNscLWJLldjQrffB8mwgm
