@@ -17,7 +17,7 @@ astroid==1.4.1
 pylint==1.4.4
 sqlparse==0.1.18
 six==1.10.0
-pyasn1==0.1.8
+pyasn1==0.1.9
 pyOpenSSL==0.15.1
 ndg-httpsclient==0.4.0
 requests==2.8.0
