@@ -36,7 +36,7 @@ raven==5.8.1
 django-annoying==0.8.4
 django-smoketest==0.3.0
 django-debug-toolbar==1.4
-django-jenkins==0.17.0
+django-jenkins==0.18.1
 django-markwhat==1.4
 gunicorn==19.3.0
 django-compressor==1.6
