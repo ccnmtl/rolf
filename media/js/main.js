@@ -3,7 +3,7 @@ require.config({
         // Major libraries
         jquery: 'jquery-1.9.1.min',
         underscore: 'libs/underscore/underscore-min',
-        backbone: 'libs/backbone/backbone-1.0.0-min',
+        backbone: 'libs/backbone/backbone-min',
 
         // Require.js plugins
         text: 'libs/require/text',
