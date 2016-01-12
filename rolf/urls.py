@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic.edit import DeleteView
-import os.path
 from rolf.rolf_main.models import Category, Application, Deployment
 from rolf.rolf_main.models import Push, Recipe, Stage
 admin.autodiscover()
@@ -38,8 +37,6 @@ recipe_info_dict = {
     'template_name': 'rolf/recipe_detail.html',
 }
 
-
-site_media_root = os.path.join(os.path.dirname(__file__), "../media")
 
 accounts_tuple = (r'^accounts/', include('django.contrib.auth.urls'))
 
@@ -123,8 +120,6 @@ urlpatterns = patterns(
     (r'^admin/', include(admin.site.urls)),
     (r'^stats/$', TemplateView.as_view(template_name="stats.html")),
     (r'smoketest/', include('smoketest.urls')),
-    (r'^site_media/(?P<path>.*)$',
-     'django.views.static.serve', {'document_root': site_media_root}),
     (r'^uploads/(?P<path>.*)$',
      'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 )
