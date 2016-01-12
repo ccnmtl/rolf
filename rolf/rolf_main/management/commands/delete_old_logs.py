@@ -18,5 +18,4 @@ class Command(BaseCommand):
                 '-start_time').first()
             deployment.push_set.filter(
                 start_time__lt=year_ago,
-                id__ne=most_recent_push.id,
-            ).delete()
+            ).exclude(id=most_recent_push.id).delete()
