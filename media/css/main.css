@@ -45,36 +45,36 @@ tr.odd td { background-color: #efe;}
 
 
 tr.ok th {
-background: #cfc url(/site_media/img/ok.gif) no-repeat 0px 0px;
+background: #cfc url(../img/ok.gif) no-repeat 0px 0px;
 padding-left: 22px;
 height: 19px;
 }
 tr.odd th { background-color: #efe;}
 
 tr.nested-ok th {
-background: #cfc url(/site_media/img/ok.gif) no-repeat 0px 0px;
+background: #cfc url(../img/ok.gif) no-repeat 0px 0px;
 height: 19px;
 }
 
 tr.nested-failed th {
-background: #fcc url(/site_media/img/failed.gif) no-repeat 0px 0px;
+background: #fcc url(../img/failed.gif) no-repeat 0px 0px;
 height: 19px;
 }
 
 div.nested-ok {
-background: #cfc url(/site_media/img/ok.gif) no-repeat 0px 0px;
+background: #cfc url(../img/ok.gif) no-repeat 0px 0px;
 height: 19px;
 padding-left: 30px;
 }
 
 div.nested-failed {
-background: #fcc url(/site_media/img/failed.gif) no-repeat 0px 0px;
+background: #fcc url(../img/failed.gif) no-repeat 0px 0px;
 height: 19px;
 padding-left: 30px;
 }
 
 div.nested-inprogress {
-background: #ccf url(/site_media/img/spinner.gif) no-repeat 0px 0px;
+background: #ccf url(../img/spinner.gif) no-repeat 0px 0px;
 height: 19px;
 padding-left: 30px;
 }
@@ -93,14 +93,14 @@ div.nest th {
 
 tr.failed td { background-color: #fcc;}
 
-tr.failed th { background: #fcc url(/site_media/img/failed.gif) no-repeat 0px 0px;
+tr.failed th { background: #fcc url(../img/failed.gif) no-repeat 0px 0px;
 padding-left: 22px;
 height: 19px;
 }
 
 tr.inprogress th, tr.inprogress td {background-color: #ccf;}
 
-tr.inprogress th { background: #ccf url(/site_media/img/spinner.gif) no-repeat 0px 0px;
+tr.inprogress th { background: #ccf url(../img/spinner.gif) no-repeat 0px 0px;
 padding-left: 22px;
  }
 
@@ -118,13 +118,13 @@ h3 { font-size: 100%; margin: 0px; font-weight: normal; }
 h3.rolf-hidden { 
             cursor: pointer;
             padding-left: 15px;
-            background: url(/site_media/img/arrow_right.png) no-repeat 0px 4px;
+            background: url(../img/arrow_right.png) no-repeat 0px 4px;
  }
 
 h3.rolf-showing { 
              cursor: pointer;
              padding-left: 15px;
-             background: url(/site_media/img/arrow_down.png) no-repeat 0px 4px;
+             background: url(../img/arrow_down.png) no-repeat 0px 4px;
  }
 
 
@@ -154,7 +154,7 @@ div.ok {
        color: #060;
        border: #060 solid 1px;
        padding-left: 50px;
-       background: #cec url(/site_media/img/ok_check.png) no-repeat 0px 0px;
+       background: #cec url(../img/ok_check.png) no-repeat 0px 0px;
        height: 48px;
 }
 
@@ -162,7 +162,7 @@ div.failed {
 	   color: #f00;
 	   background-color: #fcc;
 	   border: #600 solid 1px;
-       background: #fcc url(/site_media/img/large_failed.png) no-repeat
+       background: #fcc url(../img/large_failed.png) no-repeat
 	   0px 0px;
 	   padding-left: 50px;
 }
@@ -170,7 +170,7 @@ div.failed {
 div.inprogress {
 	   color: #00f;
 	   border: #006 solid 1px;
-	   background: #e7e7e7 url(/site_media/img/large_spinner.gif) no-repeat 0px 0px;
+	   background: #e7e7e7 url(../img/large_spinner.gif) no-repeat 0px 0px;
 	   padding-left: 50px;
 	   height: 50px;
 }	   
