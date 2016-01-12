@@ -19,4 +19,4 @@ class Command(BaseCommand):
                 push.delete()
                 deleted += 1
             idx += 1
-        print("deleted %d" %d deleted)
+        print("deleted %d" % deleted)
