@@ -3,9 +3,8 @@
 {% load perms %}
 {% block title %}{{object.name}}{% endblock %}
 {% block js %}
-  {% compress js %}
+
   <script data-main="{{STATIC_URL}}js/main" src="{{STATIC_URL}}js/libs/require/require.js"></script>
-  {% endcompress %}
 
 <script type="text/template" id="push-status-template">
   <div id="push-status" class="<%= status %>"><%= status %></div>
