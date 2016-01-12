@@ -14,8 +14,8 @@ class Command(BaseCommand):
             if deployment.push_set.all().count() < 2:
                 # skip any that have 0 or 1 pushes
                 continue
-            most_recent_push = list(
-                deployment.push_set.all().order_by('-start_date'))[0]
+            most_recent_push = deployment.push_set.all().order_by(
+                '-start_date').first()
             deployment.push_set.filter(
                 start_date__lt=year_ago,
                 id__ne=most_recent_push.id,
