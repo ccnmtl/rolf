@@ -1,18 +1,23 @@
+{% load compress %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>rolf: {% block title %}{% endblock %}</title>
 
-    <link href="/site_media/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="/site_media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <link rel="stylesheet" href="/site_media/css/main.css?site=rolf" media="screen" />
-    <link rel="stylesheet" href="/site_media/css/prettify.css?site=rolf" media="screen" />
-    <link rel="stylesheet" href="/site_media/css/print.css?site=rolf" media="print" />
-    <link rel="shortcut icon" href="/site_media/img/favicon.ico" type="image/x-icon" />
-    <script src="/site_media/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/site_media/js/hs.js"></script>
-    <script type="text/javascript" src="/site_media/bootstrap/js/bootstrap.min.js"></script>
+    {% compress css %}
+    <link href="{{STATIC_URL}}bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{STATIC_URL}}css/main.css?site=rolf" media="screen" />
+    <link rel="stylesheet" href="{{STATIC_URL}}css/prettify.css?site=rolf" media="screen" />
+    <link rel="stylesheet" href="{{STATIC_URL}}css/print.css?site=rolf" media="print" />
+    {% endcompress %}
+    <link rel="shortcut icon" href="{{STATIC_URL}}img/favicon.ico" type="image/x-icon" />
+    {% compress js %}
+    <script src="{{STATIC_URL}}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/hs.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}bootstrap/js/bootstrap.min.js"></script>
+    {% endcompress %}
     {% block css %}{% endblock %}
     {% block js %}{% endblock %}
     {% block feeds %}{% endblock %}

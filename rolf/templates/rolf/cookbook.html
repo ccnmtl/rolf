@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load compress %}
+
 {% block extra_body_classes %}cookbook{% endblock %}
 {% block content %}
 {% if request.user.is_superuser %}
@@ -57,8 +59,9 @@ language <select name="language">
 </div>
 </div>
 
-
-<script src="/site_media/js/prettify.js"></script>
+{% compress js %}
+<script src="{{STATIC_URL}}js/prettify.js"></script>
+{% endcompress %}
 <script type="text/javascript">
   prettyPrint();
 </script>
