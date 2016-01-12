@@ -15,8 +15,8 @@ class Command(BaseCommand):
                 # skip any that have 0 or 1 pushes
                 continue
             most_recent_push = deployment.push_set.all().order_by(
-                '-start_date').first()
+                '-start_time').first()
             deployment.push_set.filter(
-                start_date__lt=year_ago,
+                start_time__lt=year_ago,
                 id__ne=most_recent_push.id,
             ).delete()
