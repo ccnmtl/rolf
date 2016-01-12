@@ -85,7 +85,7 @@
 <tr class="unknown stage-row" id="stage-{{stage.id}}">
 <th>{{stage.name}}</th>
 <td><input py:if="step" type="submit" value="execute" id="execute-{{stage.id}}"
-onclick="runStage({{stage.id}}); this.disabled=true;return false" />
+onclick="appView.runStage({{stage.id}}); this.disabled=true;return false" />
 <input py:if="not step" type="hidden" value="execute" 
 id="execute-{{stage.id}}" />
 </td>
