@@ -318,9 +318,12 @@ def generic_detail(request, object_id, model, template_name):
 @login_required
 @render_to('rolf/get_api_key.html')
 def get_api_key(request):
+    remote_addr = request.META.get(
+        'HTTP_X_FORWARDED_FOR',
+        request.META.get('REMOTE_ADDR'))
     s1 = URLSafeSerializer(settings.API_SECRET, salt="rolf-ipaddress-key")
     k1 = s1.dumps(dict(username=request.user.username,
-                       remote_addr=request.META['REMOTE_ADDR']))
+                       remote_addr=remote_addr))
     s2 = URLSafeTimedSerializer(settings.API_SECRET, salt="rolf-timed-key")
     k2 = s2.dumps(dict(username=request.user.username))
 
@@ -329,7 +332,7 @@ def get_api_key(request):
     if ip:
         k3 = s1.dumps(dict(username=request.user.username, remote_addr=ip))
     return dict(k1=k1, k2=k2, k3=k3, ip=ip,
-                remote_addr=request.META['REMOTE_ADDR'])
+                remote_addr=remote_addr)
 
 
 def verify_key(request):
@@ -340,7 +343,11 @@ def verify_key(request):
     try:
         d = s1.loads(key)
         # check their IP
-        if d['remote_addr'] != request.META['REMOTE_ADDR']:
+        remote_addr = request.META.get(
+            'HTTP_X_FORWARDED_FOR',
+            request.META.get('REMOTE_ADDR'))
+
+        if d['remote_addr'] != remote_addr:
             return None
         return get_object_or_404(User, username=d['username'])
     except BadSignature:
