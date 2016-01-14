@@ -184,8 +184,8 @@ class Deployment(models.Model):
         deleted = 0
         if self.push_set.all().count() < keep:
             return deleted
-        for push in list(self.push_set.all().order_by(
-                '-start_time'))[keep:]:
+        for push in self.push_set.all().order_by(
+                '-start_time')[keep:]:
             push.delete()
             deleted += 1
         return deleted
