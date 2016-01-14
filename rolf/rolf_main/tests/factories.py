@@ -1,7 +1,7 @@
 import factory
 from django.contrib.auth.models import User
 from rolf.rolf_main.models import Category, Application, Deployment
-from rolf.rolf_main.models import Recipe, Setting, Stage
+from rolf.rolf_main.models import Recipe, Setting, Stage, Push
 
 
 class CategoryFactory(factory.DjangoModelFactory):
@@ -27,7 +27,7 @@ class DeploymentFactory(factory.DjangoModelFactory):
 class UserFactory(factory.DjangoModelFactory):
     class Meta:
         model = User
-    username = 'testuser'
+    username = factory.Sequence(lambda n: 'testuser{0}'.format(n))
 
 
 class RecipeFactory(factory.DjangoModelFactory):
@@ -59,3 +59,10 @@ class StageFactory(factory.DjangoModelFactory):
     name = "test stage"
     deployment = factory.SubFactory(DeploymentFactory)
     recipe = factory.SubFactory(RecipeFactory)
+
+
+class PushFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Push
+    user = factory.SubFactory(UserFactory)
+    deployment = factory.SubFactory(DeploymentFactory)

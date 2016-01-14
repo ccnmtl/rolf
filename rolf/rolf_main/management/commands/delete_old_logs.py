@@ -11,12 +11,6 @@ class Command(BaseCommand):
         deleted = 0
         for deployment in Deployment.objects.all():
             print("[%02d/%02d]" % (idx, count))
-            if deployment.push_set.all().count() < KEEP:
-                # skip any that have 0 or 1 pushes
-                continue
-            for push in list(deployment.push_set.all().order_by(
-                    '-start_time'))[KEEP:]:
-                push.delete()
-                deleted += 1
+            deleted += deployment.clear_old_pushes(keep=KEEP)
             idx += 1
         print("deleted %d" % deleted)
