@@ -1,7 +1,7 @@
 from django.test import TestCase
 from factories import CategoryFactory, ApplicationFactory, DeploymentFactory
 from factories import UserFactory, RecipeFactory, ShellRecipeFactory
-from factories import SettingFactory, StageFactory
+from factories import SettingFactory, StageFactory, PushFactory
 
 
 class CategoryTest(TestCase):
@@ -87,6 +87,20 @@ class DeploymentTest(TestCase):
         d2 = DeploymentFactory()
         d1.clone_stages(d2)
         self.assertTrue(d2.stage_set.all().count() > 0)
+
+    def test_clear_old_pushes_below_threshold(self):
+        p = PushFactory()
+        d = p.deployment
+        d.clear_old_pushes(keep=2)
+        self.assertEqual(d.push_set.count(), 1)
+
+    def test_clear_old_pushes_over_threshold(self):
+        d = DeploymentFactory()
+        PushFactory(deployment=d)
+        PushFactory(deployment=d)
+        PushFactory(deployment=d)
+        d.clear_old_pushes(keep=2)
+        self.assertEqual(d.push_set.count(), 2)
 
 
 class BasicPushTest(TestCase):

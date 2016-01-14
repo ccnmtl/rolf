@@ -180,6 +180,16 @@ class Deployment(models.Model):
                                 default=flag.default,
                                 description=flag.description)
 
+    def clear_old_pushes(self, keep=20):
+        deleted = 0
+        if self.push_set.all().count() < keep:
+            return deleted
+        for push in self.push_set.all().order_by(
+                '-start_time')[keep:]:
+            push.delete()
+            deleted += 1
+        return deleted
+
 
 class Permission(models.Model):
     deployment = models.ForeignKey(Deployment)
@@ -258,6 +268,10 @@ class Push(models.Model):
             self.status = pushstage.status
             self.end_time = datetime.now()
             self.save()
+            if pushstage.status != "failed":
+                # on a successful push, the deployment should
+                # clear out old pushes
+                self.deployment.clear_old_pushes()
         return pushstage
 
     def checkout_dir(self):
