@@ -1,4 +1,10 @@
 FROM ccnmtl/django.base
+RUN groupadd -r pusher && useradd -r -g pusher pusher \
+		&& chown pusher:pusher /var \
+		&& chown -R pusher:pusher /ve \
+		&& mkdir /home/pusher \
+		&& chown -R pusher:pusher /home/pusher
+USER pusher
 ADD wheelhouse /wheelhouse
 RUN /ve/bin/pip install --no-index -f /wheelhouse -r /wheelhouse/requirements.txt
 WORKDIR /app
