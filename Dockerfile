@@ -1,5 +1,6 @@
 FROM ccnmtl/django.base
 RUN apt-get update && apt-get install -y git-core
+RUN  echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config
 RUN groupadd -r pusher && useradd -r -g pusher pusher \
 		&& chown pusher:pusher /var \
 		&& chown -R pusher:pusher /ve \
