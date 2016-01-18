@@ -7,4 +7,5 @@ cd /app/
 exec /ve/bin/gunicorn --env \
   DJANGO_SETTINGS_MODULE=rolf.settings_docker \
   rolf.wsgi:application -b 0.0.0.0:8000 -w 3 \
+	-t 600 \
   --access-logfile=- --error-logfile=-
