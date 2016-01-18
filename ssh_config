@@ -6,6 +6,7 @@ Host *
     GSSAPIDelegateCredentials no
     UseRoaming no
     IdentityFile ~/.ssh/id_rsa
+		StrictHostKeyChecking no
 		
 Host bastion
     Hostname nectar.ccnmtl.columbia.edu
