@@ -5,7 +5,7 @@ Host *
     GSSAPIAuthentication yes
     GSSAPIDelegateCredentials no
     UseRoaming no
-    IdentityFile ~/.ssh/id_rsa
+    IdentityFile ~/.ssh/id_dsa
     StrictHostKeyChecking no
 
 Host bastion
