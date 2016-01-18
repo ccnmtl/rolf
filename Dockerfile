@@ -1,4 +1,5 @@
 FROM ccnmtl/django.base
+RUN apt-get update && apt-get install -y git-core
 RUN groupadd -r pusher && useradd -r -g pusher pusher \
 		&& chown pusher:pusher /var \
 		&& chown -R pusher:pusher /ve \
