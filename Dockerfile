@@ -1,12 +1,6 @@
 FROM ccnmtl/django.base
 RUN apt-get update && apt-get install -y git-core
-RUN  echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config
-RUN groupadd -r pusher && useradd -r -g pusher pusher \
-		&& chown pusher:pusher /var \
-		&& chown -R pusher:pusher /ve \
-		&& mkdir /home/pusher \
-		&& chown -R pusher:pusher /home/pusher
-USER pusher
+ADD ssh_config /etc/ssh/ssh_config
 ADD wheelhouse /wheelhouse
 RUN /ve/bin/pip install --no-index -f /wheelhouse -r /wheelhouse/requirements.txt
 WORKDIR /app

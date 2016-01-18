@@ -1,0 +1,34 @@
+Host *
+    User pusher
+    SendEnv LANG LC_*
+    HashKnownHosts yes
+    GSSAPIAuthentication yes
+    GSSAPIDelegateCredentials no
+    UseRoaming no
+    IdentityFile ~/.ssh/id_rsa
+		
+Host bastion
+    Hostname nectar.ccnmtl.columbia.edu
+
+Host jupiter
+    Hostname 172.31.17.250
+    ProxyCommand ssh -W %h:%p bastion
+
+Host giant
+    Hostname 172.31.17.252
+    ProxyCommand ssh -W %h:%p bastion            
+
+Host rabbit
+    Hostname 172.31.17.254
+    ProxyCommand ssh -W %h:%p bastion            
+
+Host gitbastion
+    User git
+    ForwardAgent yes
+    Hostname nectar.ccnmtl.columbia.edu
+
+Host git.ccnmtl.columbia.edu
+     User git
+     ForwardAgent yes
+     Hostname 172.31.17.252
+     ProxyCommand ssh -W %h:%p gitbastion
