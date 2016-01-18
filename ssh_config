@@ -6,8 +6,8 @@ Host *
     GSSAPIDelegateCredentials no
     UseRoaming no
     IdentityFile ~/.ssh/id_rsa
-		StrictHostKeyChecking no
-		
+    StrictHostKeyChecking no
+
 Host bastion
     Hostname nectar.ccnmtl.columbia.edu
 
@@ -17,11 +17,11 @@ Host jupiter
 
 Host giant
     Hostname 172.31.17.252
-    ProxyCommand ssh -W %h:%p bastion            
+    ProxyCommand ssh -W %h:%p bastion
 
 Host rabbit
     Hostname 172.31.17.254
-    ProxyCommand ssh -W %h:%p bastion            
+    ProxyCommand ssh -W %h:%p bastion
 
 Host gitbastion
     User git
