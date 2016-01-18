@@ -12,4 +12,6 @@ RUN /ve/bin/flake8 /app/rolf/ --max-complexity=10
 RUN /ve/bin/python manage.py test
 EXPOSE 8000
 ADD docker-run.sh /run.sh
-CMD ["/run.sh"]
+ENV APP antisocial
+ENTRYPOINT ["/run.sh"]
+CMD ["run"]
