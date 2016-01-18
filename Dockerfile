@@ -1,5 +1,5 @@
 FROM ccnmtl/django.base
-RUN apt-get update && apt-get install -y git-core
+RUN apt-get update && apt-get install -y curl git-core
 ADD ssh_config /etc/ssh/ssh_config
 ADD wheelhouse /wheelhouse
 RUN /ve/bin/pip install --no-index -f /wheelhouse -r /wheelhouse/requirements.txt
