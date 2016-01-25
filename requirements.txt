@@ -33,7 +33,7 @@ factory_boy==2.6.0
 djangowind==0.14.3
 django-extensions==1.6.1
 django-statsd-mozilla==0.3.16
-raven==5.8.1
+raven==5.10.1
 django-annoying==0.8.5
 django-smoketest==0.3.0
 django-debug-toolbar==1.4
