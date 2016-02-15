@@ -2,7 +2,7 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from models import Category, Push, Application, Deployment, Permission
 from models import Setting, Flag, Recipe, Stage, FlagValue
 from json import dumps
@@ -11,19 +11,18 @@ from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer
 from itsdangerous import BadSignature, SignatureExpired
 from django.conf import settings
 from django.contrib.auth.models import User
-from annoying.decorators import render_to
 
 
 @login_required
-@render_to('rolf/index.html')
 def index(request):
     recent_pushes = Push.objects.filter(user=request.user)
     recent_deployments = list(set([p.deployment for p in recent_pushes]))
     recent_deployments.sort(key=lambda x: x.last_push_date())
     recent_deployments.reverse()
-    return dict(recent_pushes=recent_pushes[:50],
-                recent_deployments=recent_deployments,
-                categories=Category.objects.all())
+    return render(request, 'rolf/index.html',
+                  dict(recent_pushes=recent_pushes[:50],
+                       recent_deployments=recent_deployments,
+                       categories=Category.objects.all()))
 
 
 @login_required
@@ -246,9 +245,9 @@ def stage(request, object_id):
 
 
 @login_required
-@render_to('rolf/cookbook.html')
 def cookbook(request):
-    return dict(all_recipes=Recipe.objects.all().exclude(name=""))
+    return render(request, 'rolf/cookbook.html',
+                  dict(all_recipes=Recipe.objects.all().exclude(name="")))
 
 
 @login_required
@@ -316,7 +315,6 @@ def generic_detail(request, object_id, model, template_name):
 
 
 @login_required
-@render_to('rolf/get_api_key.html')
 def get_api_key(request):
     remote_addr = request.META.get(
         'HTTP_X_FORWARDED_FOR',
@@ -331,8 +329,9 @@ def get_api_key(request):
     ip = request.GET.get('ip', None)
     if ip:
         k3 = s1.dumps(dict(username=request.user.username, remote_addr=ip))
-    return dict(k1=k1, k2=k2, k3=k3, ip=ip,
-                remote_addr=remote_addr)
+    return render(request, 'rolf/get_api_key.html',
+                  dict(k1=k1, k2=k2, k3=k3, ip=ip,
+                       remote_addr=remote_addr))
 
 
 def verify_key(request):
