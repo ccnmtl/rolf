@@ -1,9 +1,12 @@
+from urlparse import urlparse
 from django.contrib.auth.models import Group
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 from factories import UserFactory, CategoryFactory, ApplicationFactory
-from factories import DeploymentFactory
-from rolf.rolf_main.models import Category
+from factories import DeploymentFactory, StageFactory
+from rolf.rolf_main.models import Category, Stage
+from rolf.rolf_main.tests.mixins import LoggedInTestMixin
 
 
 class SimpleTest(TestCase):
@@ -108,3 +111,21 @@ class ApiTest(TestCase):
         response = self.c.get("/api/1.0/get_key/?ip=128.59.1.1")
         assert ("This key is for the specified IP "
                 "Address (128.59.1.1)") in response.content
+
+
+class DeploymentTests(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(DeploymentTests, self).setUp()
+        self.deployment = DeploymentFactory()
+        self.stage = StageFactory(deployment=self.deployment)
+
+    def test_delete_stage(self):
+        r = self.client.post(reverse('stage_delete', args=(self.stage.pk,)))
+
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(
+            urlparse(r.url).path,
+            reverse('deployment_detail', args=(self.deployment.pk,)))
+
+        with self.assertRaises(Stage.DoesNotExist):
+            Stage.objects.get(pk=self.stage.pk)

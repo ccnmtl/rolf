@@ -11,6 +11,7 @@ from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer
 from itsdangerous import BadSignature, SignatureExpired
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.views.generic.edit import DeleteView
 
 
 @login_required
@@ -409,3 +410,10 @@ def api_run_stage(request, push_id, stage_id):
                    end_time=str(pushstage.end_time),
                    stage_id=pushstage.stage.id)),
         content_type='application/json')
+
+
+class DeleteStageView(DeleteView):
+    model = Stage
+
+    def get_success_url(self):
+        return self.object.deployment.get_absolute_url()

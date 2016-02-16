@@ -1,10 +1,11 @@
-from django.conf.urls import patterns, include
+from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic.edit import DeleteView
 from rolf.rolf_main.models import Category, Application, Deployment
 from rolf.rolf_main.models import Push, Recipe, Stage
+from rolf.rolf_main.views import DeleteStageView
 admin.autodiscover()
 
 category_info_dict = {
@@ -58,8 +59,10 @@ urlpatterns = patterns(
     (r'^application/(?P<pk>\d+)/delete/$',
      DeleteView.as_view(model=Application, success_url="/")),
 
-    (r'^deployment/(?P<object_id>\d+)/$',
-     'rolf.rolf_main.views.generic_detail', deployment_info_dict),
+    url(r'^deployment/(?P<object_id>\d+)/$',
+        'rolf.rolf_main.views.generic_detail',
+        deployment_info_dict,
+        name='deployment_detail'),
     (r'^deployment/(?P<object_id>\d+)/add_setting/$',
      'rolf.rolf_main.views.add_setting'),
     (r'^deployment/(?P<object_id>\d+)/edit_settings/$',
@@ -105,8 +108,8 @@ urlpatterns = patterns(
     (r'^stage/(?P<object_id>\d+)/$',
      'rolf.rolf_main.views.generic_detail', stage_info_dict),
     (r'^stage/(?P<object_id>\d+)/edit/$', 'rolf.rolf_main.views.edit_stage'),
-    (r'^stage/(?P<pk>\d+)/delete/$',
-     DeleteView.as_view(model=Stage, success_url="/")),
+    url(r'^stage/(?P<pk>\d+)/delete/$', DeleteStageView.as_view(),
+        name='stage_delete'),
 
     (r'^api/1.0/get_key/$',
      'rolf.rolf_main.views.get_api_key'),
