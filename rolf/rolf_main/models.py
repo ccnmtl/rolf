@@ -41,7 +41,7 @@ class Application(models.Model):
 
 
 class Deployment(models.Model):
-    name = models.CharField(max_length="256", default="prod")
+    name = models.CharField(max_length=256, default="prod")
     application = models.ForeignKey(Application)
     deprecated = models.BooleanField(
         default=False,

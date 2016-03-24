@@ -1,5 +1,5 @@
 --index-url https://pypi.ccnmtl.columbia.edu/
-Django==1.8.11
+Django==1.9.4
 Markdown==2.6.5
 psycopg2==2.6.1
 statsd==3.2.1
