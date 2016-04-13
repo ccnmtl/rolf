@@ -39,6 +39,6 @@ if [ "$1" == "run" ]; then
     exec /ve/bin/gunicorn --env \
          DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE \
          $APP.wsgi:application -b 0.0.0.0:8000 -w 3 \
-         -t 1200 \
+         -t 3600 \
          --access-logfile=- --error-logfile=-
 fi
