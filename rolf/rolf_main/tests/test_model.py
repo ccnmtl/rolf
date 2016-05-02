@@ -1,3 +1,6 @@
+import shutil
+import tempfile
+
 from django.test import TestCase
 from factories import CategoryFactory, ApplicationFactory, DeploymentFactory
 from factories import UserFactory, RecipeFactory, ShellRecipeFactory
@@ -121,8 +124,11 @@ class BasicPushTest(TestCase):
         push = self.d.new_push(self.u, "test push")
         # haven't run anything so it should be inprogress
         self.assertEquals(push.status, "inprogress")
-        for s in self.d.stage_set.all():
-            push.run_stage(s.id)
+        tempdir = tempfile.mkdtemp()
+        with self.settings(SCRIPT_DIR=tempdir):
+            for s in self.d.stage_set.all():
+                push.run_stage(s.id)
+        shutil.rmtree(tempdir)
         # should have completed successfully
         self.assertEquals(push.status, "ok")
         # and let's make sure a setting variable has round-tripped
