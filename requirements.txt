@@ -9,7 +9,7 @@ pep8==1.7.0
 pyflakes==1.1.0
 mccabe==0.4.0
 flake8==2.5.4
-logilab-common==0.63.2
+logilab-common==1.2.0
 logilab-astng==0.24.3
 lazy-object-proxy==1.2.1
 wrapt==1.10.6
