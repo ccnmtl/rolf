@@ -28,7 +28,7 @@ whitelistaffilmapper==0.1.0
 fake-factory==0.5.3
 certifi==2016.2.28
 python-dateutil==2.5.3
-contextlib2==0.5.1
+contextlib2==0.5.2
 
 factory_boy==2.6.1
 djangowind==0.14.3
