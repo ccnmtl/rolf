@@ -10,7 +10,7 @@ pyflakes==1.2.3
 mccabe==0.5.0
 pycodestyle==2.0.0
 flake8==2.6.0
-logilab-common==1.2.1
+logilab-common==1.2.2
 logilab-astng==0.24.3
 lazy-object-proxy==1.2.2
 wrapt==1.10.8
