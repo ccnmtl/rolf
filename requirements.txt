@@ -11,7 +11,7 @@ mccabe==0.5.2
 pycodestyle==2.0.0
 enum34==1.1.6
 configparser==3.5.0
-flake8==3.0.3
+flake8==3.0.4
 logilab-common==1.2.2
 logilab-astng==0.24.3
 lazy-object-proxy==1.2.2
