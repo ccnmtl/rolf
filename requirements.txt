@@ -35,7 +35,7 @@ contextlib2==0.5.4
 
 factory_boy==2.7.0
 djangowind==0.15.0
-django-extensions==1.6.7
+django-extensions==1.7.1
 django-statsd-mozilla==0.3.16
 raven==5.24.3
 django-smoketest==1.0.0
