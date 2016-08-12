@@ -1,11 +1,21 @@
-from django.conf.urls import patterns, include, url
+import django.views.static
+
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic.edit import DeleteView
 from rolf.rolf_main.models import Category, Application, Deployment
 from rolf.rolf_main.models import Push, Recipe, Stage
-from rolf.rolf_main.views import DeleteStageView
+from rolf.rolf_main.views import (
+    DeleteStageView, generic_detail, edit_recipe, add_cookbook_recipe,
+    api_push, get_api_key, api_run_stage, cookbook, stage, add_flag,
+    remove_flag, add_permission, rollback, reorder_stages, edit_stage,
+    push, clone_deployment, add_stage, edit_settings, add_setting,
+    add_deployment, remove_permission, add_application,
+    add_category, index,
+)
+
 admin.autodiscover()
 
 category_info_dict = {
@@ -39,90 +49,67 @@ recipe_info_dict = {
 }
 
 
-accounts_tuple = (r'^accounts/', include('django.contrib.auth.urls'))
+accounts_tuple = url(r'^accounts/', include('django.contrib.auth.urls'))
 
-urlpatterns = patterns(
-    '',
-    (r'^$', 'rolf.rolf_main.views.index'),
-    (r'^category/add/', 'rolf.rolf_main.views.add_category'),
-    (r'^category/(?P<object_id>\d+)/$',
-     'rolf.rolf_main.views.generic_detail', category_info_dict),
-    (r'^category/(?P<object_id>\d+)/add_application/$',
-     'rolf.rolf_main.views.add_application'),
-    (r'^category/(?P<pk>\d+)/delete/$',
-     DeleteView.as_view(model=Category, success_url="/")),
+urlpatterns = [
+    url(r'^$', index),
+    url(r'^category/add/', add_category),
+    url(r'^category/(?P<object_id>\d+)/$', generic_detail, category_info_dict),
+    url(r'^category/(?P<object_id>\d+)/add_application/$', add_application),
+    url(r'^category/(?P<pk>\d+)/delete/$', DeleteView.as_view(
+        model=Category, success_url="/")),
 
-    (r'^application/(?P<object_id>\d+)/$',
-     'rolf.rolf_main.views.generic_detail', application_info_dict),
-    (r'^application/(?P<object_id>\d+)/add_deployment/$',
-     'rolf.rolf_main.views.add_deployment'),
-    (r'^application/(?P<pk>\d+)/delete/$',
-     DeleteView.as_view(model=Application, success_url="/")),
+    url(r'^application/(?P<object_id>\d+)/$', generic_detail,
+        application_info_dict),
+    url(r'^application/(?P<object_id>\d+)/add_deployment/$', add_deployment),
+    url(r'^application/(?P<pk>\d+)/delete/$', DeleteView.as_view(
+        model=Application, success_url="/")),
 
-    url(r'^deployment/(?P<object_id>\d+)/$',
-        'rolf.rolf_main.views.generic_detail',
-        deployment_info_dict,
-        name='deployment_detail'),
-    (r'^deployment/(?P<object_id>\d+)/add_setting/$',
-     'rolf.rolf_main.views.add_setting'),
-    (r'^deployment/(?P<object_id>\d+)/edit_settings/$',
-     'rolf.rolf_main.views.edit_settings'),
-    (r'^deployment/(?P<object_id>\d+)/add_stage/$',
-     'rolf.rolf_main.views.add_stage'),
-    (r'^deployment/(?P<object_id>\d+)/clone/$',
-     'rolf.rolf_main.views.clone_deployment'),
-    (r'^deployment/(?P<object_id>\d+)/push/$',
-     'rolf.rolf_main.views.push'),
-    (r'^deployment/(?P<object_id>\d+)/remove_permission/$',
-     'rolf.rolf_main.views.remove_permission'),
-    (r'^deployment/(?P<object_id>\d+)/add_permission/$',
-     'rolf.rolf_main.views.add_permission'),
+    url(r'^deployment/(?P<object_id>\d+)/$', generic_detail,
+        deployment_info_dict, name='deployment_detail'),
+    url(r'^deployment/(?P<object_id>\d+)/add_setting/$', add_setting),
+    url(r'^deployment/(?P<object_id>\d+)/edit_settings/$', edit_settings),
+    url(r'^deployment/(?P<object_id>\d+)/add_stage/$', add_stage),
+    url(r'^deployment/(?P<object_id>\d+)/clone/$', clone_deployment),
+    url(r'^deployment/(?P<object_id>\d+)/push/$', push),
+    url(r'^deployment/(?P<object_id>\d+)/remove_permission/$',
+        remove_permission),
+    url(r'^deployment/(?P<object_id>\d+)/add_permission/$', add_permission),
 
-    (r'^deployment/(?P<object_id>\d+)/remove_flag/$',
-     'rolf.rolf_main.views.remove_flag'),
-    (r'^deployment/(?P<object_id>\d+)/add_flag/$',
-     'rolf.rolf_main.views.add_flag'),
+    url(r'^deployment/(?P<object_id>\d+)/remove_flag/$', remove_flag),
+    url(r'^deployment/(?P<object_id>\d+)/add_flag/$', add_flag),
 
-    (r'^deployment/(?P<object_id>\d+)/rollback/$',
-     'rolf.rolf_main.views.rollback'),
-    (r'^deployment/(?P<object_id>\d+)/reorder_stages/$',
-     'rolf.rolf_main.views.reorder_stages'),
-    (r'^deployment/(?P<pk>\d+)/delete/$',
-     DeleteView.as_view(model=Deployment, success_url="/")),
+    url(r'^deployment/(?P<object_id>\d+)/rollback/$', rollback),
+    url(r'^deployment/(?P<object_id>\d+)/reorder_stages/$', reorder_stages),
+    url(r'^deployment/(?P<pk>\d+)/delete/$', DeleteView.as_view(
+        model=Deployment, success_url="/")),
 
-    (r'^push/(?P<object_id>\d+)/$',
-     'rolf.rolf_main.views.generic_detail', push_info_dict),
-    (r'^push/(?P<object_id>\d+)/stage/$', 'rolf.rolf_main.views.stage'),
-    (r'^push/(?P<pk>\d+)/delete/$',
-     DeleteView.as_view(model=Push, success_url="/")),
+    url(r'^push/(?P<object_id>\d+)/$', generic_detail, push_info_dict),
+    url(r'^push/(?P<object_id>\d+)/stage/$', stage),
+    url(r'^push/(?P<pk>\d+)/delete/$', DeleteView.as_view(
+        model=Push, success_url="/")),
 
-    (r'^cookbook/$', 'rolf.rolf_main.views.cookbook'),
-    (r'^cookbook/(?P<object_id>\d+)/$',
-     'rolf.rolf_main.views.generic_detail', recipe_info_dict),
-    (r'^cookbook/(?P<object_id>\d+)/edit/$',
-     'rolf.rolf_main.views.edit_recipe'),
-    (r'^cookbook/(?P<pk>\d+)/delete/$',
-     DeleteView.as_view(model=Recipe, success_url="/cookbook/")),
-    (r'^cookbook/add/$', 'rolf.rolf_main.views.add_cookbook_recipe'),
-
-    (r'^stage/(?P<object_id>\d+)/$',
-     'rolf.rolf_main.views.generic_detail', stage_info_dict),
-    (r'^stage/(?P<object_id>\d+)/edit/$', 'rolf.rolf_main.views.edit_stage'),
+    url(r'^cookbook/$', cookbook),
+    url(r'^cookbook/(?P<object_id>\d+)/$', generic_detail, recipe_info_dict),
+    url(r'^cookbook/(?P<object_id>\d+)/edit/$', edit_recipe),
+    url(r'^cookbook/(?P<pk>\d+)/delete/$', DeleteView.as_view(
+        model=Recipe, success_url="/cookbook/")),
+    url(r'^cookbook/add/$', add_cookbook_recipe),
+    url(r'^stage/(?P<object_id>\d+)/$', generic_detail, stage_info_dict),
+    url(r'^stage/(?P<object_id>\d+)/edit/$', edit_stage),
     url(r'^stage/(?P<pk>\d+)/delete/$', DeleteStageView.as_view(),
         name='stage_delete'),
 
-    (r'^api/1.0/get_key/$',
-     'rolf.rolf_main.views.get_api_key'),
-    (r'^api/1.0/deployment/(?P<deployment_id>\d+)/push/$',
-     'rolf.rolf_main.views.api_push'),
-    (r'^api/1.0/push/(?P<push_id>\d+)/stage/(?P<stage_id>\d+)/$',
-     'rolf.rolf_main.views.api_run_stage'),
+    url(r'^api/1.0/get_key/$', get_api_key),
+    url(r'^api/1.0/deployment/(?P<deployment_id>\d+)/push/$', api_push),
+    url(r'^api/1.0/push/(?P<push_id>\d+)/stage/(?P<stage_id>\d+)/$',
+        api_run_stage),
 
-    (r'^accounts/', include('djangowind.urls')),
-    (r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
-    (r'^admin/', include(admin.site.urls)),
-    (r'^stats/$', TemplateView.as_view(template_name="stats.html")),
-    (r'smoketest/', include('smoketest.urls')),
-    (r'^uploads/(?P<path>.*)$',
-     'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-)
+    url(r'^accounts/', include('djangowind.urls')),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^stats/$', TemplateView.as_view(template_name="stats.html")),
+    url(r'smoketest/', include('smoketest.urls')),
+    url(r'^uploads/(?P<path>.*)$', django.views.static.serve,
+        {'document_root': settings.MEDIA_ROOT}),
+]
