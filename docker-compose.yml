@@ -1,0 +1,16 @@
+db:
+  image: postgres
+web:
+  build: .
+  command: manage runserver 0.0.0.0:8000
+  environment:
+    - APP=rolf
+    - SECRET_KEY=dummy-secret-key
+    - API_SECRET=dummy-api-secret
+    - SETTINGS=settings_compose
+  volumes:
+    - .:/app/
+  ports:
+    - "8000:8000"
+  links:
+    - db

@@ -11,7 +11,7 @@ DB_NAME = os.environ.get('DB_NAME', 'rolf')
 DB_HOST = os.environ.get(
     'DB_HOST', os.environ.get('POSTGRESQL_PORT_5432_TCP_ADDR', ''))
 DB_PORT = int(os.environ.get(
-    'DB_PORT', os.environ.get('POSTGRESQL_PORT_54342_TCP_PORT', 5432)))
+    'DB_PORT', os.environ.get('POSTGRESQL_PORT_5432_TCP_PORT', 5432)))
 DB_USER = os.environ.get('DB_USER', '')
 DB_PASSWORD = os.environ.get('DB_PASSWORD', '')
 
