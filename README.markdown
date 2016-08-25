@@ -53,4 +53,3 @@ possible.
 
 Please see the [wiki](https://github.com/ccnmtl/rolf/wiki) for
 instructions on installing, configuring, and using Rolf. 
-
