@@ -134,7 +134,7 @@ touch reports/*
 				if (smoketestURL != null) {
 						stage "smoketest"
 						output = sh(script: "curl ${smoketestURL} --silent --insecure", returnStdout: true)
-						output.trim() == "BLAH"
+						assert output.trim() == "BLAH"
 				}
 				// TODO: mediacheck
 		}
