@@ -3,3 +3,4 @@ ve
 *.pyc
 reports
 celerybeat-schedule
+Jenkinsfile
