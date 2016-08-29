@@ -105,23 +105,27 @@ ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
         parallel branches
     }
 
-    node {
-				stage "restart celery worker"
-        def branches = [:]
-        for (int i = 0; i < celery_hosts.size(); i++) {
-            branches["celery-restart-${i}"] = create_restart_celery_exec(i, celery_hosts[i])
-        }
-        parallel branches
-    }
+		if (celery_hosts.size() > 0) {
+				node {
+						stage "restart celery worker"
+						def branches = [:]
+						for (int i = 0; i < celery_hosts.size(); i++) {
+								branches["celery-restart-${i}"] = create_restart_celery_exec(i, celery_hosts[i])
+						}
+						parallel branches
+				}
+		}
 
-    node {
-				stage "restart celery beat"
-        def branches = [:]
-        for (int i = 0; i < beat_hosts.size(); i++) {
-            branches["beat-restart-${i}"] = create_restart_beat_exec(i, beat_hosts[i])
-        }
-        parallel branches
-    }
+		if (beat_hosts.size() > 0) {
+				node {
+						stage "restart celery beat"
+						def branches = [:]
+						for (int i = 0; i < beat_hosts.size(); i++) {
+								branches["beat-restart-${i}"] = create_restart_beat_exec(i, beat_hosts[i])
+						}
+						parallel branches
+				}
+		}
 
 		// TODO: smoketest
 
