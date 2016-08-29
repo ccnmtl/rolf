@@ -53,7 +53,9 @@ try {
 				sh "rm -rf reports/"
 				sh """container=\$(docker create ${REPO}/${APP}:${TAG})
 docker cp \$container:/app/reports reports/
-docker rm \$container"""
+docker rm \$container
+touch reports/*
+"""
 
 				stage "Unit Tests"
 				junit "reports/junit.xml"
