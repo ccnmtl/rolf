@@ -40,80 +40,6 @@ try {
     opbeat = false
 }
 
-// -------------------- helper functions ----------------------
-
-def create_pull_exec(int i, String host) {
-    cmd = { 
-        node {
-            stage "Docker Pull - "+i
-            sh """
-ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
-ssh ${host} cp /var/www/${APP}/TAG /var/www/${APP}/REVERT || true
-ssh ${host} "echo export TAG=\$TAG > /var/www/${APP}/TAG"
-"""
-        }
-    }
-    return cmd
-}
-
-def create_restart_web_exec(int i, String host) {
-    cmd = { 
-        node {
-            stage "Restart Gunicorn - "+i
-            sh """
-ssh ${host} sudo stop ${APP} || true
-ssh ${host} sudo start ${APP}
-"""
-        }
-    }
-    return cmd
-}
-
-def create_restart_celery_exec(int i, String host) {
-    cmd = { 
-        node {
-            stage "Restart Worker - "+i
-            sh """
-ssh ${host} sudo stop ${APP}-worker || true
-ssh ${host} sudo start ${APP}-worker
-"""
-            }
-    }
-    return cmd
-}
-
-def create_restart_beat_exec(int i, String host) {
-    cmd = { 
-        node {
-            stage "Restart Beat - "+i
-            sh """
-ssh ${host} sudo stop ${APP}-beat || true
-ssh ${host} sudo start ${APP}-beat
-"""
-        }
-    }
-    return cmd
-}
-
-// retry with exponential backoff
-def retry_backoff(int max_attempts, Closure c) {
-    int n = 0
-    while (n < max_attempts) {
-        try {
-            c()
-            return
-        } catch (err) {
-            if ((n + 1) >= max_attempts) {
-                // we're done. re-raise the exception
-                throw err
-            }
-            sleep(2**n)
-            n++
-        }
-    }
-    return
-}
-
 
 def err = null
 currentBuild.result = "SUCCESS"
@@ -144,7 +70,17 @@ touch reports/*
     node {
         def branches = [:]
         for (int i = 0; i < all_hosts.size(); i++) {
-            branches["pull-${i}"] = create_pull_exec(i, all_hosts[i])
+						def host = all_hosts[i]
+						branches["pull-${i}"] = {
+								node {
+										stage "Docker Pull - "+i
+										sh """
+ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
+ssh ${host} cp /var/www/${APP}/TAG /var/www/${APP}/REVERT || true
+ssh ${host} "echo export TAG=\$TAG > /var/www/${APP}/TAG"
+"""
+								}
+						}
         }
         parallel branches
   
@@ -217,3 +153,70 @@ touch reports/*
         throw err
     }
 }
+
+// -------------------- helper functions ----------------------
+
+def create_pull_exec(int i, String host) {
+    cmd = { 
+    }
+    return cmd
+}
+
+def create_restart_web_exec(int i, String host) {
+    cmd = { 
+        node {
+            stage "Restart Gunicorn - "+i
+            sh """
+ssh ${host} sudo stop ${APP} || true
+ssh ${host} sudo start ${APP}
+"""
+        }
+    }
+    return cmd
+}
+
+def create_restart_celery_exec(int i, String host) {
+    cmd = { 
+        node {
+            stage "Restart Worker - "+i
+            sh """
+ssh ${host} sudo stop ${APP}-worker || true
+ssh ${host} sudo start ${APP}-worker
+"""
+            }
+    }
+    return cmd
+}
+
+def create_restart_beat_exec(int i, String host) {
+    cmd = { 
+        node {
+            stage "Restart Beat - "+i
+            sh """
+ssh ${host} sudo stop ${APP}-beat || true
+ssh ${host} sudo start ${APP}-beat
+"""
+        }
+    }
+    return cmd
+}
+
+// retry with exponential backoff
+def retry_backoff(int max_attempts, Closure c) {
+    int n = 0
+    while (n < max_attempts) {
+        try {
+            c()
+            return
+        } catch (err) {
+            if ((n + 1) >= max_attempts) {
+                // we're done. re-raise the exception
+                throw err
+            }
+            sleep(2**n)
+            n++
+        }
+    }
+    return
+}
+
