@@ -51,7 +51,7 @@ try {
         stage "Build"
         sh "make build"
 				sh "rm -rf reports/"
-				sh """container=$(docker create ${REPO}/${APP}:${TAG})
+				sh """container=\$(docker create ${REPO}/${APP}:${TAG})
 docker cp \$container:/app/reports reports/
 docker rm \$container"
 
