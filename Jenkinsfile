@@ -53,8 +53,8 @@ try {
 
 def mediacheckVerify = ''
 try {
-		if MEDIACHECK_SKIP_VERIFY {
-						mediacheckVerify = '--verify-ssl=false'
+		if (MEDIACHECK_SKIP_VERIFY) {
+        mediacheckVerify = '--verify-ssl=false'
 		}
 } catch (mediacheckVerifyError) {
 }
