@@ -28,6 +28,10 @@ try {
 }
 
 def all_hosts = hosts + celery_hosts + beat_hosts as Set
+println hosts
+println all_hosts
+println all_hosts.size()
+
 
 def opbeat = true
 
