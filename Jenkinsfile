@@ -97,6 +97,7 @@ ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
     }
 
     node {
+				stage "restart gunicorn"
         def branches = [:]
         for (int i = 0; i < hosts.size(); i++) {
             branches["web-restart-${i}"] = create_restart_web_exec(i, hosts[i])
@@ -105,6 +106,7 @@ ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
     }
 
     node {
+				stage "restart celery worker"
         def branches = [:]
         for (int i = 0; i < celery_hosts.size(); i++) {
             branches["celery-restart-${i}"] = create_restart_celery_exec(i, celery_hosts[i])
@@ -113,6 +115,7 @@ ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
     }
 
     node {
+				stage "restart celery beat"
         def branches = [:]
         for (int i = 0; i < beat_hosts.size(); i++) {
             branches["beat-restart-${i}"] = create_restart_beat_exec(i, beat_hosts[i])
@@ -166,7 +169,6 @@ def create_pull_exec(int i, String host) {
 def create_restart_web_exec(int i, String host) {
     cmd = { 
         node {
-            stage "Restart Gunicorn - "+i
             sh """
 ssh ${host} sudo stop ${APP} || true
 ssh ${host} sudo start ${APP}
@@ -179,7 +181,6 @@ ssh ${host} sudo start ${APP}
 def create_restart_celery_exec(int i, String host) {
     cmd = { 
         node {
-            stage "Restart Worker - "+i
             sh """
 ssh ${host} sudo stop ${APP}-worker || true
 ssh ${host} sudo start ${APP}-worker
@@ -192,7 +193,6 @@ ssh ${host} sudo start ${APP}-worker
 def create_restart_beat_exec(int i, String host) {
     cmd = { 
         node {
-            stage "Restart Beat - "+i
             sh """
 ssh ${host} sudo stop ${APP}-beat || true
 ssh ${host} sudo start ${APP}-beat
