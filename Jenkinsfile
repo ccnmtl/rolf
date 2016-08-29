@@ -69,11 +69,12 @@ touch reports/*
 
     node {
         def branches = [:]
+				stage "Docker Pull"
+				
         for (int i = 0; i < all_hosts.size(); i++) {
 						def host = all_hosts[i]
 						branches["pull-${i}"] = {
 								node {
-										stage "Docker Pull - "+i
 										sh """
 ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
 ssh ${host} cp /var/www/${APP}/TAG /var/www/${APP}/REVERT || true
