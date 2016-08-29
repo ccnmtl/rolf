@@ -163,7 +163,7 @@ curl ${smoketestURL} --silent | grep PASS
 
 				if (mediacheckURL != null) {
 						stage "mediacheck"
-						retry_backoff(5) { sh "mediacheck --url='${mediacheckURL}' --log-level=info --timeout=${mediacheckTimeout} ${mediacheckVerify}" }
+						retry_backoff(5) { sh "mediacheck --url='${mediacheckURL}' --log-level=info --timeout=${mediacheckTimeout * 1000} ${mediacheckVerify}" }
 				}
 		}
 
