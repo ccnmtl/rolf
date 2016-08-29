@@ -153,19 +153,17 @@ touch reports/*
 		}
 
 		node {
-				sleep 3 // wait for restarts
-
 				if (smoketestURL != null) {
 						stage "smoketest"
-						sh """#!/bin/bash
+						retry_backoff(5) { sh """#!/bin/bash
 curl ${smoketestURL} --silent | grep PASS
 """
+						}
 				}
 
 				if (mediacheckURL != null) {
 						stage "mediacheck"
-						// TODO: retry
-						sh "mediacheck --url=${mediacheckURL} --log-level=info --timeout=${mediacheckTimeout} ${mediacheckVerify}"
+						retry_backoff(5) { sh "mediacheck --url=${mediacheckURL} --log-level=info --timeout=${mediacheckTimeout} ${mediacheckVerify}" }
 				}
 		}
 
