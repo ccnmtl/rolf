@@ -133,6 +133,7 @@ touch reports/*
 		node {
 				if (smoketestURL != null) {
 						stage "smoketest"
+						sleep 3
 						sh """#!/bin/bash
 curl ${smoketestURL} --silent | grep PASS
 """
