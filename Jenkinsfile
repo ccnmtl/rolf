@@ -28,11 +28,16 @@ try {
 		celery_hosts = []
 		beat_hosts = []
 }
-
 def all_hosts = hosts + celery_hosts + beat_hosts as Set
 
-def opbeat = true
+def smoketestURL = null
+try {
+		smoketestURL = SMOKETEST_URL
+} catch (smoketestURLError) {
+		smoketestURL = "https://${APP}.ccnmtl.columbia.edu/smoketest/"
+}
 
+def opbeat = true
 try {
     env.OPBEAT_ORG = OPBEAT_ORG
     env.OPBEAT_APP = OPBEAT_APP
@@ -77,9 +82,7 @@ touch reports/*
 						def host = all_hosts[i]
 						branches["pull-${i}"] = {
 								node {
-										sh """
-ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
-"""
+										sh "ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG"
 								}
 						}
         }
@@ -127,9 +130,13 @@ ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG
 				}
 		}
 
-		// TODO: smoketest
-
-		// TODO: mediacheck
+		node {
+				if (smoketestURL != null) {
+						stage "smoketest"
+						sh "curl ${smoketestURL} | grep PASS"
+				}
+				// TODO: mediacheck
+		}
 
     if (opbeat) {
         node {
