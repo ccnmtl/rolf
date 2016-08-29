@@ -37,6 +37,28 @@ try {
 		smoketestURL = "https://${APP}.ccnmtl.columbia.edu/smoketest/"
 }
 
+def mediacheckURL = null
+try {
+    mediacheckURL = MEDIACHECK_URL
+} catch (mediacheckURLError) {
+    mediacheckURL = "https://${APP}.ccnmtl.columbia.edu/"
+}
+
+def mediacheckTimeout = 10
+try {
+    mediacheckTimeout = MEDIACHECK_TIMEOUT
+} catch (mediacheckTimeoutError) {
+    mediacheckTimeout = 10
+}
+
+def mediacheckVerify = ''
+try {
+		if MEDIACHECK_SKIP_VERIFY {
+						mediacheckVerify = '--verify-ssl=false'
+		}
+} catch (mediacheckVerifyError) {
+}
+
 def opbeat = true
 try {
     env.OPBEAT_ORG = OPBEAT_ORG
@@ -131,14 +153,20 @@ touch reports/*
 		}
 
 		node {
+				sleep 3 // wait for restarts
+
 				if (smoketestURL != null) {
 						stage "smoketest"
-						sleep 3
 						sh """#!/bin/bash
 curl ${smoketestURL} --silent | grep PASS
 """
 				}
-				// TODO: mediacheck
+
+				if (mediacheckURL != null) {
+						stage "mediacheck"
+						// TODO: retry
+						sh "mediacheck --url=${mediacheckURL} --log-level=info --timeout=${mediacheckTimeout} ${mediacheckVerify}"
+				}
 		}
 
     if (opbeat) {
