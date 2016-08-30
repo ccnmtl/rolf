@@ -227,12 +227,6 @@ def notifyBuild(String buildStatus = 'STARTED') {
 				sendToIndividuals: true])
 }
 		
-def create_pull_exec(int i, String host) {
-    cmd = { 
-    }
-    return cmd
-}
-
 def create_restart_web_exec(int i, String host) {
     cmd = { 
         node {
