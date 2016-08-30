@@ -179,7 +179,6 @@ curl ${smoketestURL} --silent | grep PASS
             }
         }
     }
-
 } catch (caughtError) {
     err = caughtError
     currentBuild.result = "FAILURE"
@@ -198,7 +197,7 @@ curl ${smoketestURL} --silent | grep PASS
 
 def notifyBuild(String buildStatus = 'STARTED') {
   // build status of null means successful
-  buildStatus =  buildStatus ?: 'SUCCESSFUL'
+  buildStatus =  buildStatus ?: 'SUCCESS'
 
   // Default values
   def colorCode = '#FF0000'
@@ -211,7 +210,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
   if (buildStatus == 'STARTED') {
     color = 'YELLOW'
     colorCode = '#FFFF00'
-  } else if (buildStatus == 'SUCCESSFUL') {
+  } else if (buildStatus == 'SUCCESS') {
     color = 'GREEN'
     colorCode = '#00FF00'
   } else {
