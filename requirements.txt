@@ -40,7 +40,7 @@ django-statsd-mozilla==0.3.16
 raven==5.26.0
 django-smoketest==1.0.0
 django-debug-toolbar==1.5
-django-jenkins==0.19.0
+django-jenkins==0.110.0
 django-markwhat==1.5
 gunicorn==19.6.0
 rcssmin==1.0.6  # django-compressor
