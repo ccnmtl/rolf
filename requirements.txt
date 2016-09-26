@@ -1,6 +1,6 @@
 --index-url https://pypi.ccnmtl.columbia.edu/
 Django==1.9.9
-Markdown==2.6.6
+Markdown==2.6.7
 psycopg2==2.6.2
 statsd==3.2.1
 itsdangerous==0.24
