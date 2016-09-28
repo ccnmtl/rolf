@@ -34,7 +34,7 @@ python-dateutil==2.5.3
 contextlib2==0.5.4
 
 factory_boy==2.7.0
-djangowind==0.15.0
+djangowind==0.16.0
 django-extensions==1.7.4
 django-statsd-mozilla==0.3.16
 raven==5.27.1
