@@ -39,7 +39,7 @@ django-extensions==1.7.4
 django-statsd-mozilla==0.3.16
 raven==5.27.1
 django-smoketest==1.0.0
-django-debug-toolbar==1.5
+django-debug-toolbar==1.6
 django-jenkins==0.110.0
 django-markwhat==1.5
 gunicorn==19.6.0
