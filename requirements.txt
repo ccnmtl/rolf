@@ -37,7 +37,7 @@ factory_boy==2.7.0
 djangowind==0.16.0
 django-extensions==1.7.4
 django-statsd-mozilla==0.3.16
-raven==5.27.1
+raven==5.30.0
 django-smoketest==1.0.0
 django-debug-toolbar==1.6
 django-jenkins==0.110.0
