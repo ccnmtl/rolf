@@ -30,7 +30,7 @@ whitelistaffilmapper==0.1.0
 ipaddress==1.0.17
 fake-factory==0.7.2
 certifi==2016.9.26
-python-dateutil==2.5.3
+python-dateutil==2.6.0
 contextlib2==0.5.4
 
 factory_boy==2.7.0
