@@ -28,7 +28,7 @@ requests_futures==0.9.7
 futures==3.0.5
 whitelistaffilmapper==0.1.0
 ipaddress==1.0.17
-fake-factory==0.7.2
+Faker==0.7.3
 certifi==2016.9.26
 python-dateutil==2.6.0
 contextlib2==0.5.4
