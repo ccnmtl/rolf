@@ -1,3 +1,4 @@
+import django.contrib.auth.views
 import django.views.static
 
 from django.conf.urls import include, url
@@ -106,7 +107,7 @@ urlpatterns = [
         api_run_stage),
 
     url(r'^accounts/', include('djangowind.urls')),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+    url(r'^logout/$', django.contrib.auth.views.logout, {'next_page': '/'}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^stats/$', TemplateView.as_view(template_name="stats.html")),
     url(r'smoketest/', include('smoketest.urls')),
