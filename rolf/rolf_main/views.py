@@ -1,8 +1,7 @@
-from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response, get_object_or_404, render
+from django.shortcuts import get_object_or_404, render
 from models import Category, Push, Application, Deployment, Permission
 from models import Setting, Flag, Recipe, Stage, FlagValue
 from json import dumps
@@ -309,10 +308,9 @@ def reorder_stages(request, object_id):
 
 @login_required
 def generic_detail(request, object_id, model, template_name):
-    return render_to_response(template_name,
-                              dict(object=get_object_or_404(model,
-                                                            id=object_id)),
-                              context_instance=RequestContext(request))
+    return render(request, template_name,
+                  dict(object=get_object_or_404(model,
+                                                id=object_id)))
 
 
 @login_required
