@@ -33,7 +33,7 @@ certifi==2016.9.26
 python-dateutil==2.6.0
 contextlib2==0.5.4
 
-factory_boy==2.7.0
+factory_boy==2.8.1
 djangowind==0.16.1
 django-extensions==1.7.5
 django-statsd-mozilla==0.3.16
