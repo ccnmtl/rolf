@@ -46,7 +46,7 @@ gunicorn==19.6.0
 rcssmin==1.0.6  # django-compressor
 rjsmin==1.0.12  # django-compressor
 django-compressor==2.1
-django-impersonate==1.0.1
+django-impersonate==1.1
 django-waffle==0.11.1
 django-appconf==1.0.2
 django-stagingcontext==0.1.0
