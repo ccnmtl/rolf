@@ -7,7 +7,7 @@ itsdangerous==0.24
 coverage==4.3.4
 pep8==1.7.0
 pyflakes==1.5.0
-mccabe==0.6.0
+mccabe==0.6.1
 pycodestyle==2.0
 enum34==1.1.6
 configparser==3.5.0
