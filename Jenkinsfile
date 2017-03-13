@@ -24,17 +24,17 @@ try {
     celery_hosts = CELERY_HOSTS.split(" ")
     beat_hosts = BEAT_HOSTS.split(" ")
 } catch (hostsErr) {
-		// don't care
-		celery_hosts = []
-		beat_hosts = []
+    // don't care
+    celery_hosts = []
+    beat_hosts = []
 }
 def all_hosts = hosts + celery_hosts + beat_hosts as Set
 
 def smoketestURL = null
 try {
-		smoketestURL = SMOKETEST_URL
+    smoketestURL = SMOKETEST_URL
 } catch (smoketestURLError) {
-		smoketestURL = "https://${APP}.ccnmtl.columbia.edu/smoketest/"
+    smoketestURL = "https://${APP}.ccnmtl.columbia.edu/smoketest/"
 }
 
 def mediacheckURL = null
@@ -53,9 +53,9 @@ try {
 
 def mediacheckVerify = ''
 try {
-		if (MEDIACHECK_SKIP_VERIFY) {
+    if (MEDIACHECK_SKIP_VERIFY) {
         mediacheckVerify = '--verify-ssl=false'
-		}
+    }
 } catch (mediacheckVerifyError) {
 }
 
@@ -79,19 +79,19 @@ try {
         checkout scm
 
         stage "Build"
-				sh "docker pull ${REPO}/${APP}:latest"
+        sh "docker pull ${REPO}/${APP}:latest"
         sh "make build"
-				sh "rm -rf reports/"
-				sh """container=\$(docker create ${REPO}/${APP}:${TAG})
+        sh "rm -rf reports/"
+        sh """container=\$(docker create ${REPO}/${APP}:${TAG})
 docker cp \$container:/app/reports reports/
 docker rm \$container
 touch reports/*
 """
 
-				stage "Unit Tests"
-				junit "reports/junit.xml"
+        stage "Unit Tests"
+        junit "reports/junit.xml"
 
-				// TODO: coverage/pep8
+        // TODO: coverage/pep8
 
         stage "Docker Push"
         retry_backoff(5) { sh "docker push ${REPO}/${APP}:${TAG}" }
@@ -99,18 +99,18 @@ touch reports/*
 
     node {
         def branches = [:]
-				stage "Docker Pull"
-				
+        stage "Docker Pull"
+
         for (int i = 0; i < all_hosts.size(); i++) {
-						def host = all_hosts[i]
-						branches["pull-${i}"] = {
-								node {
-										sh "ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG"
-								}
-						}
+            def host = all_hosts[i]
+            branches["pull-${i}"] = {
+                node {
+                    sh "ssh ${host} docker pull \${REPOSITORY}\$REPO/${APP}:\$TAG"
+                }
+            }
         }
         parallel branches
-  
+
         stage "Migrate"
         def host = all_hosts[0]
         sh "ssh ${host} /usr/local/bin/docker-runner ${APP} migrate"
@@ -118,12 +118,12 @@ touch reports/*
         stage "Collectstatic"
         sh "ssh ${host} /usr/local/bin/docker-runner ${APP} collectstatic"
 
-				stage "Compress"
-				sh "ssh ${host} /usr/local/bin/docker-runner ${APP} compress"
+        stage "Compress"
+        sh "ssh ${host} /usr/local/bin/docker-runner ${APP} compress"
     }
 
     node {
-				stage "restart gunicorn"
+        stage "restart gunicorn"
         def branches = [:]
         for (int i = 0; i < hosts.size(); i++) {
             branches["web-restart-${i}"] = create_restart_web_exec(i, hosts[i])
@@ -131,42 +131,42 @@ touch reports/*
         parallel branches
     }
 
-		if (celery_hosts.size() > 0) {
-				node {
-						stage "restart celery worker"
-						def branches = [:]
-						for (int i = 0; i < celery_hosts.size(); i++) {
-								branches["celery-restart-${i}"] = create_restart_celery_exec(i, celery_hosts[i])
-						}
-						parallel branches
-				}
-		}
+    if (celery_hosts.size() > 0) {
+        node {
+            stage "restart celery worker"
+            def branches = [:]
+            for (int i = 0; i < celery_hosts.size(); i++) {
+                branches["celery-restart-${i}"] = create_restart_celery_exec(i, celery_hosts[i])
+            }
+            parallel branches
+        }
+    }
 
-		if (beat_hosts.size() > 0) {
-				node {
-						stage "restart celery beat"
-						def branches = [:]
-						for (int i = 0; i < beat_hosts.size(); i++) {
-								branches["beat-restart-${i}"] = create_restart_beat_exec(i, beat_hosts[i])
-						}
-						parallel branches
-				}
-		}
+    if (beat_hosts.size() > 0) {
+        node {
+            stage "restart celery beat"
+            def branches = [:]
+            for (int i = 0; i < beat_hosts.size(); i++) {
+                branches["beat-restart-${i}"] = create_restart_beat_exec(i, beat_hosts[i])
+            }
+            parallel branches
+        }
+    }
 
-		node {
-				if (smoketestURL != null) {
-						stage "smoketest"
-						retry_backoff(5) { sh """#!/bin/bash
+    node {
+        if (smoketestURL != null) {
+            stage "smoketest"
+            retry_backoff(5) { sh """#!/bin/bash
 curl ${smoketestURL} --silent | grep PASS
 """
-						}
-				}
+            }
+        }
 
-				if (mediacheckURL != null) {
-						stage "mediacheck"
-						retry_backoff(5) { sh "mediacheck --url='${mediacheckURL}' --log-level=info --timeout=${mediacheckTimeout * 1000} ${mediacheckVerify}" }
-				}
-		}
+        if (mediacheckURL != null) {
+            stage "mediacheck"
+            retry_backoff(5) { sh "mediacheck --url='${mediacheckURL}' --log-level=info --timeout=${mediacheckTimeout * 1000} ${mediacheckVerify}" }
+        }
+    }
 
     if (opbeat) {
         node {
@@ -185,7 +185,7 @@ curl ${smoketestURL} --silent | grep PASS
     currentBuild.result = "FAILURE"
 } finally {
     (currentBuild.result != "ABORTED") && node {
-				notifyBuild(currentBuild.result)
+        notifyBuild(currentBuild.result)
     }
 
     /* Must re-throw exception to propagate error */
@@ -197,39 +197,39 @@ curl ${smoketestURL} --silent | grep PASS
 // -------------------- helper functions ----------------------
 
 def notifyBuild(String buildStatus = 'STARTED') {
-  // build status of null means successful
-  buildStatus =  buildStatus ?: 'SUCCESS'
+		// build status of null means successful
+		buildStatus =  buildStatus ?: 'SUCCESS'
 
-  // Default values
-  def colorCode = '#FF0000'
-  def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
-  def summary = "${subject} (${env.BUILD_URL})"
-  def details = """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+		// Default values
+		def colorCode = '#FF0000'
+		def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+		def summary = "${subject} (${env.BUILD_URL})"
+		def details = """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
 
-  // Override default values based on build status
-  if (buildStatus == 'STARTED') {
-    color = 'YELLOW'
-    colorCode = '#FFFF00'
-  } else if (buildStatus == 'SUCCESS') {
-    color = 'GREEN'
-    colorCode = '#36a64f'
-  } else {
-    color = 'RED'
-    colorCode = '#FF0000'
-  }
+		// Override default values based on build status
+		if (buildStatus == 'STARTED') {
+				color = 'YELLOW'
+				colorCode = '#FFFF00'
+		} else if (buildStatus == 'SUCCESS') {
+				color = 'GREEN'
+				colorCode = '#36a64f'
+		} else {
+				color = 'RED'
+				colorCode = '#FF0000'
+		}
 
-  // Send notifications
-	//  slackSend (color: colorCode, message: summary)
+		// Send notifications
+		//  slackSend (color: colorCode, message: summary)
 
-  step([$class: 'Mailer',
-				notifyEveryUnstableBuild: true,
-				recipients: ADMIN_EMAIL,
-				sendToIndividuals: true])
+		step([$class: 'Mailer',
+					notifyEveryUnstableBuild: true,
+					recipients: ADMIN_EMAIL,
+					sendToIndividuals: true])
 }
-		
+
 def create_restart_web_exec(int i, String host) {
-    cmd = { 
+    cmd = {
         node {
             sh """
 ssh ${host} sudo stop ${APP} || true
@@ -241,19 +241,19 @@ ssh ${host} sudo start ${APP}
 }
 
 def create_restart_celery_exec(int i, String host) {
-    cmd = { 
+    cmd = {
         node {
             sh """
 ssh ${host} sudo stop ${APP}-worker || true
 ssh ${host} sudo start ${APP}-worker
 """
-            }
+				}
     }
     return cmd
 }
 
 def create_restart_beat_exec(int i, String host) {
-    cmd = { 
+    cmd = {
         node {
             sh """
 ssh ${host} sudo stop ${APP}-beat || true
@@ -278,8 +278,7 @@ def retry_backoff(int max_attempts, Closure c) {
             }
             sleep(2**n)
             n++
-        }
+								}
     }
     return
 }
-
