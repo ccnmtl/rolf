@@ -1,5 +1,5 @@
 --index-url https://pypi.ccnmtl.columbia.edu/
-Django==1.10.7
+Django==1.11
 Markdown==2.6.8
 psycopg2==2.7.1
 statsd==3.2.1
@@ -34,6 +34,7 @@ Faker==0.7.11
 certifi==2017.1.23
 python-dateutil==2.6.0
 contextlib2==0.5.4
+pytz==2017.2
 
 factory_boy==2.8.1
 djangowind==1.0.0
