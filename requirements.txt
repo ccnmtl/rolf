@@ -36,7 +36,7 @@ ipaddress==1.0.18
 Faker==0.7.11
 certifi==2017.4.17
 python-dateutil==2.6.0
-contextlib2==0.5.4
+contextlib2==0.5.5
 pytz==2017.2
 
 factory_boy==2.8.1
