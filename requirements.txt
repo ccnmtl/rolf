@@ -21,7 +21,7 @@ wrapt==1.10.10
 
 pylint==1.7.1
 
-astroid==1.5.2
+astroid==1.5.3
 
 sqlparse==0.2.3
 six==1.10.0
