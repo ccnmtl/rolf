@@ -3,6 +3,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
 		git-core \
+		libffi-dev \
+		libssl-dev \
+		python-dev \
 		python3-requests \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
