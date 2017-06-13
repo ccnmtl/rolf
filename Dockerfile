@@ -13,6 +13,7 @@ ADD ssh_config /etc/ssh/ssh_config
 COPY package.json /node/
 RUN cd /node && npm install && touch /node/node_modules/sentinal
 ADD wheelhouse /wheelhouse
+ADD requirements /requirements
 RUN /ve/bin/pip install --no-index -f /wheelhouse -r /wheelhouse/requirements.txt && touch /ve/sentinal
 WORKDIR /app
 COPY . /app/
