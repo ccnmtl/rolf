@@ -7,7 +7,7 @@ coverage==4.4.1
 pep8==1.7.0
 pyflakes==1.5.0
 mccabe==0.6.1
-pycodestyle==2.0
+pycodestyle==2.3.1
 enum34==1.1.6
 configparser==3.5.0
 flake8==3.3.0
@@ -28,7 +28,7 @@ pyasn1==0.2.3
 pyOpenSSL==17.0.0
 ndg-httpsclient==0.4.2
 
-chardet==3.0.3
+chardet==3.0.4
 idna==2.5
 urllib3==1.21.1
 certifi==2017.4.17
@@ -39,7 +39,7 @@ futures==3.1.1
 ./requirements/src/whitelistaffilmapper-0.1.0-py2-none-any.whl
 ipaddress==1.0.18
 
-Faker==0.7.15
+Faker==0.7.17
 
 python-dateutil==2.6.0
 contextlib2==0.5.5
