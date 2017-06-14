@@ -39,7 +39,7 @@ futures==3.1.1
 ./requirements/src/whitelistaffilmapper-0.1.0-py2-none-any.whl
 ipaddress==1.0.18
 
-Faker==0.7.15
+Faker==0.7.17
 
 python-dateutil==2.6.0
 contextlib2==0.5.5
